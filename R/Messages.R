@@ -6,10 +6,10 @@
 #'
 #' @keywords internal
 #'
-message_update <- function(n, is_message = FALSE, file) {
+message_update <- function(n, is_message = FALSE, file, dur) {
   note <-
     switch(n,
-      paste("\nProcessing:", basename(file)),
+      paste("\n\n\nProcessing:", basename(file)),
       "\n....Naming columns based on file mode",
       "\n....Using automatically-detected column names",
       "\n..Getting meta-data from header",
@@ -22,7 +22,10 @@ message_update <- function(n, is_message = FALSE, file) {
       "\n......No sign of confounding by vector magnitude variable",
       "\n......Success identifying remaining columns",
       "Tests indicate that inclinometer variables have been mis-assigned. Review the file by hand, and submit a bug report.",
-      "\n14")
+      "\nAll columns read as character.\nReturning prematurely as a result.\nAdjusting value of skip parameter will likely fix the issue.",
+      "\n......Checks on inclinometer variables showed no issues",
+      paste("\nProcessing complete. Elapsed time", dur, "minutes."),
+      "\n17")
   if (is_message) {
     message(note)
   } else {

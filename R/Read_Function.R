@@ -86,6 +86,7 @@ AG_col_names <- function(variable) {
 read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     nrows = 10, header = FALSE, ...) {
 
+  t <- proc.time()
   if (verbose) message_update(1, file = file)
     meta <-
       AG_meta(
@@ -120,16 +121,23 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
       header = header,
       ...))
 
+  if (all(sapply(AG, class) %in% c("character", "factor"))) {
+    message_update(14, TRUE)
+    return(AG)
+  }
+
   if (length(variables) == ncol(AG)) {
     message_update(2)
     names(AG) <- variables
     AG <- AG_time(AG, meta)
+    if (verbose) message_update(16, dur = get_duration(t))
     return(AG)
   }
 
   if (!"V1" %in% names(AG)) {
     message_update(3)
     AG <- AG_time(AG, meta)
+    if (verbose) message_update(16, dur = get_duration(t))
     return(AG)
   } else {
     message_update(6)
@@ -148,10 +156,11 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     }
 
     if (any(grepl("inclinometer", names(AG), ignore.case = TRUE))) {
-      AG <- check_inc(AG)
+      AG <- check_inc(AG, verbose = verbose)
     }
 
     AG <- AG_time(AG, meta)
+    if (verbose) message_update(16, dur = get_duration(t))
     return(AG)
   }
 }
@@ -247,7 +256,7 @@ AG_time <- function(AG, meta) {
 #'
 #' @keywords internal
 #'
-check_inc <- function(AG) {
+check_inc <- function(AG, verbose = FALSE) {
   inc_names <-
     which(grepl("inclinometer", names(AG), ignore.case = TRUE))
   test1 <- length(inc_names) == 4
@@ -256,5 +265,17 @@ check_inc <- function(AG) {
     message_update(13, TRUE)
     return(AG)
   }
+
+  if (verbose) message_update(15)
   return(AG)
+}
+
+#' Provide the run time of processing
+#'
+#' @param t The initial time
+#'
+#' @keywords internal
+#'
+get_duration <- function(t) {
+  format((proc.time() - t)[3] / 60, digits = 1, nsmall = 1)
 }

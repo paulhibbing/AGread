@@ -4,10 +4,12 @@
 \alias{check_inc}
 \title{Test whether inclinometer variables have been correctly assigned}
 \usage{
-check_inc(AG)
+check_inc(AG, verbose = FALSE)
 }
 \arguments{
 \item{AG}{A data frame of partially-processed data}
+
+\item{verbose}{A logical scalar: Print processing updates?}
 }
 \description{
 Test whether inclinometer variables have been correctly assigned

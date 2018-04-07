@@ -4,7 +4,7 @@
 \alias{message_update}
 \title{Print processing updates to console}
 \usage{
-message_update(n, is_message = FALSE, file)
+message_update(n, is_message = FALSE, file, dur)
 }
 \arguments{
 \item{n}{The message number to print}
