@@ -1,0 +1,13 @@
+Package: AGread
+Title: Read Accelerometer Files from ActiGraph Accelerometers
+Version: 0.0.0.9000
+Authors@R: person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
+		  role = c("aut","cre"))
+Description: Standardizes the process of bringing various modes of output
+    files into R. For more information, see:
+    <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->
+Depends: R (>= 3.4.3)
+License: GPL-3 | file LICENSE
+Imports: data.table (>= 1.10.4)
+Encoding: UTF-8
+LazyData: true
