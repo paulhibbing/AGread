@@ -1,0 +1,13 @@
+citHeader("To cite package 'AGread' in publications use:")
+
+citEntry(entry = "Misc",
+  title        = "AGread: Read Accelerometer Files from ActiGraph Accelerometers",
+  author       = personList(as.person("Paul R. Hibbing")),
+  year         = "2018",
+  url          = "https://github.com/paulhibbing/AGread/",
+
+  textVersion  =
+  paste("Paul R. Hibbing (2018).",
+        "AGread: Read Accelerometer Files from ActiGraph Accelerometers.",
+        "URL https://github.com/paulhibbing/AGread/.")
+)
