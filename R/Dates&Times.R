@@ -16,8 +16,8 @@
 #'             "12:00:00",
 #'             "23:59:59"))
 #'
-#' TwoRegression:::get_minute(key_times)
-#' TwoRegression:::get_minute(key_times, rational = TRUE)
+#' AGread:::get_minute(key_times)
+#' AGread:::get_minute(key_times, rational = TRUE)
 #' }
 #'
 #' @keywords internal
@@ -44,7 +44,7 @@ get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE
 #' \dontrun{
 #' key_dates <- c("2018-01-01", "2018-12-31")
 #'
-#' TwoRegression:::get_day_of_year(key_dates, "%Y-%m-%d")
+#' AGread:::get_day_of_year(key_dates, "%Y-%m-%d")
 #' }
 #'
 #' @keywords internal

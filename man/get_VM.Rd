@@ -23,10 +23,10 @@ data(imu_to_collapse)
 
 vm_columns <-
     grepl("accelerometer",
-        names(imu),
+        names(imu_to_collapse),
         ignore.case = T)
 
-get_VM(imu[, vm_columns])
+get_VM(data.frame(imu_to_collapse)[, vm_columns])
 }
 
 }

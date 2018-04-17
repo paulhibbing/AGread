@@ -19,7 +19,7 @@ raw_file <-
     "TestID_LeftWrist_RAW.csv",
     package = "AGread")
 
-AGread:::get_raw_file_meta(file)
+AGread:::get_raw_file_meta(raw_file)
 }
 
 }

@@ -80,7 +80,7 @@ AG_col_names <- function(variable) {
 #'
 #' @examples
 #' \dontrun{
-#' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"))
+#' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
 #' }
 #'
 read_AG_counts <- function(file, verbose = FALSE, skip = 10,
@@ -130,17 +130,17 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     message_update(2)
     names(AG) <- variables
     AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(t))
+    if (verbose) message_update(16, dur = get_duration(timer))
     return(AG)
   }
 
   if (!"V1" %in% names(AG)) {
     message_update(3)
     AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(t))
+    if (verbose) message_update(16, dur = get_duration(timer))
     return(AG)
   } else {
-    message_update(6)
+    if (verbose) message_update(6)
     AG <- test_times(AG, verbose = verbose)
 
     if (all(c("Axis1", "Axis2", "Axis3") %in% variables)) {
@@ -276,6 +276,6 @@ check_inc <- function(AG, verbose = FALSE) {
 #'
 #' @keywords internal
 #'
-get_duration <- function(t) {
-  format((proc.time() - t)[3] / 60, digits = 1, nsmall = 1)
+get_duration <- function(timer) {
+  format((proc.time() - timer)[3] / 60, digits = 1, nsmall = 1)
 }

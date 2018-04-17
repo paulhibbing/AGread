@@ -2,7 +2,7 @@
 
 export(classify_magnetometer)
 export(get_VM)
+export(read_AG_IMU)
 export(read_AG_counts)
 export(read_AG_raw)
-export(read_IMU)
 importFrom(magrittr,"%>%")

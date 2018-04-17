@@ -4,7 +4,7 @@
 \alias{get_imu_file_meta}
 \title{Get file metadata (sampling frequency, start time, and samples per epoch) for primary accelerometer}
 \usage{
-get_imu_file_meta(file, output_window_secs)
+get_imu_file_meta(file, output_window_secs = 1)
 }
 \arguments{
 \item{file}{character scalar giving path to IMU file}
@@ -21,7 +21,7 @@ imu_file <-
     "TestID_LeftWrist_IMU.csv",
     package = "AGread")
 
-AGread:::get_imu_file_meta(file, 1)
+AGread:::get_imu_file_meta(imu_file, 1)
 }
 
 }

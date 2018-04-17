@@ -6,8 +6,15 @@ Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://tra
 
 # AGread
 
-AGread is for automatically bringing activity counts data from ActiGraph
-accelerometers (csv format) into R.
+AGread is for automatically detecting the format of .csv data files from
+ActiGraph accelerometers, and bringing the data into R. It is designed
+to streamline and standardize the file-reading process, prior to further
+processing. Thus, it can be used flexibly to develop new methods for
+handling ActiGraph data, or to invoke existing methods, many of which
+exist in other R packages (e.g.
+[PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
+and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
+or will soon.
 
 ## Installation
 

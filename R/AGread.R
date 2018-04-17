@@ -1,15 +1,21 @@
-#' Read Accelerometer Files from ActiGraph Accelerometers
+#' Read Data Files from ActiGraph Monitors
 #'
 #' This provides support for reading ActiGraph files of various modes into R.
 #' For more information see:
-#' \url{https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file-}
+#' \url{https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file-}. Additionally, functions are provided to read and minimally pre-process raw data from primary accelerometer and inertial measurement unit files.
 #'
-#' @section Core function:
+#' @section Core functions:
 #' \code{\link{read_AG_counts}}
+#'
+#' \code{\link{read_AG_raw}}
+#'
+#' \code{\link{read_AG_IMU}}
 #'
 #' @examples
 #' \dontrun{
-#' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"))
+#' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
+#' read_AG_raw(system.file("extdata", "TestID_LeftWrist_RAW.csv", package = "AGread"))
+#' read_AG_IMU(system.file("extdata", "TestID_LeftWrist_IMU.csv", package = "AGread"))
 #' }
 #'
 #' @importFrom magrittr %>%

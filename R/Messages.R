@@ -1,5 +1,6 @@
 #' Print processing updates to console
 #'
+#' @inheritParams read_AG_IMU
 #' @param message_number The message number to print
 #' @param is_message A logical scalar: Print as message?
 #' @param file A character scalar: name of file being processed
@@ -8,7 +9,7 @@
 #'
 #' @keywords internal
 #'
-message_update <- function(message_number, is_message = FALSE, file, dur, vm_variables, n) {
+message_update <- function(message_number, is_message = FALSE, file, dur, vm_variables, n, filter_hz) {
   note <-
     switch(message_number,
       paste("\n\n\nReading:", basename(file)),
@@ -17,8 +18,8 @@ message_update <- function(message_number, is_message = FALSE, file, dur, vm_var
       "\n..Getting meta-data from header",
       "\n..Reading file",
       "\n....Attempting to determine column names from mode and column characteristics",
-      "\n......No sign of confounding by date/time variables",
-      "\n......Affirmative evidence of confounding by date/time variables",
+      "\n......No sign of confounding by date/time columns",
+      "\n......Affirmative evidence that date and time are first two columns",
       "\n......No conclusion about date/time confounding possible",
       "\n......Identified a vector magnitude variable included in the file",
       "\n......No sign of confounding by vector magnitude variable",
@@ -29,7 +30,7 @@ message_update <- function(message_number, is_message = FALSE, file, dur, vm_var
       paste("\nReading complete. Elapsed time", dur, "minutes."),
       "Primary accelerometer file is formatted unexpectedly. Processing with read.csv() -- be prepared to wait.",
       "Error in file formatting. Returning NULL.",
-      "\n\n-- Filtering Gyroscope...",
+      paste("\n\n-- Low-pass filtering gyroscope at", filter_hz, "Hz..."),
       " Done.\n",
       "\n-- Calculating Vector Magnitudes...",
       paste(
@@ -38,7 +39,7 @@ message_update <- function(message_number, is_message = FALSE, file, dur, vm_var
         "\n"
       ),
       "\n     Vector magnitude calculation complete.\n",
-      "Number of rows not divisible by samp_rate*output_window\nTruncating data.",
+      "Number of rows not divisible by samp_rate*output_window: Data will be truncated.",
       "\n-- Collapsing data. This could take awhile...",
       "Length of X and Y differ. Returning NULL.",
       paste("Determining direction from mean values of x and y, replicating", n, "times."),

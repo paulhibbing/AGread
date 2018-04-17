@@ -16,11 +16,11 @@
 #'         "TestID_LeftWrist_IMU.csv",
 #'         package = "AGread")
 #'
-#' read_IMU(imu_file)
+#' read_AG_IMU(imu_file)
 #' }
 #'
 #' @export
-read_IMU <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, filter = TRUE, filter_hz = 35) {
+read_AG_IMU <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, filter = TRUE, filter_hz = 35) {
   timer <- proc.time()
   if (verbose) message_update(1, file = file)
 
@@ -35,7 +35,7 @@ read_IMU <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, f
       showProgress = FALSE
     ))
     )
-  if (class(AG) == "try-error") {
+  if ("try-error" %in% class(AG)) {
     message_update(18, is_message = TRUE)
     return(NULL)
   }
@@ -60,8 +60,6 @@ read_IMU <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, f
 
   AG$Magnetometer_VM_MicroT <-
     get_VM(AG[, grepl("magnetometer", names(AG), ignore.case = T)], verbose = verbose)
-
-  if (verbose) message_update(24)
 
   AG <- imu_collapse(AG, meta$block_size, verbose = verbose)
 

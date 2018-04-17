@@ -4,7 +4,8 @@
 \alias{message_update}
 \title{Print processing updates to console}
 \usage{
-message_update(message_number, is_message = FALSE, file, dur, vm_variables, n)
+message_update(message_number, is_message = FALSE, file, dur, vm_variables, n,
+  filter_hz)
 }
 \arguments{
 \item{message_number}{The message number to print}
@@ -16,6 +17,8 @@ message_update(message_number, is_message = FALSE, file, dur, vm_variables, n)
 \item{vm_variables}{variables being used to calculate vector magnitude}
 
 \item{n}{Number of replications to be performed for magnetometer direction classification}
+
+\item{filter_hz}{The cutoff for the low-pass filter}
 }
 \description{
 Print processing updates to console

@@ -10,9 +10,9 @@
 #' \dontrun{
 #' data(imu_to_collapse)
 #'
-#' X <- mean(imu$Magnetometer.X)
-#' Y <- mean(imu$Magnetometer.Y)
-#' Z <- mean(imu$Magnetometer.Z)
+#' X <- mean(imu_to_collapse$Magnetometer.X)
+#' Y <- mean(imu_to_collapse$Magnetometer.Y)
+#' Z <- mean(imu_to_collapse$Magnetometer.Z)
 #'
 #' classify_magnetometer(X, Y, Z)
 #' }

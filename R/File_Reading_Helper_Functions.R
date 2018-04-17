@@ -12,7 +12,7 @@
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
-#' AGread:::check_columns(file)
+#' AGread:::check_columns(raw_file)
 #' }
 #'
 #' @keywords internal
@@ -52,7 +52,7 @@ check_second <- function(AG) {
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
-#' AGread:::get_raw_file_meta(file)
+#' AGread:::get_raw_file_meta(raw_file)
 #' }
 #'
 #' @keywords internal
@@ -100,7 +100,7 @@ get_raw_file_meta <- function(file) {
 #'     "TestID_LeftWrist_IMU.csv",
 #'     package = "AGread")
 #'
-#' AGread:::get_imu_file_meta(file, 1)
+#' AGread:::get_imu_file_meta(imu_file, 1)
 #' }
 #'
 #' @keywords internal
@@ -219,4 +219,5 @@ imu_collapse <- function(AG, block_size, verbose = FALSE) {
 
   if (verbose) message_update(20)
   AG <- as.data.frame(AG)
+  return(AG)
 }

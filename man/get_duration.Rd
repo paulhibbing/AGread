@@ -4,7 +4,7 @@
 \alias{get_duration}
 \title{Provide the run time of processing}
 \usage{
-get_duration(t)
+get_duration(timer)
 }
 \arguments{
 \item{t}{The initial time}

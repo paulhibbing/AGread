@@ -30,7 +30,7 @@ Read data table files containing count values
 }
 \examples{
 \dontrun{
-read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"))
+read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
 }
 
 }

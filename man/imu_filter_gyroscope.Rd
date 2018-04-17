@@ -8,6 +8,10 @@ imu_filter_gyroscope(AG, samp_rate, filter_hz = 35, verbose = FALSE)
 }
 \arguments{
 \item{AG}{a dataframe of IMU data}
+
+\item{filter_hz}{The cutoff for the low-pass filter}
+
+\item{verbose}{A logical scalar: Print processing updates?}
 }
 \description{
 Low-Pass filter Gyroscope data
@@ -15,7 +19,7 @@ Low-Pass filter Gyroscope data
 \examples{
 \dontrun{
 data(imu_to_collapse)
-AGread:::imu_filter_gyroscope(imu)
+AGread:::imu_filter_gyroscope(imu_to_collapse, 100)
 }
 
 }

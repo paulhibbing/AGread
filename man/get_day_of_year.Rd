@@ -21,7 +21,7 @@ A wrapper to retrieve the Julian date.
 \dontrun{
 key_dates <- c("2018-01-01", "2018-12-31")
 
-TwoRegression:::get_day_of_year(key_dates, "\%Y-\%m-\%d")
+AGread:::get_day_of_year(key_dates, "\%Y-\%m-\%d")
 }
 
 }
