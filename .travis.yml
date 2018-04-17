@@ -1,5 +1,12 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
+sudo: required
 cache: packages
+before_install:
+  - sudo apt-get install -y libsndfile1-dev
+  - sudo apt-get install -y libfftw3-dev
+env:
+  global:
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran rpack"
+    - R_BUILD_ARGS="--no-build-vignettes --no-manual rpack"
