@@ -12,10 +12,10 @@
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
-#' AGread:::check_columns(raw_file)
+#' check_columns(raw_file)
 #' }
 #'
-#' @keywords internal
+#' @export
 check_columns <- function(file) {
   test_read <- utils::read.csv(file, nrows = 15)
   if(ncol(test_read) == 1) FALSE else TRUE
@@ -28,10 +28,10 @@ check_columns <- function(file) {
 #' @examples
 #' \dontrun{
 #' data(imu_to_check)
-#' AGread:::check_second(imu_to_check)
+#' check_second(imu_to_check)
 #' }
 #'
-#' @keywords internal
+#' @export
 check_second <- function(AG) {
   AG$ms <-
     as.numeric(format(AG$Timestamp, "%OS3"))%%1
@@ -52,10 +52,10 @@ check_second <- function(AG) {
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
-#' AGread:::get_raw_file_meta(raw_file)
+#' get_raw_file_meta(raw_file)
 #' }
 #'
-#' @keywords internal
+#' @export
 get_raw_file_meta <- function(file) {
   file_meta <-
     data.frame(data.table::fread(
@@ -100,10 +100,10 @@ get_raw_file_meta <- function(file) {
 #'     "TestID_LeftWrist_IMU.csv",
 #'     package = "AGread")
 #'
-#' AGread:::get_imu_file_meta(imu_file, 1)
+#' get_imu_file_meta(imu_file, 1)
 #' }
 #'
-#' @keywords internal
+#' @export
 get_imu_file_meta <- function(file, output_window_secs = 1) {
   header <-
     utils::read.csv(file, nrow = 20, stringsAsFactors = F, header = F)
@@ -144,10 +144,10 @@ get_imu_file_meta <- function(file, output_window_secs = 1) {
 #' @examples
 #' \dontrun{
 #' data(raw_to_collapse)
-#' AGread:::AG_collapse(raw_to_collapse, 1, 80)
+#' AG_collapse(raw_to_collapse, 1, 80)
 #' }
 #'
-#' @keywords internal
+#' @export
 AG_collapse <- function(AG, output_window_secs = 1, samp_freq) {
   ## Get ENMO
   ## Adapted from code written by Vincent van Hees
@@ -181,10 +181,10 @@ AG_collapse <- function(AG, output_window_secs = 1, samp_freq) {
 #' @examples
 #' \dontrun{
 #' data(imu_to_collapse)
-#' AGread:::imu_collapse(imu_to_collapse, 100)
+#' imu_collapse(imu_to_collapse, 100)
 #' }
 #'
-#' @keywords internal
+#' @export
 imu_collapse <- function(AG, block_size, verbose = FALSE) {
 
   if (nrow(AG) %% block_size != 0) {

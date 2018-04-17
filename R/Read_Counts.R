@@ -274,7 +274,12 @@ check_inc <- function(AG, verbose = FALSE) {
 #'
 #' @param t The initial time
 #'
-#' @keywords internal
+#' @examples
+#' timer <- proc.time()
+#' Sys.sleep(2.2)
+#' AGread:::message_update(16, dur = get_duration(timer))
+#'
+#' @export
 #'
 get_duration <- function(timer) {
   format((proc.time() - timer)[3] / 60, digits = 1, nsmall = 1)

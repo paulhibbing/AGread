@@ -6,10 +6,10 @@
 #' @examples
 #' \dontrun{
 #' data(imu_to_collapse)
-#' AGread:::imu_filter_gyroscope(imu_to_collapse, 100)
+#' imu_filter_gyroscope(imu_to_collapse, 100)
 #' }
 #'
-#' @keywords internal
+#' @export
 imu_filter_gyroscope <- function(AG, samp_rate, filter_hz = 35, verbose = FALSE) {
   if (verbose) message_update(19, filter_hz = filter_hz)
   AG[, grepl("gyroscope", names(AG), ignore.case = T)] <-
