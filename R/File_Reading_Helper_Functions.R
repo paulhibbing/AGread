@@ -104,7 +104,7 @@ get_raw_file_meta <- function(file) {
 #' }
 #'
 #' @keywords internal
-get_imu_file_meta <- function(file, output_window_secs) {
+get_imu_file_meta <- function(file, output_window_secs = 1) {
   header <-
     utils::read.csv(file, nrow = 20, stringsAsFactors = F, header = F)
 
