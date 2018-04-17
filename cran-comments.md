@@ -14,11 +14,16 @@ Maintainer: 'Paul R. Hibbing <paulhibbing@gmail.com>'
 New submission
 
 Possibly mis-spelled words in DESCRIPTION:
-  ActiGraph
+  ActiGraph (2:29)
+  accelerometer (10:27)
+  pre (9:64)
 
-This is the first submission of `AGread`. The "possibly mis-spelled word"
-    is the name of a device whose data are manipulated by the package
-    functions.
+This is the first submission of `AGread`. The first
+    "possibly mis-spelled word" is the name of a device
+    whose data are manipulated by the package functions.
+    The other two words are false positives, "accelerometer"
+    being a type of sensor, and "pre" being appended within
+    the phrase "pre-processing."
 
 ## Other comments
 
