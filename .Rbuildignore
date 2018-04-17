@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^modes.csv$
+^TwoRegression_messages.csv$
 ^\.travis\.yml$
 ^README\.Rmd$
 ^README-.*\.png$

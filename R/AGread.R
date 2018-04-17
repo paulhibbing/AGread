@@ -12,6 +12,7 @@
 #' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"))
 #' }
 #'
+#' @importFrom magrittr %>%
 #' @docType package
 #' @name AGread
 NULL

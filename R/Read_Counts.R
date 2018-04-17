@@ -86,7 +86,7 @@ AG_col_names <- function(variable) {
 read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     nrows = 10, header = FALSE, ...) {
 
-  t <- proc.time()
+  timer <- proc.time()
   if (verbose) message_update(1, file = file)
     meta <-
       AG_meta(
@@ -160,7 +160,7 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     }
 
     AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(t))
+    if (verbose) message_update(16, dur = get_duration(timer))
     return(AG)
   }
 }

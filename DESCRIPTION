@@ -8,7 +8,12 @@ Description: Standardize the process of bringing various modes of output
     <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->.
 Depends: R (>= 3.4.3)
 License: GPL-3 | file LICENSE
-Imports: data.table (>= 1.10.4), utils (>= 3.4.3), stats (>= 3.4.3)
+Imports: data.table (>= 1.10.4),
+    utils (>= 3.4.3),
+    stats (>= 3.4.3),
+    dplyr (>= 0.5.0),
+    seewave (>= 2.0.5),
+    magrittr (>= 1.5),
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

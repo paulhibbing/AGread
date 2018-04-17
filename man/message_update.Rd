@@ -4,14 +4,18 @@
 \alias{message_update}
 \title{Print processing updates to console}
 \usage{
-message_update(n, is_message = FALSE, file, dur)
+message_update(message_number, is_message = FALSE, file, dur, vm_variables, n)
 }
 \arguments{
-\item{n}{The message number to print}
+\item{message_number}{The message number to print}
 
 \item{is_message}{A logical scalar: Print as message?}
 
 \item{file}{A character scalar: name of file being processed}
+
+\item{vm_variables}{variables being used to calculate vector magnitude}
+
+\item{n}{Number of replications to be performed for magnetometer direction classification}
 }
 \description{
 Print processing updates to console
