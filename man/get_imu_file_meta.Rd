@@ -21,8 +21,7 @@ imu_file <-
     "TestID_LeftWrist_IMU.csv",
     package = "AGread")
 
-AGread:::get_imu_file_meta(imu_file, 1)
+get_imu_file_meta(imu_file, 1)
 }
 
 }
-\keyword{internal}

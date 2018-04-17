@@ -19,8 +19,7 @@ Collapse primary accelerometer data
 \examples{
 \dontrun{
 data(raw_to_collapse)
-AGread:::AG_collapse(raw_to_collapse, 1, 80)
+AG_collapse(raw_to_collapse, 1, 80)
 }
 
 }
-\keyword{internal}

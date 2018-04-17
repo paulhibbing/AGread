@@ -22,8 +22,7 @@ Collapse raw IMU data to a specified epoch
 \examples{
 \dontrun{
 data(imu_to_collapse)
-AGread:::imu_collapse(imu_to_collapse, 100)
+imu_collapse(imu_to_collapse, 100)
 }
 
 }
-\keyword{internal}

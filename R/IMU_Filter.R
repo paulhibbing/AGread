@@ -2,6 +2,7 @@
 #'
 #' @inheritParams check_second
 #' @inheritParams read_AG_IMU
+#' @param samp_rate The sampling rate, in Hz
 #'
 #' @examples
 #' \dontrun{

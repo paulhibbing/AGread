@@ -16,13 +16,13 @@ New submission
 Possibly mis-spelled words in DESCRIPTION:
   ActiGraph
 
-This is the first submission of AGread. The "possibly mis-spelled word"
+This is the first submission of `AGread`. The "possibly mis-spelled word"
     is the name of a device whose data are manipulated by the package
     functions.
 
 ## Other comments
 
-In addition to the original functions supplied in this package, the
+In addition to the new material supplied in this package, the
     following data sets and documentation are duplicated (or modifed)
     from the `TwoRegression` package, of which I am the author and
     maintainer:
@@ -52,10 +52,12 @@ The following functions are duplicated (or modified) exported
 * read_AG_IMU (re-named from read_IMU)
 * read_AG_raw
 
-In retrospect, a standalone package (i.e., `AGread`) was always
-    the best place for these functions and data sets to live.
-    Therefore, my intent is to transition them from `TwoRegression`
-    to `AGread` by:
+In retrospect, a standalone reading and pre-processing package
+    (i.e., `AGread`) was always the best place for these functions
+    and data sets to live. In the `TwoRegression` package, these items
+    played a supporting role, whereas both packages will have a more
+    focused purpose if the items are transitioned from `TwoRegression`
+    to `AGread`. My plan for doing so would involve:
 
 * deprecating in the next submission of `TwoRegression`
 * removing, with a major version increment, in the subsequent of

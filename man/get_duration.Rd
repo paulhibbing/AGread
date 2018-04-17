@@ -7,9 +7,14 @@
 get_duration(timer)
 }
 \arguments{
-\item{t}{The initial time}
+\item{timer}{The initial time}
 }
 \description{
 Provide the run time of processing
 }
-\keyword{internal}
+\examples{
+timer <- proc.time()
+Sys.sleep(2.2)
+AGread:::message_update(16, dur = get_duration(timer))
+
+}

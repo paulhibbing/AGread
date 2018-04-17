@@ -272,7 +272,7 @@ check_inc <- function(AG, verbose = FALSE) {
 
 #' Provide the run time of processing
 #'
-#' @param t The initial time
+#' @param timer The initial time
 #'
 #' @examples
 #' timer <- proc.time()

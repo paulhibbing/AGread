@@ -21,8 +21,7 @@ raw_file <-
     "TestID_LeftWrist_RAW.csv",
     package = "AGread")
 
-AGread:::check_columns(raw_file)
+check_columns(raw_file)
 }
 
 }
-\keyword{internal}
