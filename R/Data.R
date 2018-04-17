@@ -28,7 +28,7 @@
 #'   \item{Accelerometer.X}{Secondary accelerometer x-axis data, in G}
 #'   \item{Accelerometer.Y}{Secondary accelerometer y-axis data, in G}
 #'   \item{Accelerometer.Z}{Secondary accelerometer z-axis data, in G}
-#'   \item{Temperature}{Temperature of the IMU, in Celcius}
+#'   \item{Temperature}{Temperature of the IMU, in Celsius}
 #'   \item{Gyroscope.X}{Gyroscope x-axis data, in degrees per second}
 #'   \item{Gyroscope.Y}{Gyroscope y-axis data, in degrees per second}
 #'   \item{Gyroscope.Z}{Gyroscope z-axis data, in degrees per second}
