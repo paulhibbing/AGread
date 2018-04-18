@@ -1,8 +1,10 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 0.1.0
-Authors@R: person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
-		  role = c("aut","cre"))
+Version: 0.1.1
+Authors@R: c(
+    person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
+		  role = c("aut","cre")),
+    person(c("Vincent", "T."), "van Hees", role = "ctb"))
 Description: Standardize the process of bringing various modes of output
     files into R. For more information, see:
     <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->.
@@ -19,3 +21,5 @@ Imports: data.table (>= 1.10.4),
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+URL: https://github.com/paulhibbing/AGread
+BugReports: https://github.com/paulhibbing/AGread/issues

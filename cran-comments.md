@@ -1,3 +1,13 @@
+## Resubmission:
+This is a resubmission, which has incorporated the following changes:
+
+* Added Vincent van Hees as contributor in the Authors@R field of
+    DESCRIPTION.
+
+* Added URL and BugReports fields to DESCRIPTION
+
+* Incremented version from 0.1.0 to 0.1.1
+
 ## Test environments
 * local Windows 10 install, R 3.4.3
 * ubuntu 14.04.5 (on travis-ci), R 3.4.4
