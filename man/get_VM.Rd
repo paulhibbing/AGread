@@ -18,15 +18,13 @@ a vector of vector magnitude values
 Calculate vector magnitude
 }
 \examples{
-\dontrun{
 data(imu_to_collapse)
 
 vm_columns <-
     grepl("accelerometer",
         names(imu_to_collapse),
-        ignore.case = T)
+        ignore.case = TRUE)
 
 get_VM(data.frame(imu_to_collapse)[, vm_columns])
-}
 
 }

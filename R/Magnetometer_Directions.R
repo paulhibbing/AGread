@@ -6,8 +6,12 @@
 #' @param orientation the conversion scheme to use, from c("vertical",
 #'   "horizontal")
 #'
+#' @return A vector of cardinal directions assigned from the set
+#'     {N, NNE, NE, ENE, E, ESE, SE, SSE, S,
+#'      SSW, SW, WSW, W, WNW, NW, NNW}, where N, E, S, and W are
+#'      north, east, south, and west, respectively.
+#'
 #' @examples
-#' \dontrun{
 #' data(imu_to_collapse)
 #'
 #' X <- mean(imu_to_collapse$Magnetometer.X)
@@ -15,7 +19,6 @@
 #' Z <- mean(imu_to_collapse$Magnetometer.Z)
 #'
 #' classify_magnetometer(X, Y, Z)
-#' }
 #'
 #' @seealso
 #'   \url{http://s3.amazonaws.com/actigraphcorp.com/wp-content/uploads/2017/11/26205750/ActiGraph_IMU_White_Paper.pdf}

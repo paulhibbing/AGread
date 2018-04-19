@@ -20,9 +20,7 @@ dataframe of IMU data averaged over the specified epoch length
 Collapse raw IMU data to a specified epoch
 }
 \examples{
-\dontrun{
 data(imu_to_collapse)
 imu_collapse(imu_to_collapse, 100)
-}
 
 }

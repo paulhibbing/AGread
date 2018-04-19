@@ -8,7 +8,6 @@
 #' @param rational A logical scalar. Use rational number to represent seconds?
 #'
 #' @examples
-#' \dontrun{
 #' key_times <-
 #'     paste("2018-03-15",
 #'           c("00:00:00",
@@ -18,7 +17,6 @@
 #'
 #' get_minute(key_times)
 #' get_minute(key_times, rational = TRUE)
-#' }
 #'
 #' @export
 get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE) {
@@ -41,11 +39,9 @@ get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE
 #' @return A numeric vector of Julian dates.
 #'
 #' @examples
-#' \dontrun{
 #' key_dates <- c("2018-01-01", "2018-12-31")
 #'
 #' get_day_of_year(key_dates, "%Y-%m-%d")
-#' }
 #'
 #' @export
 get_day_of_year <- function(timestamp, format = "%Y-%m-%d %H:%M:%S") {

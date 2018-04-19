@@ -13,13 +13,11 @@ get_raw_file_meta(file)
 Get file metadata (sampling frequency and timestamps) for primary accelerometer
 }
 \examples{
-\dontrun{
 raw_file <-
     system.file("extdata",
     "TestID_LeftWrist_RAW.csv",
     package = "AGread")
 
 get_raw_file_meta(raw_file)
-}
 
 }

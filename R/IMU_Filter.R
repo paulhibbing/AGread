@@ -5,10 +5,8 @@
 #' @param samp_rate The sampling rate, in Hz
 #'
 #' @examples
-#' \dontrun{
 #' data(imu_to_collapse)
 #' imu_filter_gyroscope(imu_to_collapse, 100)
-#' }
 #'
 #' @export
 imu_filter_gyroscope <- function(AG, samp_rate, filter_hz = 35, verbose = FALSE) {

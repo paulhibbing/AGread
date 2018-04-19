@@ -1,6 +1,6 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
 		  role = c("aut","cre")),
@@ -10,6 +10,8 @@ Description: Standardize the process of bringing various modes of output
     <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->.
     Additionally, processes are provided to read and minimally pre-process
     raw data from primary accelerometer and inertial measurement unit files.
+    ActiGraph monitors are used to estimate physical activity outcomes via
+    body-worn sensors that measure (e.g.) acceleration or rotational velocity.
 Depends: R (>= 2.10)
 License: GPL-3 | file LICENSE
 Imports: data.table (>= 1.10.4),

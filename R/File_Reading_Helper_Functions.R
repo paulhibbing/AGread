@@ -6,14 +6,12 @@
 #'
 #' @inheritParams read_AG_raw
 #' @examples
-#' \dontrun{
 #' raw_file <-
 #'     system.file("extdata",
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
 #' check_columns(raw_file)
-#' }
 #'
 #' @export
 check_columns <- function(file) {
@@ -26,10 +24,8 @@ check_columns <- function(file) {
 #' @param AG a dataframe of IMU data
 #'
 #' @examples
-#' \dontrun{
 #' data(imu_to_check)
 #' check_second(imu_to_check)
-#' }
 #'
 #' @export
 check_second <- function(AG) {
@@ -46,14 +42,12 @@ check_second <- function(AG) {
 #' @param file character scalar giving path to primary accelerometer file
 #'
 #' @examples
-#' \dontrun{
 #' raw_file <-
 #'     system.file("extdata",
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
 #' get_raw_file_meta(raw_file)
-#' }
 #'
 #' @export
 get_raw_file_meta <- function(file) {
@@ -94,14 +88,12 @@ get_raw_file_meta <- function(file) {
 #' @param output_window_secs the desired epoch length, over which to average IMU data
 #'
 #' @examples
-#' \dontrun{
 #' imu_file <-
 #'     system.file("extdata",
 #'     "TestID_LeftWrist_IMU.csv",
 #'     package = "AGread")
 #'
-#' get_imu_file_meta(imu_file, 1)
-#' }
+#' get_imu_file_meta(imu_file)
 #'
 #' @export
 get_imu_file_meta <- function(file, output_window_secs = 1) {
@@ -142,10 +134,8 @@ get_imu_file_meta <- function(file, output_window_secs = 1) {
 #' @param samp_freq The sampling frequency
 #'
 #' @examples
-#' \dontrun{
 #' data(raw_to_collapse)
 #' AG_collapse(raw_to_collapse, 1, 80)
-#' }
 #'
 #' @export
 AG_collapse <- function(AG, output_window_secs = 1, samp_freq) {
@@ -179,10 +169,8 @@ AG_collapse <- function(AG, output_window_secs = 1, samp_freq) {
 #' @return dataframe of IMU data averaged over the specified epoch length
 #'
 #' @examples
-#' \dontrun{
 #' data(imu_to_collapse)
 #' imu_collapse(imu_to_collapse, 100)
-#' }
 #'
 #' @export
 imu_collapse <- function(AG, block_size, verbose = FALSE) {

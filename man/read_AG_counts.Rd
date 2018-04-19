@@ -29,8 +29,6 @@ A data frame reflecting the data contained in the csv file
 Read data table files containing count values
 }
 \examples{
-\dontrun{
 read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
-}
 
 }

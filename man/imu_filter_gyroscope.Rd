@@ -19,9 +19,7 @@ imu_filter_gyroscope(AG, samp_rate, filter_hz = 35, verbose = FALSE)
 Low-Pass filter Gyroscope data
 }
 \examples{
-\dontrun{
 data(imu_to_collapse)
 imu_filter_gyroscope(imu_to_collapse, 100)
-}
 
 }

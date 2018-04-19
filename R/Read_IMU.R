@@ -10,14 +10,12 @@
 #' @return A dataframe giving processed IMU data in the specified epoch length
 #'
 #' @examples
-#' \dontrun{
 #' imu_file <-
 #'     system.file("extdata",
 #'         "TestID_LeftWrist_IMU.csv",
 #'         package = "AGread")
 #'
 #' read_AG_IMU(imu_file)
-#' }
 #'
 #' @export
 read_AG_IMU <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, filter = TRUE, filter_hz = 35) {

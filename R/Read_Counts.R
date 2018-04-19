@@ -2,7 +2,11 @@
 #'
 #' @inheritParams read_AG_counts
 #'
-#' @keywords internal
+#' @examples
+#' counts_file <- system.file("extdata", "Example.csv", package = "AGread")
+#' AGread::AG_meta(counts_file)
+#'
+#' @export
 AG_meta <- function(file, verbose = FALSE, ...) {
   if (verbose) message_update(4)
   meta <-
@@ -79,9 +83,7 @@ AG_col_names <- function(variable) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
-#' }
 #'
 read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     nrows = 10, header = FALSE, ...) {

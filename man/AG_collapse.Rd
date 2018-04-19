@@ -17,9 +17,7 @@ AG_collapse(AG, output_window_secs = 1, samp_freq)
 Collapse primary accelerometer data
 }
 \examples{
-\dontrun{
 data(raw_to_collapse)
 AG_collapse(raw_to_collapse, 1, 80)
-}
 
 }

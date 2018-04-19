@@ -6,7 +6,18 @@ This is a resubmission, which has incorporated the following changes:
 
 * Added URL and BugReports fields to DESCRIPTION
 
-* Incremented version from 0.1.0 to 0.1.1
+* Added a summary of what ActiGraph monitors measure
+    in DESCRIPTION
+
+* Unwrapped examples from \dontrun{} where possible
+
+* Improved the documentation of classify_magnetometer()
+
+* Exported AG_meta()
+
+* Incremented version from 0.1.0 to 0.1.2 (An incomplete
+    resubmission was mistakenly uploaded for version 0.1.1,
+    but moved away before review at my request.)
 
 ## Test environments
 * local Windows 10 install, R 3.4.3

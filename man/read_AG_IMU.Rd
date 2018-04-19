@@ -27,13 +27,11 @@ A dataframe giving processed IMU data in the specified epoch length
 File reading function for IMU files
 }
 \examples{
-\dontrun{
 imu_file <-
     system.file("extdata",
         "TestID_LeftWrist_IMU.csv",
         package = "AGread")
 
 read_AG_IMU(imu_file)
-}
 
 }
