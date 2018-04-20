@@ -31,9 +31,15 @@ or will soon.
 
 ## Installation
 
-You can install AGread from github with:
+You can install the development version of AGread from github with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("paulhibbing/AGread")
+```
+
+Or, AGread v0.1.2 is now available on CRAN, and can be installed with:
+
+``` r
+install.packages("AGread")
 ```
