@@ -9,7 +9,7 @@ Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://tra
 -----
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/AGread)](https://cran.r-project.org/package=AGread)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.2-orange.svg?style=flat-square)](commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.1.2.9000-orange.svg?style=flat-square)](commits/master)
 
 -----
 
