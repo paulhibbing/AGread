@@ -12,7 +12,7 @@ Description: Standardize the process of bringing various modes of output
     raw data from primary accelerometer and inertial measurement unit files.
     ActiGraph monitors are used to estimate physical activity outcomes via
     body-worn sensors that measure (e.g.) acceleration or rotational velocity.
-Depends: R (>= 2.10)
+Depends: R (>= 3.1.0)
 License: GPL-3 | file LICENSE
 Imports: data.table (>= 1.10.4),
     utils,
