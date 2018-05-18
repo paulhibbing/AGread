@@ -24,3 +24,4 @@ message_update(message_number, is_message = FALSE, file, dur, vm_variables, n,
 Print processing updates to console
 }
 \keyword{internal}
+

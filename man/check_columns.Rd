@@ -4,10 +4,12 @@
 \alias{check_columns}
 \title{Check if the primary accelerometer file is formatted correctly}
 \usage{
-check_columns(file)
+check_columns(file, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
+
+\item{...}{Arguments passed to \code{\link{read.csv}}}
 }
 \description{
 \code{check_columns} returns a logical scalar indicating whether there is a
@@ -23,3 +25,4 @@ raw_file <-
 check_columns(raw_file)
 
 }
+

@@ -15,3 +15,4 @@ check_inc(AG, verbose = FALSE)
 Test whether inclinometer variables have been correctly assigned
 }
 \keyword{internal}
+

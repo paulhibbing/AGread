@@ -12,8 +12,6 @@ imu_filter_gyroscope(AG, samp_rate, filter_hz = 35, verbose = FALSE)
 \item{samp_rate}{The sampling rate, in Hz}
 
 \item{filter_hz}{The cutoff for the low-pass filter}
-
-\item{verbose}{A logical scalar: Print processing updates?}
 }
 \description{
 Low-Pass filter Gyroscope data
@@ -23,3 +21,4 @@ data(imu_to_collapse)
 imu_filter_gyroscope(imu_to_collapse, 100)
 
 }
+
