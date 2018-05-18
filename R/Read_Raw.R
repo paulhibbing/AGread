@@ -23,7 +23,7 @@ read_AG_raw <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10
 
   meta <- get_raw_file_meta(file)
 
-  raw_data <- check_columns(file, ...)
+  raw_data <- check_columns(file, skip = skip, ...)
   if (!raw_data) {
     message_update(17, is_message = TRUE)
     AG <- utils::read.csv(file, stringsAsFactors = FALSE, skip = skip)
