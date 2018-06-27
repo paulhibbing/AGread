@@ -9,7 +9,7 @@
 #'
 #' @keywords internal
 #'
-message_update <- function(message_number, is_message = FALSE, file, dur, vm_variables, n, filter_hz) {
+message_update <- function(message_number, is_message = FALSE, file, dur, vm_variables, n = 1, filter_hz) {
   note <-
     switch(message_number,
       paste("\n\n\nReading:", basename(file)),
