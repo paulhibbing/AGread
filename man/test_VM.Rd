@@ -15,4 +15,3 @@ test_VM(AG, verbose = FALSE)
 Test whether a vector magnitude column is present
 }
 \keyword{internal}
-

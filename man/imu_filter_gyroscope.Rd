@@ -23,4 +23,3 @@ data(imu_to_collapse)
 imu_filter_gyroscope(imu_to_collapse, 100)
 
 }
-

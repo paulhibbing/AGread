@@ -28,4 +28,3 @@ vm_columns <-
 get_VM(data.frame(imu_to_collapse)[, vm_columns])
 
 }
-

@@ -18,4 +18,3 @@ Sys.sleep(2.2)
 AGread:::message_update(16, dur = get_duration(timer))
 
 }
-

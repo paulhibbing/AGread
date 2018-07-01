@@ -32,4 +32,3 @@ Read data table files containing count values
 read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
 
 }
-

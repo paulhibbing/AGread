@@ -15,4 +15,3 @@ AG_time(AG, meta)
 Add time variable to processed data
 }
 \keyword{internal}
-

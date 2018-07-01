@@ -13,4 +13,3 @@ AG_col_names(variable)
 Map variable inclusion to columns in csv file
 }
 \keyword{internal}
-

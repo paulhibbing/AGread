@@ -18,10 +18,10 @@ For more information see:
 
 \code{\link{read_AG_IMU}}
 }
+
 \examples{
 read_AG_counts(system.file("extdata", "Example.csv", package = "AGread"), skip = 11)
 read_AG_raw(system.file("extdata", "TestID_LeftWrist_RAW.csv", package = "AGread"))
 read_AG_IMU(system.file("extdata", "TestID_LeftWrist_IMU.csv", package = "AGread"))
 
 }
-

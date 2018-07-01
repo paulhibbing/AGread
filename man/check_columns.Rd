@@ -27,4 +27,3 @@ raw_file <-
 check_columns(raw_file, skip = 10)
 
 }
-

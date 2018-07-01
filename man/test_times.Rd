@@ -15,4 +15,3 @@ test_times(AG, verbose = FALSE)
 Test whether first columns contain date/time information
 }
 \keyword{internal}
-

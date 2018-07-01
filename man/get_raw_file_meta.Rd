@@ -21,4 +21,3 @@ raw_file <-
 get_raw_file_meta(raw_file)
 
 }
-

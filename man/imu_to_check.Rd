@@ -24,4 +24,3 @@ imu_to_check
 A dataset for demonstrating checks that are applied to IMU data.
 }
 \keyword{datasets}
-

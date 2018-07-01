@@ -4,8 +4,8 @@
 \alias{message_update}
 \title{Print processing updates to console}
 \usage{
-message_update(message_number, is_message = FALSE, file, dur, vm_variables, n,
-  filter_hz)
+message_update(message_number, is_message = FALSE, file, dur, vm_variables,
+  n = 1, filter_hz)
 }
 \arguments{
 \item{message_number}{The message number to print}
@@ -24,4 +24,3 @@ message_update(message_number, is_message = FALSE, file, dur, vm_variables, n,
 Print processing updates to console
 }
 \keyword{internal}
-

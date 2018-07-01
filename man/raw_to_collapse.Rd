@@ -18,4 +18,3 @@ A partially-processed primary accelerometer dataset ready to be collapsed
 from raw samples to one-second summaries.
 }
 \keyword{datasets}
-

@@ -32,4 +32,3 @@ raw_file <-
 read_AG_raw(raw_file)
 
 }
-
