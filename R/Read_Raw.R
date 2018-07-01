@@ -2,6 +2,7 @@
 #'
 #' @param file A character scalar giving path to primary accelerometer file
 #' @param output_window_secs the desired epoch length; defaults to one second
+#' @param ... Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}
 #' @inheritParams read_AG_counts
 #'
 #' @return A dataframe giving processed raw data from the primary accelerometer in the specified epoch length
@@ -15,16 +16,16 @@
 #' read_AG_raw(raw_file)
 #'
 #' @export
-read_AG_raw <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10) {
+read_AG_raw <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, ...) {
   timer <- proc.time()
 
   if (verbose) message_update(1, file = file)
 
   meta <- get_raw_file_meta(file)
 
-  raw_data <- check_columns(file)
+  raw_data <- check_columns(file, skip = skip, ...)
   if (!raw_data) {
-    message_update(27, is_message = TRUE)
+    message_update(17, is_message = TRUE)
     AG <- utils::read.csv(file, stringsAsFactors = FALSE, skip = skip)
   } else {
   AG <-

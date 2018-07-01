@@ -4,10 +4,14 @@
 \alias{check_columns}
 \title{Check if the primary accelerometer file is formatted correctly}
 \usage{
-check_columns(file)
+check_columns(file, skip, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
+
+\item{skip}{Header length: Number of rows to skip when reading the file}
+
+\item{...}{Arguments passed to \code{\link{read.csv}}}
 }
 \description{
 \code{check_columns} returns a logical scalar indicating whether there is a
@@ -20,6 +24,7 @@ raw_file <-
     "TestID_LeftWrist_RAW.csv",
     package = "AGread")
 
-check_columns(raw_file)
+check_columns(raw_file, skip = 10)
 
 }
+

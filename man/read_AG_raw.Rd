@@ -4,7 +4,7 @@
 \alias{read_AG_raw}
 \title{File reading function for primary accelerometer files}
 \usage{
-read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10)
+read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
@@ -14,6 +14,8 @@ read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10)
 \item{verbose}{A logical scalar: Print processing updates?}
 
 \item{skip}{Header length: Number of rows to skip when reading the file}
+
+\item{...}{Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}}
 }
 \value{
 A dataframe giving processed raw data from the primary accelerometer in the specified epoch length
@@ -30,3 +32,4 @@ raw_file <-
 read_AG_raw(raw_file)
 
 }
+

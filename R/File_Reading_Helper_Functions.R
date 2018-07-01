@@ -5,17 +5,19 @@
 #'  indicates the test has passed, whereas FALSE indicates an issue.
 #'
 #' @inheritParams read_AG_raw
+#' @inheritParams read_AG_counts
+#' @param ... Arguments passed to \code{\link{read.csv}}
 #' @examples
 #' raw_file <-
 #'     system.file("extdata",
 #'     "TestID_LeftWrist_RAW.csv",
 #'     package = "AGread")
 #'
-#' check_columns(raw_file)
+#' check_columns(raw_file, skip = 10)
 #'
 #' @export
-check_columns <- function(file) {
-  test_read <- utils::read.csv(file, nrows = 15)
+check_columns <- function(file, skip, ...) {
+  test_read <- utils::read.csv(file, nrows = 15, skip = skip, ...)
   if(ncol(test_read) == 1) FALSE else TRUE
 }
 
