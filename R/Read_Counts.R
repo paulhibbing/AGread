@@ -89,53 +89,69 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     nrows = 10, header = FALSE, ...) {
 
   timer <- proc.time()
-  if (verbose) message_update(1, file = file)
-    meta <-
-      AG_meta(
-        file,
-        verbose = verbose,
-        nrows = nrows,
+
+  # Get metadata
+    if (verbose) message_update(1, file = file)
+      meta <-
+        AG_meta(
+          file,
+          verbose = verbose,
+          nrows = nrows,
+          header = header,
+          ...
+        )
+    file_mode <-
+      modes[modes$mode == meta$mode, ]
+    stopifnot(nrow(file_mode) == 1)
+
+  # Pick out expected variable names
+    matches <-
+      sapply(names(file_mode), function(x) file_mode[ ,x] == "X")
+    mode_vars <-
+      names(matches)[matches]
+    variables <-
+      do.call(c,
+        sapply(
+          mode_vars,
+          AG_col_names,
+          simplify = FALSE,
+          USE.NAMES = FALSE
+        ))
+
+  # Read the file
+    if (verbose) message_update(5)
+    AG <-
+      data.frame(data.table::fread(file,
+        stringsAsFactors = FALSE,
+        skip = skip,
         header = header,
-        ...
-      )
-  file_mode <-
-    modes[modes$mode == meta$mode, ]
-  stopifnot(nrow(file_mode) == 1)
+        ...))
 
-  matches <-
-    sapply(names(file_mode), function(x) file_mode[ ,x] == "X")
-  variables <-
-    names(matches)[matches]
-  variables <-
-    do.call(c,
-      sapply(
-        variables,
-        AG_col_names,
-        simplify = FALSE,
-        USE.NAMES = FALSE
-      ))
+  # Deal with mis-reading case
+    if (all(sapply(AG, class) %in% c("character", "factor"))) {
+      message_update(14, TRUE)
+      return(AG)
+    }
 
-  if (verbose) message_update(5)
-  AG <-
-    data.frame(data.table::fread(file,
-      stringsAsFactors = FALSE,
-      skip = skip,
-      header = header,
-      ...))
+  # Deal with the automatic-naming case for dummy-coded inclinometer
+    if (length(variables) == ncol(AG)) {
+      message_update(2)
+      names(AG) <- variables
+      AG <- AG_time(AG, meta)
+      if (verbose) message_update(16, dur = get_duration(timer))
+      return(AG)
+    }
 
-  if (all(sapply(AG, class) %in% c("character", "factor"))) {
-    message_update(14, TRUE)
-    return(AG)
-  }
+  # Deal with the automatic-naming case for discrete (0-3) inclinometer
+    if (length(mode_vars) == ncol(AG)) {
+      message_update(28)
+      names(AG) <- mode_vars
+      AG <- AG_time(AG, meta)
+      if (verbose) message_update(16, dur = get_duration(timer))
+      return(AG)
+    }
 
-  if (length(variables) == ncol(AG)) {
-    message_update(2)
-    names(AG) <- variables
-    AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(timer))
-    return(AG)
-  }
-
+  # Deal with cases not caught in previous cases
   if (!"V1" %in% names(AG)) {
     message_update(3)
     AG <- AG_time(AG, meta)

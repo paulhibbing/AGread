@@ -13,7 +13,7 @@ message_update <- function(message_number, is_message = FALSE, file, dur, vm_var
   note <-
     switch(message_number,
       paste("\n\n\nReading:", basename(file)),
-      "\n....Naming columns based on file mode",
+      "\n....Naming columns based on file mode, with four incline columns",
       "\n....Using automatically-detected column names",
       "\n..Getting meta-data from header",
       "\n..Reading file",
@@ -52,8 +52,10 @@ message_update <- function(message_number, is_message = FALSE, file, dur, vm_var
       #^^25
 
       "Length of X and Y differ. Returning NULL.",
-      paste("Determining direction from mean values of x and y, replicating", n, "times."),
-      "\n28")
+      paste("Determining direction from mean values of x",
+        "and y, replicating", n, "times."),
+      "\n....Naming columns based on file mode, with one incline column",
+      "\n29")
   if (is_message) {
     message(note)
   } else {
