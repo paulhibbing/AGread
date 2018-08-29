@@ -4,7 +4,8 @@
 \alias{AG_collapse}
 \title{Collapse primary accelerometer data}
 \usage{
-AG_collapse(AG, output_window_secs = 1, samp_freq)
+AG_collapse(AG, output_window_secs = 1, samp_freq, method = "default",
+  ENMO2 = NULL)
 }
 \arguments{
 \item{AG}{a dataframe of raw primary accelerometer data}
@@ -12,6 +13,12 @@ AG_collapse(AG, output_window_secs = 1, samp_freq)
 \item{output_window_secs}{the desired epoch length; defaults to one second}
 
 \item{samp_freq}{The sampling frequency}
+
+\item{method}{character scalar giving the method to use for calculating ENMO,
+either "default" or "block"}
+
+\item{ENMO2}{vector of leftover raw values from the previous block (if
+applicable)}
 }
 \description{
 Collapse primary accelerometer data
