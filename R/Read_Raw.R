@@ -4,6 +4,8 @@
 #' @param output_window_secs the desired epoch length; defaults to one second
 #' @param ... Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}
 #' @inheritParams read_AG_counts
+#' @param block logical. Should file be read in blocks? Will be automatically
+#'   invoked if file is larger than 2 GB.
 #'
 #' @return A dataframe giving processed raw data from the primary accelerometer in the specified epoch length
 #'
@@ -16,24 +18,46 @@
 #' read_AG_raw(raw_file)
 #'
 #' @export
-read_AG_raw <- function(file, output_window_secs = 1, verbose = FALSE, skip = 10, ...) {
+read_AG_raw <- function(file, output_window_secs = 1,
+  verbose = FALSE, skip = 10, block = FALSE, ...) {
+
   timer <- proc.time()
 
   if (verbose) message_update(1, file = file)
 
   meta <- get_raw_file_meta(file)
 
-  raw_data <- check_columns(file, skip = skip, ...)
-  if (!raw_data) {
-    message_update(17, is_message = TRUE)
-    AG <- utils::read.csv(file, stringsAsFactors = FALSE, skip = skip)
-  } else {
-  AG <-
-    data.table::fread(file, stringsAsFactors = FALSE, showProgress = FALSE, skip = skip)
-  }
-  names(AG) <- gsub("\\.", " ", names(AG))
+  if (any(block, get_file_size__gb(file) > 2)) {
 
-  AG <- AG_collapse(AG, output_window_secs, meta$samp_freq)
+    message("\nReading file in blocks, due to excessive size.")
+    AG <- read_AG_raw_block(
+        file, output_window_secs,
+        verbose, skip, meta, timer, ...
+    )
+
+  } else {
+
+    raw_data <- check_columns(file, skip = skip, ...)
+
+    if (!raw_data) {
+      message_update(17, is_message = TRUE)
+      AG <- utils::read.csv(file, stringsAsFactors = FALSE, skip = skip)
+    } else {
+    AG <-
+      data.table::fread(file, stringsAsFactors = FALSE,
+        showProgress = FALSE, skip = skip)
+    }
+
+    if (nrow(AG) == 0) {
+      message("No data in the file. Returning NULL.")
+      return(NULL)
+    }
+
+    names(AG) <- gsub("\\.", " ", names(AG))
+
+    AG <- AG_collapse(AG, output_window_secs, meta$samp_freq)
+
+  }
 
   AG$Timestamp <-
     meta$start + seq(0, nrow(AG)-1, output_window_secs)

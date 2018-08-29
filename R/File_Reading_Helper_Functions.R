@@ -134,31 +134,79 @@ get_imu_file_meta <- function(file, output_window_secs = 1) {
 #' @param AG a dataframe of raw primary accelerometer data
 #' @param output_window_secs the desired epoch length; defaults to one second
 #' @param samp_freq The sampling frequency
+#' @param method character scalar giving the method to use for calculating ENMO,
+#'   either "default" or "block"
+#' @param ENMO2 vector of leftover raw values from the previous block (if
+#'   applicable)
 #'
 #' @examples
 #' data(raw_to_collapse)
 #' AG_collapse(raw_to_collapse, 1, 80)
 #'
 #' @export
-AG_collapse <- function(AG, output_window_secs = 1, samp_freq) {
+AG_collapse <- function(AG, output_window_secs = 1, samp_freq,
+  method = "default", ENMO2 = NULL) {
+
   ## Get ENMO
   ## Adapted from code written by Vincent van Hees
-  ENMO <-
-    sqrt(AG$`Accelerometer X` ^ 2 + AG$`Accelerometer Y` ^ 2 + AG$`Accelerometer Z` ^
-        2) - 1
+  ENMO <- sqrt(
+    AG$`Accelerometer X` ^ 2 +
+      AG$`Accelerometer Y` ^ 2 +
+      AG$`Accelerometer Z` ^ 2
+  ) - 1
+
   ENMO[which(ENMO < 0)] <- 0
-  ENMO2 <- cumsum(ENMO)
-  ENMO3 <-
-    diff(ENMO2[seq(1, length(ENMO), by = (samp_freq * output_window_secs))]) /
-    (samp_freq * output_window_secs)
 
-  # final_length <- min(c(length(ENMO3), nrow(data)))
-  # AG <- data.frame(AG$AG[1:final_length, ])
-  # ENMO3 <- ENMO3[1:final_length]
-  ENMO <- ENMO3 * 1000
-  ## /end adapted van Hees code
+  if(!is.null(ENMO2)) {
 
-  AG <- data.frame(Block = seq(ENMO), ENMO = ENMO)
+    ENMO2 <- cumsum(c(ENMO2[length(ENMO2)], ENMO))[-1]
+
+  } else {
+
+    ENMO2 <- cumsum(ENMO)
+
+  }
+
+  # Old way of averaging (cuts out one second)
+  if (method == "default") {
+
+      ENMO3 <- diff(
+        ENMO2[seq(
+          1, length(ENMO),
+          by = (samp_freq * output_window_secs)
+        )]
+      ) / (samp_freq * output_window_secs)
+      ENMO <- ENMO3 * 1000
+      AG <- data.frame(Block = seq(ENMO), ENMO = ENMO)
+
+      # final_length <- min(c(length(ENMO3), nrow(data)))
+      # AG <- data.frame(AG$AG[1:final_length, ])
+      # ENMO3 <- ENMO3[1:final_length]
+      ## /end adapted van Hees code
+
+  }
+
+  if (method == "block") {
+
+    # Applying default method more generally, for processing in blocks
+    block <- cumsum(
+      seq(length(ENMO)) %% (samp_freq * output_window_secs) == 1
+    )
+
+    indices <- seq(
+      1, length(ENMO2),
+      by = (samp_freq * output_window_secs)
+    )
+    ENMO <- ENMO2[indices]
+
+    AG <- list(
+      ENMO2 = ENMO2[seq(length(ENMO2)) > max(indices)],
+      AG = data.frame(Block = seq(ENMO), ENMO = ENMO)
+    )
+
+  }
+
+
   return(AG)
 }
 

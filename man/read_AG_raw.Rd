@@ -4,7 +4,8 @@
 \alias{read_AG_raw}
 \title{File reading function for primary accelerometer files}
 \usage{
-read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10, ...)
+read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10,
+  block = FALSE, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
@@ -14,6 +15,9 @@ read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10, ...)
 \item{verbose}{A logical scalar: Print processing updates?}
 
 \item{skip}{Header length: Number of rows to skip when reading the file}
+
+\item{block}{logical. Should file be read in blocks? Will be automatically
+invoked if file is larger than 2 GB.}
 
 \item{...}{Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}}
 }
