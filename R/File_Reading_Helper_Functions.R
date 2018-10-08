@@ -53,33 +53,55 @@ check_second <- function(AG) {
 #'
 #' @export
 get_raw_file_meta <- function(file) {
-  file_meta <-
-    data.frame(data.table::fread(
+  file_meta <- data.frame(
+    data.table::fread(
       file,
       nrow = 10,
-      header = F,
+      header = FALSE,
       sep = "\n"
-    ))
-  samp_freq <-
-    file_meta[sapply(file_meta, function(x) {
-      grepl("Hz", x, ignore.case = T)
-    }),]
-  samp_freq <-
-    as.numeric(unlist(strsplit(samp_freq, " "))[which(grepl("Hz", unlist(strsplit(samp_freq, " ")), ignore.case = T)) - 1])
-
-  start_time <-
-    gsub("[[:alpha:] ,]", "", file_meta[sapply(file_meta, function(x) {
-      grepl("start[. ]time", x,
-        ignore.case = T)
-    }), ]
     )
-  start_date <-
-    gsub("[[:alpha:] ,]", "", file_meta[sapply(file_meta, function(x) {
-      grepl("start[. ]date", x,
-        ignore.case = T)
-    }), ])
-  start <-
-    as.POSIXlt(paste(start_date, start_time), format = "%m/%d/%Y %H:%M:%S")
+  )
+  samp_freq <- file_meta[
+    sapply(file_meta, function(x) {
+      grepl("Hz", x, ignore.case = T)
+    }), ]
+  samp_freq <- as.numeric(
+    unlist(strsplit(samp_freq, " "))[
+      which(grepl(
+        "Hz",
+        unlist(strsplit(samp_freq, " ")),
+        ignore.case = TRUE)
+      ) - 1]
+  )
+
+  start_time <- gsub(
+    "[[:alpha:] ,]",
+    "",
+    file_meta[
+      sapply(file_meta, function(x) {
+        grepl("start[. ]time", x,
+          ignore.case = T
+        )
+      }), ]
+  )
+
+  start_date <- gsub(
+    "[[:alpha:] ,]",
+    "",
+    file_meta[
+      sapply(file_meta, function(x) {
+        grepl("start[. ]date", x,
+          ignore.case = TRUE
+        )
+    }), ]
+  )
+
+  start <- as.POSIXlt(
+    x = paste(start_date, start_time),
+    tz = "UTC",
+    format = "%m/%d/%Y %H:%M:%S"
+  )
+
   if(is.na(start)) message_update(3, is_message = TRUE)
   return(list(start = start, samp_freq = samp_freq))
 }
@@ -99,27 +121,43 @@ get_raw_file_meta <- function(file) {
 #'
 #' @export
 get_imu_file_meta <- function(file, output_window_secs = 1) {
-  header <-
-    utils::read.csv(file, nrow = 20, stringsAsFactors = F, header = F)
+
+  header <- utils::read.csv(
+    file,
+    nrow = 20,
+    stringsAsFactors = FALSE,
+    header = FALSE
+  )
 
   samp_rate <- unlist(strsplit(header[, 1], " "))
-  samp_rate <-
-    suppressWarnings(try(as.numeric(samp_rate[which(samp_rate == "Hz") - 1])))
+  samp_rate <- suppressWarnings(
+    try(as.numeric(samp_rate[which(samp_rate == "Hz") - 1]))
+  )
+
   if (grepl("error", samp_rate, ignore.case = T)) {
     message_update(21, is_message = TRUE)
     samp_rate = 100
   }
 
-  date_index <-
-    which(grepl("start date", header[, 1], ignore.case = T))
-  time_index <-
-    which(grepl("start time", header[, 1], ignore.case = T))
+  date_index <- which(
+    grepl("start date", header[, 1], ignore.case = T)
+  )
+  time_index <- which(
+    grepl("start time", header[, 1], ignore.case = T)
+  )
 
-  start_time <-
-    as.POSIXlt(gsub("[[:alpha:] ]", "",
-      paste(header[date_index, 1],
-        header[time_index, 1])),
-      format = "%m/%d/%Y%H:%M:%S")
+  start_time <- as.POSIXlt(
+    gsub(
+      "[[:alpha:] ]",
+      "",
+      paste(
+        header[date_index, 1],
+        header[time_index, 1]
+      )
+    ),
+    tz = "UTC",
+    format = "%m/%d/%Y%H:%M:%S"
+  )
 
   block_size <- samp_rate * output_window_secs
   return(list(
