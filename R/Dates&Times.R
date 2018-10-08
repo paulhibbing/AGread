@@ -20,14 +20,23 @@
 #'
 #' @export
 get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE) {
-    timestamp <- as.POSIXlt(timestamp, format = format)
-    hour      <- as.numeric(strftime(timestamp, format = "%H")) * 60
-    minute    <- as.numeric(strftime(timestamp, format = "%M"))
-    second    <- as.numeric(strftime(timestamp, format = "%S")) / 60
+
+    timestamp <- as.POSIXlt(timestamp, format = format, tz = "UTC")
+
+    hour      <-  60 * as.numeric(
+      strftime(timestamp, format = "%H", tz = "UTC")
+    )
+    minute    <- as.numeric(
+      strftime(timestamp, format = "%M", tz = "UTC")
+    )
+    second    <- (1/60) * as.numeric(
+      strftime(timestamp, format = "%S", tz = "UTC")
+    )
 
     final_minute <- hour + minute + second
     if(!rational) final_minute <- floor(final_minute)
     return(final_minute)
+
 }
 
 
@@ -45,7 +54,13 @@ get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE
 #'
 #' @export
 get_day_of_year <- function(timestamp, format = "%Y-%m-%d %H:%M:%S") {
-    timestamp <- as.POSIXlt(timestamp, format = format)
-    day_of_year <- as.numeric(strftime(timestamp, format = "%j"))
+    timestamp <- as.POSIXlt(
+      timestamp,
+      tz = "UTC",
+      format = format
+    )
+    day_of_year <- as.numeric(
+      strftime(timestamp, format = "%j", tz = "UTC")
+    )
     return(day_of_year)
 }

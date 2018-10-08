@@ -43,8 +43,7 @@ read_AG_raw <- function(file, output_window_secs = 1,
       message_update(17, is_message = TRUE)
       AG <- utils::read.csv(file, stringsAsFactors = FALSE, skip = skip)
     } else {
-    AG <-
-      data.table::fread(file, stringsAsFactors = FALSE,
+    AG <- data.table::fread(file, stringsAsFactors = FALSE,
         showProgress = FALSE, skip = skip)
     }
 
@@ -59,18 +58,22 @@ read_AG_raw <- function(file, output_window_secs = 1,
 
   }
 
-  AG$Timestamp <-
-    meta$start + seq(0, nrow(AG)-1, output_window_secs)
+  AG$Timestamp <- meta$start +
+    seq(0, nrow(AG)-1, output_window_secs)
 
   AG$Block <- NULL
 
   AG$file_source_PrimaryAccel <- basename(file)
   AG$date_processed_PrimaryAccel <- Sys.time()
 
-  AG$day_of_year <-
-    get_day_of_year(AG$Timestamp, format = "%Y-%m-%d %H:%M:%S")
-  AG$minute_of_day <-
-    get_minute(AG$Timestamp, format = "%Y-%m-%d %H:%M:%S")
+  AG$day_of_year <- get_day_of_year(
+    AG$Timestamp,
+    format = "%Y-%m-%d %H:%M:%S"
+  )
+  AG$minute_of_day <- get_minute(
+    AG$Timestamp,
+    format = "%Y-%m-%d %H:%M:%S"
+  )
 
   order <-
     c("file_source_PrimaryAccel",
