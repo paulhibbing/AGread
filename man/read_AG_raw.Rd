@@ -4,8 +4,8 @@
 \alias{read_AG_raw}
 \title{File reading function for primary accelerometer files}
 \usage{
-read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10,
-  block = FALSE, ...)
+read_AG_raw(file, output_window_secs = 1, calibrate = FALSE,
+  verbose = FALSE, skip = 10, block = FALSE, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
