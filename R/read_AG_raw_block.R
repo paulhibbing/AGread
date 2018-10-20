@@ -6,8 +6,12 @@
 #'
 #' @keywords internal
 #'
-read_AG_raw_block <- function(file, output_window_secs, verbose, skip,
-  meta, timer, ...) {
+read_AG_raw_block <- function(file, output_window_secs, calibrate,
+  verbose, skip, meta, timer, ...) {
+
+  if (calibrate) {
+    stop("No method developed yet for calibrating too-large files.")
+  }
 
   # Initialize variables for the loop
     block_size <- meta$samp_freq * 86400

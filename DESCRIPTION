@@ -22,6 +22,7 @@ Imports:
     dplyr (>= 0.5.0),
     seewave (>= 2.0.5),
     magrittr (>= 1.5),
+    GGIR
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

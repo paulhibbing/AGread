@@ -19,7 +19,7 @@
 #'
 #' @export
 read_AG_raw <- function(file, output_window_secs = 1,
-  verbose = FALSE, skip = 10, block = FALSE, ...) {
+  calibrate = FALSE, verbose = FALSE, skip = 10, block = FALSE, ...) {
 
   timer <- proc.time()
 
@@ -31,7 +31,7 @@ read_AG_raw <- function(file, output_window_secs = 1,
 
     message("\nReading file in blocks, due to excessive size.")
     AG <- read_AG_raw_block(
-        file, output_window_secs,
+        file, output_window_secs, calibrate,
         verbose, skip, meta, timer, ...
     )
 
@@ -53,6 +53,10 @@ read_AG_raw <- function(file, output_window_secs = 1,
     }
 
     names(AG) <- gsub("\\.", " ", names(AG))
+
+    if (calibrate) {
+      AG <- calibrate_raw(AG, file)
+    }
 
     AG <- AG_collapse(AG, output_window_secs, meta$samp_freq)
 
