@@ -2,6 +2,7 @@
 #'
 #' @param file A character scalar giving path to primary accelerometer file
 #' @param output_window_secs the desired epoch length; defaults to one second
+#' @param calibrate Logical. Perform autocalibration using GGIR?
 #' @param ... Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}
 #' @inheritParams read_AG_counts
 #' @param block logical. Should file be read in blocks? Will be automatically

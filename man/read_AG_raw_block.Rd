@@ -12,6 +12,8 @@ read_AG_raw_block(file, output_window_secs, calibrate, verbose, skip, meta,
 
 \item{output_window_secs}{the desired epoch length; defaults to one second}
 
+\item{calibrate}{Logical. Perform autocalibration using GGIR?}
+
 \item{verbose}{A logical scalar: Print processing updates?}
 
 \item{skip}{Header length: Number of rows to skip when reading the file}
