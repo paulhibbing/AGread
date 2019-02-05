@@ -64,7 +64,7 @@ read_AG_raw <- function(file, output_window_secs = 1,
     if (return_raw) {
 
       AG$Timestamp <- meta$start +
-        seq(0, nrow(AG)-1, 1 / meta$samp_freq)
+        seq(0, (nrow(AG)-1) / meta$samp_freq, 1 / meta$samp_freq)
 
       # AG$Block <- NULL
 
