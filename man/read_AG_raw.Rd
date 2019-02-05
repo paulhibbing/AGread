@@ -4,13 +4,16 @@
 \alias{read_AG_raw}
 \title{File reading function for primary accelerometer files}
 \usage{
-read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10,
-  block = FALSE, ...)
+read_AG_raw(file, output_window_secs = 1, calibrate = FALSE,
+  verbose = FALSE, skip = 10, block = FALSE, return_raw = FALSE,
+  ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
 
 \item{output_window_secs}{the desired epoch length; defaults to one second}
+
+\item{calibrate}{logical. Perform autocalibration using \link[GGIR]{g.calibrate}}
 
 \item{verbose}{A logical scalar: Print processing updates?}
 
@@ -18,6 +21,8 @@ read_AG_raw(file, output_window_secs = 1, verbose = FALSE, skip = 10,
 
 \item{block}{logical. Should file be read in blocks? Will be automatically
 invoked if file is larger than 2 GB.}
+
+\item{return_raw}{logical. Return raw triaxial data?}
 
 \item{...}{Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}}
 }
