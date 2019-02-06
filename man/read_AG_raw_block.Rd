@@ -12,7 +12,7 @@ read_AG_raw_block(file, output_window_secs, calibrate, verbose, skip, meta,
 
 \item{output_window_secs}{the desired epoch length; defaults to one second}
 
-\item{calibrate}{Logical. Perform autocalibration using GGIR?}
+\item{calibrate}{logical. Perform autocalibration using \link[GGIR]{g.calibrate}}
 
 \item{verbose}{A logical scalar: Print processing updates?}
 
@@ -22,7 +22,8 @@ read_AG_raw_block(file, output_window_secs, calibrate, verbose, skip, meta,
 
 \item{timer}{initial time passed from initial call to \code{\link{read_AG_raw}}}
 
-\item{...}{Arguments passed to \code{\link{read.csv}} in \code{\link{check_columns}}}
+\item{...}{Arguments passed to \code{\link{read.csv}} in
+\code{\link{check_columns}}}
 }
 \description{
 Read a large raw file in blocks
