@@ -106,10 +106,12 @@ get_raw_file_meta <- function(file) {
   return(list(start = start, samp_freq = samp_freq))
 }
 
-#' Get file metadata (sampling frequency, start time, and samples per epoch) for primary accelerometer
+#' Get file metadata (sampling frequency, start time, and samples per epoch) for
+#' IMU
 #'
 #' @param file character scalar giving path to IMU file
-#' @param output_window_secs the desired epoch length, over which to average IMU data
+#' @param output_window_secs the desired epoch length, over which to average IMU
+#'   data
 #'
 #' @examples
 #' imu_file <-
@@ -263,6 +265,9 @@ AG_collapse <- function(AG, output_window_secs = 1, samp_freq,
 #' @export
 imu_collapse <- function(AG, block_size, verbose = FALSE) {
 
+  ## Establish the epoch labels
+  AG <- data.frame(AG, stringsAsFactors = FALSE)
+
   if (nrow(AG) %% block_size != 0) {
     message_update(24, is_message = TRUE)
     final_obs <-
@@ -275,25 +280,126 @@ imu_collapse <- function(AG, block_size, verbose = FALSE) {
   AG$epoch <- rep(1:(nrow(AG) / block_size), each = block_size)
 
   if (verbose) message_update(25)
-  AG <-
-    AG %>% dplyr::group_by_(~epoch) %>%
-    dplyr::summarise_(
-      date_processed_IMU = ~date_processed_IMU[1],
-      file_source_IMU = ~file_source_IMU[1],
-      Timestamp = ~Timestamp[1],
-      #Time = ~Time,
-      Gyroscope_VM_DegPerS = ~mean(Gyroscope_VM_DegPerS),
-      mean_abs_Gyroscope_x_DegPerS = ~mean(abs(Gyroscope.X)),
-      mean_abs_Gyroscope_y_DegPerS = ~mean(abs(Gyroscope.Y)),
-      mean_abs_Gyroscope_z_DegPerS = ~mean(abs(Gyroscope.Z)),
-      mean_magnetometer_direction = ~classify_magnetometer(
-        mean(Magnetometer.X),
-        mean(Magnetometer.Y),
-        mean(Magnetometer.Z)
-      )
-    )
+
+  ## Establish the IMU variables in the data and the labels for corresponding
+  ## columns
+  vars <- sapply(
+    c(
+      "Accelerometer", "Temperature",
+      "Gyroscope", "Magnetometer"
+    ),
+    function(x) any(grepl(x, names(AG)))
+  )
+
+  labels <- c("", "C", "DegPerS", "")[vars]
+  absolute <- c(FALSE, FALSE, TRUE, FALSE)[vars]
+  vars <- names(vars)[vars]
+
+  ## Store non-IMU variables
+  date_processed_IMU <- AG$date_processed_IMU[1]
+  file_source_IMU <- AG$file_source_IMU[1]
+  timestamps <- AG$Timestamp[diff(c(0, AG$epoch)) != 0]
+
+  ## Collapse the IMU variables
+  AG <- mapply(
+    imu_var_collapse,
+    var = as.list(vars),
+    label = as.list(labels),
+    absolute = as.list(absolute),
+    MoreArgs = list(AG = AG),
+    SIMPLIFY = FALSE
+  )
+  AG <- do.call(cbind, AG)
+
+  ## Re-introduce the non-IMU variables
+  AG_names <- names(AG)
+  AG$date_processed_IMU <- date_processed_IMU
+  AG$file_source_IMU <- file_source_IMU
+  AG$Timestamp <- timestamps
+  AG <- AG[ ,c("Timestamp", setdiff(names(AG), "Timestamp"))]
 
   if (verbose) message_update(20)
-  AG <- as.data.frame(AG)
+  AG <- data.frame(AG, stringsAsFactors = FALSE)
   return(AG)
+}
+
+#' Collapse an IMU variable
+#'
+#' @param AG the IMU data frame to select from
+#' @param var the character pattern to use in determining which columns to
+#'   collapse
+#' @param absolute logical. Should columns be converted to absolute values?
+#' @param label additional information (i.e., units) to include in variable
+#'   names
+#'
+#' @keywords internal
+#'
+imu_var_collapse <- function(
+  AG, var, absolute = FALSE, label = ""
+) {
+
+  if (var != "Magnetometer") {
+
+    AG_vars <- names(AG)[grepl(var, names(AG))]
+    AG <- sapply(
+      AG_vars,
+      function(x) {
+
+        new_name <- paste0("mean_", x)
+        change_name <- !grepl("VM", x)
+
+        if (absolute & change_name) {
+          AG[ ,x] <- abs(AG[ ,x])
+          new_name <- paste0("mean_abs_", x)
+        }
+
+        AG <- AG %>% dplyr::group_by(!!as.name("epoch")) %>%
+          dplyr::summarise(
+            !!new_name := mean(!!as.name(x))
+          )
+        AG$epoch <- NULL
+        return(AG)
+      },
+      simplify = FALSE
+    )
+    AG <- do.call(cbind, AG)
+  } else {
+    AG <- AG %>% dplyr::group_by(!!as.name("epoch")) %>%
+      dplyr::summarise(
+        mean_magnetometer_direction = classify_magnetometer(
+          mean(!!as.name("Magnetometer.X")),
+          mean(!!as.name("Magnetometer.Y")),
+          mean(!!as.name("Magnetometer.Z"))
+        )
+      )
+    AG$epoch <- NULL
+  }
+
+  names(AG) <- imu_name_label("\\.X$", "_x", label, names(AG))
+  names(AG) <- imu_name_label("\\.Y$", "_y", label, names(AG))
+  names(AG) <- imu_name_label("\\.Z$", "_z", label, names(AG))
+  names(AG) <- gsub(
+    "^mean_Temperature$", "mean_Temperature_C", names(AG)
+  )
+
+  return(data.frame(AG))
+
+}
+
+#' Fix the column names in IMU data during collapsing
+#'
+#' @param pattern string pattern to replace
+#' @param replacement replacement pattern
+#' @param label additional label for the replacement (i.e., units)
+#' @param AG_names column names of the IMU data
+#'
+#' @keywords internal
+#'
+imu_name_label <- function(pattern, replacement, label, AG_names) {
+  new_names <- gsub(
+    pattern,
+    paste(replacement, label, sep = "_"),
+    AG_names
+  )
+  gsub("_$", "", new_names)
 }

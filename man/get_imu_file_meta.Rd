@@ -2,17 +2,20 @@
 % Please edit documentation in R/File_Reading_Helper_Functions.R
 \name{get_imu_file_meta}
 \alias{get_imu_file_meta}
-\title{Get file metadata (sampling frequency, start time, and samples per epoch) for primary accelerometer}
+\title{Get file metadata (sampling frequency, start time, and samples per epoch) for
+IMU}
 \usage{
 get_imu_file_meta(file, output_window_secs = 1)
 }
 \arguments{
 \item{file}{character scalar giving path to IMU file}
 
-\item{output_window_secs}{the desired epoch length, over which to average IMU data}
+\item{output_window_secs}{the desired epoch length, over which to average IMU
+data}
 }
 \description{
-Get file metadata (sampling frequency, start time, and samples per epoch) for primary accelerometer
+Get file metadata (sampling frequency, start time, and samples per epoch) for
+IMU
 }
 \examples{
 imu_file <-

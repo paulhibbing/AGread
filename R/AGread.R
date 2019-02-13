@@ -17,6 +17,7 @@
 #' read_AG_IMU(system.file("extdata", "TestID_LeftWrist_IMU.csv", package = "AGread"))
 #'
 #' @importFrom magrittr %>%
+#' @importFrom rlang :=
 #' @docType package
 #' @name AGread
 NULL

@@ -11,7 +11,7 @@ tick_to_posix(x, tz = "UTC", ...)
 
 \item{tz}{character. The timezone to use}
 
-\item{...}{further arguments passed to \code{\link[base]{as.POSIXct}}}
+\item{...}{further arguments passed to \code{as.POSIXct}}
 }
 \description{
 Convert a tick value to a timestamp

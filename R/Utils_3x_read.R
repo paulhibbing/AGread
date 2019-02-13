@@ -2,7 +2,7 @@
 #'
 #' @param x the tick value
 #' @param tz character. The timezone to use
-#' @param ... further arguments passed to \code{\link[base]{as.POSIXct}}
+#' @param ... further arguments passed to \code{as.POSIXct}
 #'
 #' @keywords internal
 #'
