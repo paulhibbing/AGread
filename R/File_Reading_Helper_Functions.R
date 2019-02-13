@@ -341,6 +341,7 @@ imu_var_collapse <- function(
   if (var != "Magnetometer") {
 
     AG_vars <- names(AG)[grepl(var, names(AG))]
+    if (var == "Gyroscope") AG_vars <- AG_vars[c(4,1:3)]
     AG <- sapply(
       AG_vars,
       function(x) {

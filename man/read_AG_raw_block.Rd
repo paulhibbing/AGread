@@ -22,7 +22,7 @@ read_AG_raw_block(file, output_window_secs, calibrate, verbose, skip, meta,
 
 \item{timer}{initial time passed from initial call to \code{\link{read_AG_raw}}}
 
-\item{...}{Arguments passed to \code{\link{read.csv}} in
+\item{...}{Arguments passed to \code{read.csv} in
 \code{\link{check_columns}}}
 }
 \description{

@@ -4,7 +4,7 @@
 #' @param output_window_secs the desired epoch length; defaults to one second
 #' @param calibrate logical. Perform autocalibration using \link[GGIR]{g.calibrate}
 #' @param return_raw logical. Return raw triaxial data?
-#' @param ... Arguments passed to \code{\link{read.csv}} in
+#' @param ... Arguments passed to \code{read.csv} in
 #'   \code{\link{check_columns}}
 #' @inheritParams read_AG_counts
 #' @param block logical. Should file be read in blocks? Will be automatically
@@ -98,8 +98,9 @@ read_AG_raw <- function(file, output_window_secs = 1,
 
   }
 
-  AG$Timestamp <- meta$start +
-    seq(0, nrow(AG)-1, output_window_secs)
+  AG$Timestamp <- meta$start + seq(
+    0, (nrow(AG) * output_window_secs)-1, output_window_secs
+  )
 
   AG$Block <- NULL
 

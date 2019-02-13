@@ -4,8 +4,8 @@
 \alias{read_record}
 \title{High-level function to read a packet of data from a gt3x file}
 \usage{
-read_record(record_header, log, tz = "UTC", info, give_timestamp = TRUE,
-  parameters = NULL, schema = NULL, ...)
+read_record(record_header, log, tz = "UTC", info,
+  give_timestamp = TRUE, parameters = NULL, schema = NULL, ...)
 }
 \arguments{
 \item{record_header}{data frame containing information about the packet

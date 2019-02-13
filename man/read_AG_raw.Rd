@@ -5,7 +5,8 @@
 \title{File reading function for primary accelerometer files}
 \usage{
 read_AG_raw(file, output_window_secs = 1, calibrate = FALSE,
-  verbose = FALSE, skip = 10, block = FALSE, return_raw = FALSE, ...)
+  verbose = FALSE, skip = 10, block = FALSE, return_raw = FALSE,
+  ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
@@ -23,7 +24,7 @@ invoked if file is larger than 2 GB.}
 
 \item{return_raw}{logical. Return raw triaxial data?}
 
-\item{...}{Arguments passed to \code{\link{read.csv}} in
+\item{...}{Arguments passed to \code{read.csv} in
 \code{\link{check_columns}}}
 }
 \value{
