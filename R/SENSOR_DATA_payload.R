@@ -32,52 +32,49 @@ payload_parse_sensor_data_25 <- function(
       schema$Payload$samples <- 100
     }
 
-  ## Column-wise assembly
-    columns <- split(
-      schema$Payload$sensorColumns,
-      seq(nrow(schema$Payload$sensorColumns))
+    all_indices <- lapply(
+      seq(schema$Payload$samples) - 1,
+      function(i) ((i) * BYTES_PER_RECORD) +
+        BYTE_OFFSETS + orig_offset
+    )
+    all_indices <- do.call(rbind, all_indices)
+    all_indices <- row_test(
+      all_indices, payload, schema$Payload$samples
     )
 
+    stopifnot(all(
+      nrow(all_indices) == schema$Payload$samples,
+      all_indices[1,1] == orig_offset,
+      ncol(all_indices) == schema$Payload$columns
+    ))
+
     result <- lapply(
-      seq(schema$Payload$samples),
+      seq(nrow(schema$Payload$sensorColumns)),
       function(i) {
+        column <- schema$Payload$sensorColumns[i, ]
 
-        BITS_PER_BYTE <- get(
-          "BITS_PER_BYTE", envir = parent.frame(2)
+        bytesInValue <- column$size/BITS_PER_BYTE
+        stopifnot(bytesInValue %in% 1:2)
+
+        is_signed <- column$is_signed
+
+        endianness <- "little"
+        if (column$is_big_endian) endianness <- "big"
+
+        scale_factor <- column$scale_factor
+        label <- gsub(" ", "_", column$label)
+        indices <- all_indices[ ,i]
+
+        get_sensor_column(
+          payload, indices, bytesInValue,
+          is_signed, endianness, scale_factor, label
         )
-
-        offsets <- ((i - 1) * BYTES_PER_RECORD) +
-          BYTE_OFFSETS + orig_offset
-
-        final_index <- offsets[length(offsets)] +
-          (schema$Payload$sensorColumns$size[
-            length(schema$Payload$sensorColumns$size)
-            ] / BITS_PER_BYTE)
-
-        sens_row <- data.table::rbindlist(
-          mapply(
-            get_sensor_row,
-            column = columns,
-            offset = offsets,
-            MoreArgs = list(
-              payload = payload,
-              BITS_PER_BYTE = BITS_PER_BYTE
-            ),
-            SIMPLIFY = FALSE
-          )
-        )
-
-        data.frame(
-          reshape2::dcast(
-            sens_row, .~label, value.var = "result"
-          ),
-          row.names = NULL, stringsAsFactors = FALSE
-        )[ ,-1]
-
       }
     )
 
-    result <- data.table::rbindlist(result, TRUE)
+    result[sapply(result, is.null)] <- NULL
+    result <- do.call(cbind, result)
+
     row_ms <- seq(nrow(result)) - 1
     result$Timestamp <- firstSample + (row_ms / schema$Payload$samples)
 
@@ -85,55 +82,81 @@ payload_parse_sensor_data_25 <- function(
 
 }
 
-#' Parse a row of sensor data
+#' Parse a column of sensor data
 #'
 #' @param payload raw. The payload to parse
-#' @param column data frame. Information about the column in which the result
-#'   will be placed
-#' @param offset integer. The starting index for parsing
-#' @param BITS_PER_BYTE integer. The number of bits per byte
+#' @param indices vector giving the starting index of each record to be parsed
+#' @param bytesInValue integer. Length of payload entry
+#' @param is_signed logical. Is encoded value signed?
+#' @param endianness character. Is endianness big or little?
+#' @param scale_factor numeric. Scale factor for binary-to-unit conversions
+#' @param label character. The column label
 #'
 #' @keywords internal
 #'
-get_sensor_row <- function(
-  payload, column, offset, BITS_PER_BYTE
+get_sensor_column <- function(
+  payload, indices, bytesInValue,
+  is_signed, endianness, scale_factor, label
 ) {
 
-  bytesInValue <- column$size/BITS_PER_BYTE
-  stopifnot(bytesInValue %in% 1:2)
-
-  chunk <- payload[offset:sum(offset, bytesInValue - 1)]
-
-  endianness <- "little"
-  # if (column$is_big_endian) endianness <- "big"
-  if (column$is_big_endian) endianness <- "big"
-
-  result <- readBin(
-    chunk, "integer",
-    bytesInValue, bytesInValue,
-    column$is_signed, endianness
+  chunks <- sapply(
+    indices,
+    function(x) payload[x:(x + bytesInValue - 1)],
+    simplify = FALSE
   )
 
-  if (column$scale_factor != 0) {
-    result <- result / column$scale_factor
+  result <- lapply(
+    chunks,
+    function(chunk) readBin(
+    chunk, "integer",
+    bytesInValue, bytesInValue,
+    is_signed, endianness
+    )
+  )
+
+  result <- do.call(c, result)
+  if (scale_factor != 0) {
+    result <- result / scale_factor
   }
 
   is_temp <- grepl(
-    "temperature", column$label, ignore.case = TRUE
+    "temperature", label, ignore.case = TRUE
   )
 
   if (is_temp) result <- result + 21
 
-  if (column$label != "") {
+  if (label != "") {
     return(
-      data.frame(
-      label = gsub(" ", "_", column$label),
-      result = result,
-      stringsAsFactors = FALSE
+      stats::setNames(
+        data.frame(
+          result,
+          stringsAsFactors = FALSE
+        ),
+        label
       )
     )
   }
 
   invisible()
 
+}
+
+#' Test whether a SENSOR_DATA packet has the expected number of rows
+#'
+#' @param all_indices matrix. Indices of expected payload entries
+#' @param payload raw. The payload
+#' @param expected_rows integer. The expected number of rows
+#'
+#' @keywords internal
+#'
+row_test <- function(all_indices, payload, expected_rows) {
+
+  row_test <- apply(
+    all_indices, 1, function(x) all(x <= length(payload))
+  )
+
+  all_indices <- all_indices[row_test, ]
+  needed_rows <- expected_rows - nrow(all_indices)
+  rows_to_duplicate <- sample(seq(nrow(all_indices)), needed_rows)
+  rbind(all_indices, all_indices[rows_to_duplicate, ])
 }

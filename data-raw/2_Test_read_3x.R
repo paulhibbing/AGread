@@ -1,6 +1,20 @@
-# Interactive -------------------------------------------------------------
 rm(list = ls())
 devtools::load_all()
+load("data-raw/example_data.RData")
+
+# Automated ---------------------------------------------------------------
+
+# test <- read_gt3x(
+#   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
+#   tz = "UTC",
+#   verbose = TRUE, give_timestamp = TRUE,
+#   include = c(
+#       "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+#       "LUX", "CAPSENSE", "ACTIVITY2"
+#     )
+# )
+
+# Interactive -------------------------------------------------------------
 
 # file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
 # verbose <- TRUE
@@ -12,14 +26,11 @@ devtools::load_all()
 #   "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
 #   "SENSOR_DATA"
 # )
+
 # n_records <- file_3x["log.bin", "Length"]
 
-test <- read_gt3x(
-  file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
-  tz = "UTC",
-  verbose = TRUE, give_timestamp = TRUE,
-  include = c(
-      "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-      "LUX", "CAPSENSE", "ACTIVITY2"
-    )
-)
+# record_set <- record_headers[[6]]
+# record_header <- record_set[20, ]
+# do_post_process <- TRUE
+
+# payload <- payload_raw

@@ -70,7 +70,7 @@ read_gt3x <- function(
   if (verbose) cat(
     "\n\nProcessing complete. Elapsed time",
     AGread::get_duration(timer),
-    "minutes."
+    "minutes.\n"
   )
 
   return(name_log(log))

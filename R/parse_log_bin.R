@@ -77,7 +77,7 @@ parse_log_bin <- function(
     record_headers <- sort_records(record_headers)
     record_headers <- select_records(record_headers, include)
 
-    # save.image("example_data.RData")
+    # save.image("data-raw/example_data.RData")
 
     results <- lapply(
       record_headers,

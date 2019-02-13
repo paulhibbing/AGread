@@ -20,6 +20,10 @@ process_record_set <- function(record_set, log, tz,
     as.character(RECORDS$ID)
   )]
 
+  if (label == "SENSOR_DATA") test_sensor_records(
+    record_set, schema
+  )
+
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"
   )
@@ -134,4 +138,39 @@ post_process <- function(result) {
   }
 
   return(result)
+}
+
+#' Check to see if SENSOR_DATA packets have the expected number of records
+#'
+#' @param record_set data frame. Information about the SENSOR_DATA packets (one
+#'   row per packet)
+#' @inheritParams read_record
+#'
+#' @keywords internal
+#'
+test_sensor_records <- function(record_set, schema) {
+
+  expected_size <- 2 + (sum(
+    schema$Payload$sensorColumns$size/8
+  ) * 100)
+
+  failed_record_count <- sum(
+    record_set$payload_size != expected_size
+  )
+
+  if (failed_record_count != 0) {
+    warning(paste(
+      c(
+        "Some SENSOR_DATA packets in this file",
+        " (n = ", failed_record_count, " of ",
+        nrow(record_set), ") do not",
+      " have the expected\n  length (",
+        expected_size,
+      ") for 100-Hz data, and will be resampled to",
+        " the correct length"),
+      collapse = ""
+    ))
+  }
+
+  invisible()
 }
