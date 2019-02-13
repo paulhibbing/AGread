@@ -1,3 +1,17 @@
+#' Dispatch-like function for parsing different types of payloads
+#'
+#' @param type The payload type
+#' @param payload raw. The payload
+#' @param info result of \code{\link{parse_info_txt}}
+#' @param tz character. The timezone to use.
+#' @param parameters result of parsing the PARAMETERS packet
+#' @param schema result of parsing the SENSOR_SCHEMA packet
+#' @param record_header information for
+#'   \code{\link{payload_parse_sensor_data_25}} about the packet indices etc.
+#' @param is_last_packet logical. Is the current packet the last in the file?
+#'
+#' @keywords internal
+#'
 payload_parse <- function(
   type, payload, info, tz = "UTC", parameters = NULL,
   schema = NULL, record_header = NULL, is_last_packet = FALSE
