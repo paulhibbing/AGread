@@ -16,8 +16,8 @@ testthat::test_that("File reading produces expected output", {
     read_AG_counts(
       system.file(
         "extdata", "example1sec.csv", package = "AGread"
-      )
-    )[ ,-2],
+      ), skip = 11
+    ),
     "counts_read_cache.rds"
   )
 })
