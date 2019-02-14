@@ -32,18 +32,28 @@ payload_parse_sensor_data_25 <- function(
       schema$Payload$samples <- 100
     }
 
+  ## Column-wise starting indices for each record
     all_indices <- lapply(
       seq(schema$Payload$samples) - 1,
       function(i) ((i) * BYTES_PER_RECORD) +
         BYTE_OFFSETS + orig_offset
     )
     all_indices <- do.call(rbind, all_indices)
-    all_indices <- row_test(
-      all_indices, payload, schema$Payload$samples
+    # all_indices <- row_test(
+    #   all_indices, payload, schema$Payload$samples
+    # )
+
+  ## Account for missing samples
+    missing_rows <- apply(
+      all_indices <= length(payload),
+      1, all
     )
+    all_indices <- all_indices[missing_rows, ]
+    interpolate <- schema$Payload$samples -
+      nrow(all_indices)
 
     stopifnot(all(
-      nrow(all_indices) == schema$Payload$samples,
+      # nrow(all_indices) == schema$Payload$samples,
       all_indices[1,1] == orig_offset,
       ncol(all_indices) == schema$Payload$columns
     ))
@@ -75,11 +85,12 @@ payload_parse_sensor_data_25 <- function(
     result[sapply(result, is.null)] <- NULL
     result <- do.call(cbind, result)
 
-    row_ms <- seq(nrow(result)) - 1
-    result$Timestamp <- firstSample + (row_ms / schema$Payload$samples)
+    # row_ms <- seq(nrow(result)) - 1
+    # result$Timestamp <- firstSample + (row_ms / schema$Payload$samples)
 
+    result$interpolate <- 0
+    result$interpolate[nrow(result)] <- interpolate
     return(result)
-
 }
 
 #' Parse a column of sensor data
@@ -140,24 +151,4 @@ get_sensor_column <- function(
 
   invisible()
 
-}
-
-#' Test whether a SENSOR_DATA packet has the expected number of rows
-#'
-#' @param all_indices matrix. Indices of expected payload entries
-#' @param payload raw. The payload
-#' @param expected_rows integer. The expected number of rows
-#'
-#' @keywords internal
-#'
-row_test <- function(all_indices, payload, expected_rows) {
-
-  row_test <- apply(
-    all_indices, 1, function(x) all(x <= length(payload))
-  )
-
-  all_indices <- all_indices[row_test, ]
-  needed_rows <- expected_rows - nrow(all_indices)
-  rows_to_duplicate <- sample(seq(nrow(all_indices)), needed_rows)
-  rbind(all_indices, all_indices[rows_to_duplicate, ])
 }

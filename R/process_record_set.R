@@ -13,6 +13,8 @@ process_record_set <- function(record_set, log, tz,
   verbose = FALSE, do_post_process = TRUE
 ) {
 
+  # record_set <- record_headers[[6]]
+  # record_set <- record_set[1:100, ]
   ## Setup
   n_vals <- nrow(record_set)
   label <- RECORDS$Type[match(
@@ -20,9 +22,9 @@ process_record_set <- function(record_set, log, tz,
     as.character(RECORDS$ID)
   )]
 
-  if (label == "SENSOR_DATA") test_sensor_records(
-    record_set, schema
-  )
+  # if (label == "SENSOR_DATA") test_sensor_records(
+  #   record_set, schema
+  # )
 
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"
@@ -59,6 +61,9 @@ process_record_set <- function(record_set, log, tz,
     "  .............", "100%"
   )
 
+  if (label == "SENSOR_DATA") interpolate_sensor_records(
+    records
+  )
   if (do_post_process) records <- post_process(records)
 
   if (verbose) cat(
@@ -140,37 +145,42 @@ post_process <- function(result) {
   return(result)
 }
 
-#' Check to see if SENSOR_DATA packets have the expected number of records
+#' Perform linear interpolation to fill in SENSOR_DATA payloads that are missing
+#' one or more samples
 #'
 #' @param record_set data frame. Information about the SENSOR_DATA packets (one
 #'   row per packet)
 #' @inheritParams read_record
+#' @param verbose logical. Print updates to console?
 #'
 #' @keywords internal
 #'
-test_sensor_records <- function(record_set, schema) {
+interpolate_sensor_records <- function(record_set, schema, verbose) {
 
-  expected_size <- 2 + (sum(
-    schema$Payload$sensorColumns$size/8
-  ) * 100)
+  # record_set <- records
 
-  failed_record_count <- sum(
-    record_set$payload_size != expected_size
+  ## Check if interpolation is necessary
+  n_to_interpolate <- sum(record_set$Result.interpolate)
+  if (n_to_interpolate == 0) return(record_set)
+
+  ## Get set up if so
+  if (verbose) cat(
+    "\r  Interpolating values for", n_to_interpolate,
+    "missing SENSOR_DATA samples"
   )
+  record_set <- data.frame(record_set, stringsAsFactors = FALSE)
 
-  if (failed_record_count != 0) {
-    warning(paste(
-      c(
-        "Some SENSOR_DATA packets in this file",
-        " (n = ", failed_record_count, " of ",
-        nrow(record_set), ") do not",
-      " have the expected\n  length (",
-        expected_size,
-      ") for 100-Hz data, and will be resampled to",
-        " the correct length"),
-      collapse = ""
-    ))
-  }
+  ## Locate the interpolation spots
+  indices <- which(record_set$Result.interpolate != 0)
 
-  invisible()
+  approx(
+    record_set$Timestamp[1999:2000],
+    record_set$Result.Accelerometer_X[1999:2000],
+    n = record_set$Result.interpolate[1999],
+    rule = 2
+  )
+  record_set
+
+  if (verbose) cat("  ............. COMPLETE")
+  ret
 }
