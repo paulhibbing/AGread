@@ -1,7 +1,7 @@
 context("RAW data processing")
 library(AGread)
 
-## MANUAL LEGACY TEST (verified 2/13/19)
+## MANUAL LEGACY TEST (verified 2/14/19)
 # AG_legacy <- readRDS("data-raw/RAW_legacy.rds")
 # AG <- read_AG_raw(
 #   system.file(
