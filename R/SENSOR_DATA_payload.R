@@ -124,6 +124,7 @@ get_sensor_column <- function(
   )
 
   if (is_temp) result <- result + 21
+  ## Above: 21 Could be IMU_TEMP_OFFSET from PARAMETERS
 
   if (label != "") {
     return(

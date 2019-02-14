@@ -88,6 +88,13 @@ parse_log_bin <- function(
       verbose = verbose, do_post_process = TRUE
     )
 
+    if(all("PARAMETERS" %in% include, exists("parameters"))) {
+      results$PARAMETERS <- parameters
+    }
+    if(all("SENSOR_SCHEMA" %in% include, exists("schema"))) {
+      results$SENSOR_SCHEMA <- schema
+    }
+
     return(results)
 
 }
@@ -132,6 +139,14 @@ name_log <- function(log) {
     log$IMU <- IMU[ ,ordered_names]
   }
 
+  log <- stats::setNames(
+    log,
+    gsub(
+      "^21$", "PARAMETERS", gsub(
+        "^24", "SENSOR_SCHEMA", names(log)
+        )
+    )
+  )
   return(log)
 
 }

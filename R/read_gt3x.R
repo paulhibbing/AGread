@@ -15,6 +15,9 @@
 #' 18 possibilities. Exclusion is not recommended for the PARAMETERS and
 #' SENSOR_SCHEMA packets, which also do not take long to process.
 #'
+#' @references
+#' \url{https://github.com/actigraph/GT3X-File-Format}
+#'
 #' @export
 #'
 #' @examples

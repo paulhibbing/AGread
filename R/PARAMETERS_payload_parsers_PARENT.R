@@ -11,8 +11,16 @@ par_battery_state <- function(value, key) {
   # value <- test_val("02 00 00 00")
   # key <- subset(PARAMETERS, Label == toupper("battery_state"))
   value <- get_value(key$Type[1], value)
-  key <- key[value, ]
-  value <- gsub("[0-9]\\. ", "", key$Range)
+  if (value == 0) {
+    key <- key[1, ]
+    value <- paste(
+      "ERROR: value of", value, "recorded in the packet"
+    )
+  } else {
+    key <- key[value, ]
+    value <- gsub("[0-9]\\. ", "", key$Range)
+  }
+
   return(update_key(key, value))
 }
 

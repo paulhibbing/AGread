@@ -5,10 +5,10 @@
 \title{Read data from a gt3x file}
 \usage{
 read_gt3x(file, tz = "UTC", verbose = FALSE, give_timestamp = TRUE,
-  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY",
-  "EVENT", "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT",
-  "HEART_RATE_BLE", "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3",
-  "EPOCH4", "ACTIVITY2", "SENSOR_DATA"))
+  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
+  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
+  "SENSOR_DATA"))
 }
 \arguments{
 \item{file}{character. Path to the file}
@@ -33,4 +33,7 @@ The default value for \code{include} gives all possible packet types, of
 which there are 18. Processing time can be reduced by passing a subset of the
 18 possibilities. Exclusion is not recommended for the PARAMETERS and
 SENSOR_SCHEMA packets, which also do not take long to process.
+}
+\references{
+\url{https://github.com/actigraph/GT3X-File-Format}
 }
