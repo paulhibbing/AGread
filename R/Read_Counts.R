@@ -3,7 +3,9 @@
 #' @inheritParams read_AG_counts
 #'
 #' @examples
-#' counts_file <- system.file("extdata", "Example.csv", package = "AGread")
+#' counts_file <- system.file(
+#'   "extdata", "example1sec.csv", package = "AGread"
+#' )
 #' AGread::AG_meta(counts_file)
 #'
 #' @export
@@ -84,7 +86,7 @@ AG_col_names <- function(variable) {
 #'
 #' @examples
 #' read_AG_counts(
-#'   system.file("extdata", "example1sec.csv", package = "AGread"),
+#'   system.file("example1sec.csv", package = "AGread"),
 #'   skip = 11
 #' )
 #'

@@ -7,11 +7,11 @@ load("data-raw/example_data.RData")
 # test <- read_gt3x(
 #   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
 #   tz = "UTC",
-#   verbose = TRUE, give_timestamp = TRUE,
-#   include = c(
-#       "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-#       "LUX", "CAPSENSE", "ACTIVITY2"
-#     )
+#   verbose = TRUE, give_timestamp = TRUE#,
+#   # include = c(
+#   #     "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+#   #     "LUX", "CAPSENSE", "ACTIVITY2"
+#   #   )
 # )
 
 # Interactive -------------------------------------------------------------

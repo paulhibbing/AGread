@@ -18,7 +18,9 @@ file with count values}
 Extract meta-data from file header
 }
 \examples{
-counts_file <- system.file("extdata", "Example.csv", package = "AGread")
+counts_file <- system.file(
+  "extdata", "example1sec.csv", package = "AGread"
+)
 AGread::AG_meta(counts_file)
 
 }

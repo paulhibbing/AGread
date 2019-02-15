@@ -189,11 +189,24 @@ AG_collapse <- function(AG, output_window_secs = 1, samp_freq,
 
   ## Get ENMO
   ## Adapted from code written by Vincent van Hees
-  ENMO <- sqrt(
-    AG$`Accelerometer X` ^ 2 +
-      AG$`Accelerometer Y` ^ 2 +
-      AG$`Accelerometer Z` ^ 2
-  ) - 1
+
+  if (method == "default") {
+    AG <- data.frame(AG, stringsAsFactors = FALSE)
+    names(AG) <- gsub("\\.", "_", names(AG))
+
+    ENMO <- sqrt(
+      AG$Accelerometer_X ^ 2 +
+        AG$Accelerometer_Y ^ 2 +
+        AG$Accelerometer_Z ^ 2
+    ) - 1
+
+  } else {
+    ENMO <- sqrt(
+      AG$`Accelerometer X` ^ 2 +
+        AG$`Accelerometer Y` ^ 2 +
+        AG$`Accelerometer Z` ^ 2
+    ) - 1
+  }
 
   ENMO[which(ENMO < 0)] <- 0
 
@@ -341,7 +354,9 @@ imu_var_collapse <- function(
   if (var != "Magnetometer") {
 
     AG_vars <- names(AG)[grepl(var, names(AG))]
-    if (var == "Gyroscope") AG_vars <- AG_vars[c(4,1:3)]
+    if (var == "Gyroscope") AG_vars <- stats::na.omit(
+      AG_vars[c(4,1:3)]
+    )
     AG <- sapply(
       AG_vars,
       function(x) {

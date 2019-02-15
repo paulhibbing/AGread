@@ -36,7 +36,7 @@ File reading function for primary accelerometer files
 \examples{
 raw_file <-
     system.file("extdata",
-    "TestID_LeftWrist_RAW.csv",
+    "exampleRAW.csv",
     package = "AGread")
 
 read_AG_raw(raw_file)

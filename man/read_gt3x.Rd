@@ -34,6 +34,13 @@ which there are 18. Processing time can be reduced by passing a subset of the
 18 possibilities. Exclusion is not recommended for the PARAMETERS and
 SENSOR_SCHEMA packets, which also do not take long to process.
 }
+\examples{
+file_3x <- system.file(
+  "example.gt3x", package = "AGread"
+)
+read_gt3x(file_3x)
+
+}
 \references{
 \url{https://github.com/actigraph/GT3X-File-Format}
 }

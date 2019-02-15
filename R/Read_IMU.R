@@ -57,34 +57,13 @@ read_AG_IMU <- function(
 
   AG$file_source_IMU <- basename(file)
   AG$date_processed_IMU <- Sys.time()
-  AG$Timestamp <- meta$start_time + (0:(nrow(AG) - 1) / meta$samp_rate)
+  AG$Timestamp <- meta$start_time +
+    (0:(nrow(AG) - 1) / meta$samp_rate)
 
-  AG <- check_second(AG)
-  if (filter)
-    AG <- imu_filter_gyroscope(AG, meta$samp_rate, filter_hz, verbose)
-
-  # Calculate vector magnitudes
-  if (verbose) message_update(21)
-
-  AG$mean_Accel_VM <-
-    get_VM(AG[, grepl("accelerometer", names(AG), ignore.case = T)], verbose = verbose)
-
-  AG$Gyroscope_VM_DegPerS <-
-    get_VM(AG[, grepl("gyroscope", names(AG), ignore.case = T)], verbose = verbose)
-
-  AG$Magnetometer_VM_MicroT <-
-    get_VM(AG[, grepl("magnetometer", names(AG), ignore.case = T)], verbose = verbose)
-
-  AG <- imu_collapse(AG, meta$block_size, verbose = verbose)
-
-  first_variables <- c("file_source_IMU", "date_processed_IMU", "Timestamp")
-
-  AG <- AG[, c(first_variables, setdiff(names(AG), first_variables))]
-
-  AG$epoch <- NULL
-
-  names(AG) <- gsub(
-    "mean_Gyroscope_VM_DegPerS", "Gyroscope_VM_DegPerS", names(AG)
+  AG <- ag_imu_format(
+    AG, output_window_secs, filter,
+    meta$samp_rate, filter_hz, verbose,
+    meta$block_size
   )
 
   ## Figure out which columns to return
