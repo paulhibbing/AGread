@@ -21,6 +21,11 @@
 #' @export
 #'
 #' @examples
+#' file_3x <- system.file(
+#'   "example.gt3x", package = "AGread"
+#' )
+#' read_gt3x(file_3x)
+#'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE,
@@ -76,6 +81,14 @@ read_gt3x <- function(
     "minutes.\n"
   )
 
-  return(name_log(log))
+  log <- name_log(log)
+  if ("RAW" %in% names(log)) {
+    class(log$RAW) <- c(class(log$RAW), "RAW")
+  }
+  if ("IMU" %in% names(log)) {
+    class(log$IMU) <- c(class(log$IMU), "IMU")
+  }
+
+  return(log)
 
 }

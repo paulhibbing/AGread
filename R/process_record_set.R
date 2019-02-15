@@ -22,10 +22,6 @@ process_record_set <- function(record_set, log, tz,
     as.character(RECORDS$ID)
   )]
 
-  # if (label == "SENSOR_DATA") test_sensor_records(
-  #   record_set, schema
-  # )
-
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"
   )
@@ -56,19 +52,42 @@ process_record_set <- function(record_set, log, tz,
 
   records[sapply(records, is.null)] <- NULL
   records <- collapse_records(records, label = label)
-  cat(
+  if (verbose) cat(
     "\r  Parsing", label, "packet(s)",
     "  .............", "100%"
   )
 
-  if (label == "SENSOR_DATA") interpolate_sensor_records(
-    records
-  )
+  if (label == "SENSOR_DATA") {
+    records <- interpolate_sensor_records(
+      records, schema, verbose
+    )
+  }
+
   if (do_post_process) records <- post_process(records)
+
+  if (label %in% c("ACTIVITY2", "SENSOR_DATA")) {
+
+    samp_rate <- schema$Payload$samples
+    if (samp_rate == 0) samp_rate <- 100
+    if (label == "ACTIVITY2") {
+      samp_rate <- as.numeric(
+        as.character(parameters$Payload$SAMPLE_RATE)
+      )
+    }
+    records$Timestamp <- timestamp_recalc(
+      records$Timestamp, tz, schema,
+      verbose, samp_rate, label
+    )
+  } else {
+    records$Timestamp <- lubridate::force_tz(
+      records$Timestamp, tz
+    )
+  }
 
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",
-    "  ............. COMPLETE"
+    "  ............. COMPLETE               ",
+    "      "
   )
 
   return(records)
@@ -143,44 +162,4 @@ post_process <- function(result) {
   }
 
   return(result)
-}
-
-#' Perform linear interpolation to fill in SENSOR_DATA payloads that are missing
-#' one or more samples
-#'
-#' @param record_set data frame. Information about the SENSOR_DATA packets (one
-#'   row per packet)
-#' @inheritParams read_record
-#' @param verbose logical. Print updates to console?
-#'
-#' @keywords internal
-#'
-interpolate_sensor_records <- function(record_set, schema, verbose) {
-
-  # record_set <- records
-
-  ## Check if interpolation is necessary
-  n_to_interpolate <- sum(record_set$Result.interpolate)
-  if (n_to_interpolate == 0) return(record_set)
-
-  ## Get set up if so
-  if (verbose) cat(
-    "\r  Interpolating values for", n_to_interpolate,
-    "missing SENSOR_DATA samples"
-  )
-  record_set <- data.frame(record_set, stringsAsFactors = FALSE)
-
-  ## Locate the interpolation spots
-  indices <- which(record_set$Result.interpolate != 0)
-
-  approx(
-    record_set$Timestamp[1999:2000],
-    record_set$Result.Accelerometer_X[1999:2000],
-    n = record_set$Result.interpolate[1999],
-    rule = 2
-  )
-  record_set
-
-  if (verbose) cat("  ............. COMPLETE")
-  ret
 }
