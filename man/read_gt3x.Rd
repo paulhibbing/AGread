@@ -35,10 +35,12 @@ which there are 18. Processing time can be reduced by passing a subset of the
 SENSOR_SCHEMA packets, which also do not take long to process.
 }
 \examples{
+\donttest{
 file_3x <- system.file(
-  "example.gt3x", package = "AGread"
+  "extdata", "example.gt3x", package = "AGread"
 )
 read_gt3x(file_3x)
+}
 
 }
 \references{

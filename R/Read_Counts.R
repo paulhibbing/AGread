@@ -86,7 +86,11 @@ AG_col_names <- function(variable) {
 #'
 #' @examples
 #' read_AG_counts(
-#'   system.file("example1sec.csv", package = "AGread"),
+#'   system.file(
+#'     "extdata",
+#'     "example1sec.csv",
+#'     package = "AGread"
+#'   ),
 #'   skip = 11
 #' )
 #'

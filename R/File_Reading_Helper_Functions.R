@@ -116,7 +116,7 @@ get_raw_file_meta <- function(file) {
 #' @examples
 #' imu_file <-
 #'     system.file("extdata",
-#'     "TestID_LeftWrist_IMU.csv",
+#'     "example-IMU.csv",
 #'     package = "AGread")
 #'
 #' get_imu_file_meta(imu_file)

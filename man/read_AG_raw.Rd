@@ -34,10 +34,11 @@ A dataframe giving processed raw data from the primary accelerometer
 File reading function for primary accelerometer files
 }
 \examples{
-raw_file <-
-    system.file("extdata",
-    "exampleRAW.csv",
-    package = "AGread")
+raw_file <- system.file(
+  "extdata",
+  "TestID_LeftWrist_RAW.csv",
+  package = "AGread"
+)
 
 read_AG_raw(raw_file)
 

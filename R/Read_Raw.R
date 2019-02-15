@@ -14,10 +14,11 @@
 #'   in the specified epoch length
 #'
 #' @examples
-#' raw_file <-
-#'     system.file("extdata",
-#'     "exampleRAW.csv",
-#'     package = "AGread")
+#' raw_file <- system.file(
+#'   "extdata",
+#'   "TestID_LeftWrist_RAW.csv",
+#'   package = "AGread"
+#' )
 #'
 #' read_AG_raw(raw_file)
 #'

@@ -11,10 +11,11 @@
 #' @return A dataframe giving processed IMU data in the specified epoch length
 #'
 #' @examples
-#' imu_file <-
-#'     system.file("extdata",
-#'         "example-IMU.csv",
-#'         package = "AGread")
+#' imu_file <- system.file(
+#'   "extdata",
+#'   "example-IMU.csv",
+#'   package = "AGread"
+#' )
 #'
 #' read_AG_IMU(imu_file)
 #'

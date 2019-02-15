@@ -30,7 +30,11 @@ Read data table files containing count values
 }
 \examples{
 read_AG_counts(
-  system.file("example1sec.csv", package = "AGread"),
+  system.file(
+    "extdata",
+    "example1sec.csv",
+    package = "AGread"
+  ),
   skip = 11
 )
 

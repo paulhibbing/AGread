@@ -21,10 +21,12 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' file_3x <- system.file(
-#'   "example.gt3x", package = "AGread"
+#'   "extdata", "example.gt3x", package = "AGread"
 #' )
 #' read_gt3x(file_3x)
+#' }
 #'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
