@@ -27,8 +27,8 @@ collapse_gt3x <- function(
 }
 
 #' @rdname collapse_gt3x
-#'
-#' @keywords internal
+#' @method collapse_gt3x RAW
+#' @export
 collapse_gt3x.RAW <- function(
   AG, filename = "gt3x file", output_window_secs = 1,
   filter = TRUE, filter_hz = 35, verbose = FALSE, ...
@@ -54,8 +54,8 @@ collapse_gt3x.RAW <- function(
 }
 
 #' @rdname collapse_gt3x
-#'
-#' @keywords internal
+#' @method collapse_gt3x IMU
+#' @export
 collapse_gt3x.IMU <- function(
   AG, filename = "gt3x file", output_window_secs = 1,
   filter = TRUE, filter_hz = 35, verbose = FALSE,

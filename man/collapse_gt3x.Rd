@@ -50,4 +50,3 @@ collapse_gt3x(data$RAW)
 collapse_gt3x(data$IMU)
 }
 }
-\keyword{internal}
