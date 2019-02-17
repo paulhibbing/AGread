@@ -26,6 +26,7 @@ primary accelerometer and inertial measurement unit files. Reading binary
 }
 
 \examples{
+\donttest{
 read_AG_counts(
   system.file(
   "extdata",
@@ -48,7 +49,6 @@ read_AG_IMU(
   package = "AGread"
   )
 )
-\donttest{
 file_3x <- system.file(
   "extdata", "example.gt3x", package = "AGread"
 )

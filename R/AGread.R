@@ -18,6 +18,7 @@
 #' \code{\link{read_gt3x}}
 #'
 #' @examples
+#' \donttest{
 #' read_AG_counts(
 #'   system.file(
 #'   "extdata",
@@ -40,7 +41,6 @@
 #'   package = "AGread"
 #'   )
 #' )
-#' \donttest{
 #' file_3x <- system.file(
 #'   "extdata", "example.gt3x", package = "AGread"
 #' )
