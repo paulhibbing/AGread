@@ -30,7 +30,7 @@ collapse_gt3x(AG, filename = "gt3x file", output_window_secs = 1,
 
 \item{verbose}{A logical scalar: Print processing updates?}
 
-\item{...}{Additional arguments passed to \code{l}}
+\item{...}{Additional arguments. Currently unused.}
 }
 \value{
 A data frame of collapsed data
@@ -40,7 +40,11 @@ Collapse data that were read using \code{\link{read_gt3x}}
 }
 \examples{
 \donttest{
-file <- system.file("example.gt3x", package = "AGread")
+file <- system.file(
+  "extdata",
+  "example.gt3x",
+  package = "AGread"
+)
 data <- read_gt3x(file)
 collapse_gt3x(data$RAW)
 collapse_gt3x(data$IMU)

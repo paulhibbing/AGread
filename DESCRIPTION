@@ -4,7 +4,8 @@ Version: 0.2.0
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
 		  role = c("aut","cre")),
-    person(c("Vincent", "T."), "van Hees", role = "ctb"))
+    person(c("Vincent", "T."), "van Hees", role = "ctb"),
+    person(c("Samuel", "R."), "LaMunion", role = "ctb"))
 Description: Standardize the process of bringing various modes of output files
     into R. For more information, see:
     <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->.

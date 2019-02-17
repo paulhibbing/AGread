@@ -3,14 +3,18 @@
 #' @param AG The object to collapse, inheriting from class "RAW" or "IMU"
 #' @param filename character. Filename to associate with the data.
 #' @inheritParams read_AG_IMU
-#' @param ... Additional arguments passed to \code{l}
+#' @param ... Additional arguments. Currently unused.
 #'
 #' @return A data frame of collapsed data
 #' @export
 #'
 #' @examples
 #' \donttest{
-#' file <- system.file("example.gt3x", package = "AGread")
+#' file <- system.file(
+#'   "extdata",
+#'   "example.gt3x",
+#'   package = "AGread"
+#' )
 #' data <- read_gt3x(file)
 #' collapse_gt3x(data$RAW)
 #' collapse_gt3x(data$IMU)
