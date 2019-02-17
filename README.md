@@ -13,7 +13,7 @@ Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://tra
 
 -----
 
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--04--19-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--02--16-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -28,6 +28,8 @@ exist in other R packages (e.g.
 [PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
 and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
 or will soon.
+
+New in AGread 1.2.0, binary .gt3x files can be read in as well.
 
 ## Installation
 
