@@ -1,3 +1,25 @@
+# AGread 0.2.1
+## Summary
+    This is a resubmission of version 0.2.0
+    
+## Changes
+
+* LICENSE was updated in the submission of version 0.2.0, but the changes were
+    not documented. In this resubmission, DESCRIPTION has been updated accordingly.
+    Specifically, copyright ownership has been clarified, related to the use of
+    open source material from
+    <https://github.com/actigraph/GT3X-File-Format>, and contributors have been
+    listed from the same site. The license field of
+    DESCRIPTION has been changed to `file LICENSE` to prevent misrepresentation
+    of the package copyright.
+    
+* Dependency `reshape2` was removed to resolve a NOTE on
+    <https://cran.r-project.org/web/checks/check_results_AGread.html> for
+    r-devel-linux-x86_64-fedora-clang, r-devel-linux-x86_64-fedora-gcc, and
+    r-patched-solaris-x86.
+    
+* Documentation was updated.
+    
 # AGread 0.2.0
 ## Summary
     In this update, the key new feature is support for reading binary

@@ -1,16 +1,22 @@
 ## Resubmission:
-This is a resubmission, which has incorporated the following changes:
+This is a resubmission, which is being made to address the following:
 
-* Added support for reading binary .gt3x files
-* Added reintegration function
-* Expanded support for files with inclinometer columns, to allow un-coded or
-    dummy-coded data
-* Added chunking as an option for reading RAW.csv files that are too large
-    and cause memory issues
-* Added option to apply autocalibration with GGIR
-* Added option to return raw (uncollapsed) data (#3, @srlamunion)
-* Updated time stamp calculations and time zone specifications where needed
-* Set up automated testing for continued development
+* LICENSE was updated in the submission of version 0.2.0, but the
+    changes were not documented. In this resubmission, DESCRIPTION has
+    been updated accordingly. Specifically, copyright ownership has been
+    clarified, related to the use of open source material from
+    <https://github.com/actigraph/GT3X-File-Format>, and contributors have
+    been listed from the same site. The license field of DESCRIPTION has
+    been changed to `file LICENSE` to prevent misrepresentation of the
+    package copyright.
+    
+* Dependency `reshape2` was removed to resolve a NOTE on
+    <https://cran.r-project.org/web/checks/check_results_AGread.html> for
+    r-devel-linux-x86_64-fedora-clang, r-devel-linux-x86_64-fedora-gcc, and
+    r-patched-solaris-x86.
+    
+* Documentation has been updated.
+
 
 ## Test environments
 * local Windows 10 install, R 3.5.0
@@ -20,7 +26,18 @@ This is a resubmission, which has incorporated the following changes:
 ## R CMD check results
 There were no ERRORs or WARNINGs.
 
-There was one NOTE:
+There were two NOTEs:
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Paul R. Hibbing <paulhibbing@gmail.com>'
+
+Days since last update: 1
+
+Change to non-FOSS package license.
+New license:
+  file LICENSE
+Old license:
+  GPL-3 | file LICENSE
 
 * checking examples ... NOTE
 Examples with CPU or elapsed time > 5s

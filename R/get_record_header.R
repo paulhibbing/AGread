@@ -1,4 +1,4 @@
-#' Title
+#' Retrieve record headers from .gt3x binary data
 #'
 #' @inheritParams read_record
 #' @param n_records integer. The length of log.bin

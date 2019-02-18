@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_record_header.R
 \name{get_headers}
 \alias{get_headers}
-\title{Title}
+\title{Retrieve record headers from .gt3x binary data}
 \usage{
 get_headers(log, n_records, tz = "UTC", verbose = FALSE)
 }
@@ -16,6 +16,6 @@ get_headers(log, n_records, tz = "UTC", verbose = FALSE)
 \item{verbose}{logical. Print updates to console?}
 }
 \description{
-Title
+Retrieve record headers from .gt3x binary data
 }
 \keyword{internal}
