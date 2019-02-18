@@ -8,7 +8,7 @@ This is a resubmission, which is being made to address the following:
     <https://github.com/actigraph/GT3X-File-Format>, and contributors have
     been listed from the same site. The license field of DESCRIPTION has
     been changed to `file LICENSE` to prevent misrepresentation of the
-    package copyright.
+    package copyright. See the first R CMD Check NOTE below.
     
 * Dependency `reshape2` was removed to resolve a NOTE on
     <https://cran.r-project.org/web/checks/check_results_AGread.html> for
@@ -19,7 +19,7 @@ This is a resubmission, which is being made to address the following:
 
 
 ## Test environments
-* local Windows 10 install, R 3.5.0
+* local Windows 10 installs, interchanging R 3.5.0 and R 3.4.2
 * ubuntu 14.04.5 (on travis-ci), R 3.5.2
 * win-builder (devel and release)
 
@@ -39,6 +39,9 @@ New license:
 Old license:
   GPL-3 | file LICENSE
 
+(Explained under first `resubmission` bullet.)
+
+
 * checking examples ... NOTE
 Examples with CPU or elapsed time > 5s
               user system elapsed
@@ -46,7 +49,7 @@ AGread        9.60   2.44   14.91
 read_gt3x     6.08   1.87    7.93
 collapse_gt3x 5.39   0.06    5.50
 
-The referenced examples are wrapped in \donttest{}.
+(The referenced examples are wrapped in \donttest{}.)
 
 ## Reverse dependencies
 There were no ERRORs, WARNINGs, or NOTEs for reverse dependencies.
