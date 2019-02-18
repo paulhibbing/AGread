@@ -1,11 +1,15 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
 		  role = c("aut","cre")),
     person(c("Vincent", "T."), "van Hees", role = "ctb"),
-    person(c("Samuel", "R."), "LaMunion", role = "ctb"))
+    person(c("Samuel", "R."), "LaMunion", role = "ctb"),
+    person("Daniel", "Judge", role = "ctb"),
+    person("Judge", "Maygarden", role = "ctb"),
+    person(c("ActiGraph", "LLC"), role = "cph")
+    )
 Description: Standardize the process of bringing various modes of output files
     into R. For more information, see:
     <https://actigraph.desk.com/customer/en/portal/articles/2515800-what-do-the-different-mode-numbers-mean-in-a-csv-or-dat-file->.
@@ -16,7 +20,7 @@ Description: Standardize the process of bringing various modes of output files
     rotational velocity.
 Depends:
     R (>= 3.1.0)
-License: GPL-3 | file LICENSE
+License: file LICENSE
 Imports:
     anytime (>= 0.3.0),
     binaryLogic (>= 0.3.9),
