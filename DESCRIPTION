@@ -1,6 +1,6 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
 		  role = c("aut","cre")),
@@ -20,7 +20,7 @@ Description: Standardize the process of bringing various modes of output files
     rotational velocity.
 Depends:
     R (>= 3.1.0)
-License: file LICENSE
+License: MIT + file LICENSE
 Imports:
     anytime (>= 0.3.0),
     binaryLogic (>= 0.3.9),

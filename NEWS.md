@@ -1,3 +1,13 @@
+# AGread 0.2.2
+## Summary
+    This is a second resubmission of version 0.2.0
+    
+## Changes
+
+* The license has been changed from GPL-3 to MIT, to accommodate the
+    usage conditions of material derived from
+    <https://github.com/actigraph/GT3X-File-Format>.
+
 # AGread 0.2.1
 ## Summary
     This is a resubmission of version 0.2.0
