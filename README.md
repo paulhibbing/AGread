@@ -4,16 +4,16 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build
 Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://travis-ci.org/paulhibbing/AGread)
-[![License](https://img.shields.io/badge/license-GPL-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
+[![License](https://img.shields.io/badge/licence-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 -----
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/AGread)](https://cran.r-project.org/package=AGread)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.1.2.9000-orange.svg?style=flat-square)](commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.2.9000-orange.svg?style=flat-square)](commits/master)
 
 -----
 
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--02--16-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--03--07-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -29,7 +29,7 @@ exist in other R packages (e.g.
 and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
 or will soon.
 
-New in AGread 1.2.0, binary .gt3x files can be read in as well.
+New in AGread 0.2.2, binary .gt3x files can be read in as well.
 
 ## Installation
 
@@ -40,7 +40,7 @@ You can install the development version of AGread from github with:
 devtools::install_github("paulhibbing/AGread")
 ```
 
-Or, AGread v0.1.2 is now available on CRAN, and can be installed with:
+Or, AGread v0.2.2 is now available on CRAN, and can be installed with:
 
 ``` r
 install.packages("AGread")
