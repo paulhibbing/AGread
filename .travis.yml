@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get install -y libsndfile1-dev
   - sudo apt-get install -y libfftw3-dev
 env:
-  - _R_CHECK_SYSTEM_CLOCK_=0
   global:
+    - _R_CHECK_SYSTEM_CLOCK_=0
     - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran rpack"
     - R_BUILD_ARGS="--no-build-vignettes --no-manual rpack"
