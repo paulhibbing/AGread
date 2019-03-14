@@ -4,8 +4,7 @@
 \alias{get_minute}
 \title{Numerical Minute of the Day.}
 \usage{
-get_minute(timestamp, format = "\%Y-\%m-\%d \%H:\%M:\%S",
-  rational = FALSE)
+get_minute(timestamp, format = "\%Y-\%m-\%d \%H:\%M:\%S", rational = FALSE)
 }
 \arguments{
 \item{timestamp}{A character vector containing timestamp information}

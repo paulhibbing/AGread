@@ -12,7 +12,17 @@ This is a resubmission, which is being made to resolve the use of
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs, WARNINGs, or NOTEs.
+There were no ERRORs or WARNINGs.
+
+There was one NOTE:
+
+* checking examples ... NOTE
+    Examples with CPU or elapsed time > 5s
+              user system elapsed
+    AGread    9.70   2.39   12.48
+    read_gt3x 5.55   1.75    7.28
+
+The affected examples are wrapped in donttest{}.
 
 ## Reverse dependencies
 There were no ERRORs, WARNINGs, or NOTEs for reverse dependencies.

@@ -4,8 +4,8 @@
 \alias{ag_imu_format}
 \title{Format columns in collapsed IMU data}
 \usage{
-ag_imu_format(AG, output_window_secs = 1, filter, samp_rate,
-  filter_hz = 35, verbose, block_size)
+ag_imu_format(AG, output_window_secs = 1, filter, samp_rate, filter_hz = 35,
+  verbose, block_size)
 }
 \arguments{
 \item{AG}{data frame containing IMU data}
