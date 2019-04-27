@@ -70,34 +70,41 @@ payload_parse_activity2_26 <- function(
   payload, info, is_last_packet = FALSE
 ) {
 
-  test_pass <- all(
-    length(payload) %% 3 == 0,
-    length(payload) %% 2 == 0
-  )
-  if (is_last_packet & !test_pass) return(NULL)
+  if (length(payload) != 1) {
 
-  stopifnot(test_pass)
+    test_pass <- all(
+      length(payload) %% 3 == 0,
+      length(payload) %% 2 == 0
+    )
+    if (is_last_packet & !test_pass) return(NULL)
 
-  scale_factor <- switch(
-    substring(info$Serial_Number, 1, 3),
-    "NEO" = 341,
-    "CLE" = 341,
-    "MOS" = 256
-  )
+    stopifnot(test_pass)
 
-  if ("Acceleration_Scale" %in% names(info)) {
-    scale_factor <- info$Acceleration_Scale
+    scale_factor <- switch(
+      substring(info$Serial_Number, 1, 3),
+      "NEO" = 341,
+      "CLE" = 341,
+      "MOS" = 256
+    )
+
+    if ("Acceleration_Scale" %in% names(info)) {
+      scale_factor <- info$Acceleration_Scale
+    }
+
+    payload <- readBin(
+      payload, "integer", length(payload) / 2, 2, TRUE
+    )
+
+    payload <- matrix(
+      round(payload / scale_factor, 3),
+      ncol = 3,
+      byrow = TRUE
+    )
+  } else {
+
+    payload <- matrix(NA, info$Sample_Rate, 3)
+
   }
-
-  payload <- readBin(
-    payload, "integer", length(payload) / 2, 2, TRUE
-  )
-
-  payload <- matrix(
-    round(payload / scale_factor, 3),
-    ncol = 3,
-    byrow = TRUE
-  )
 
   return(
     stats::setNames(

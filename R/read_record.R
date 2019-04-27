@@ -40,7 +40,9 @@ read_record <- function(
 
   value <- list(
       Type = record_header$type,
-      Timestamp = record_header$timestamp,
+      Timestamp = lubridate::force_tz(
+        record_header$timestamp, tz
+      ),
       Size = record_header$size,
       Payload = payload,
       Checksum = checksum

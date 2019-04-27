@@ -51,6 +51,29 @@ process_record_set <- function(record_set, log, tz,
   )
 
   records[sapply(records, is.null)] <- NULL
+
+  if (label == "ACTIVITY2") {
+
+    missing_records <- sapply(
+      records,
+      function(x) all(is.na(x$Payload))
+    )
+
+    if (any(missing_records)) {
+
+      if (verbose) cat(
+        "\r  Parsing", label, "packet(s)",
+        "-- interrupting to fill in USB connection time"
+      )
+
+      records <- latch_accelerometer_records(
+        missing_records, records, info
+      )
+
+    }
+
+  }
+
   records <- collapse_records(records, label = label)
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",

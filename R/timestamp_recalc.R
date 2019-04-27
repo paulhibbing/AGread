@@ -29,7 +29,7 @@ timestamp_recalc <- function(
     ((seq_along(timestamps) - 1) / samp_rate)
 
   if (verbose) cat(
-    "\r  Re-calculating SENSOR_DATA timestamps",
+    "\r  Re-calculating", label, "timestamps",
     "  ............. COMPLETE               "
   )
 
