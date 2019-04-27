@@ -52,60 +52,15 @@ process_record_set <- function(record_set, log, tz,
 
   records[sapply(records, is.null)] <- NULL
 
-  if (label == "ACTIVITY2") {
-
-    missing_records <- sapply(
-      records,
-      function(x) all(is.na(x$Payload))
-    )
-
-    if (any(missing_records)) {
-
-      if (verbose) cat(
-        "\r  Parsing", label, "packet(s)",
-        "-- interrupting to fill in USB connection time"
-      )
-
-      records <- latch_accelerometer_records(
-        missing_records, records, info
-      )
-
-    }
-
-  }
-
-  records <- collapse_records(records, label = label)
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",
-    "  .............", "100%"
+    "-- applying extra processes"
   )
 
-  if (label == "SENSOR_DATA") {
-    records <- interpolate_sensor_records(
-      records, schema, verbose
-    )
-  }
-
-  if (do_post_process) records <- post_process(records)
-
-  if (label %in% c("ACTIVITY2", "SENSOR_DATA")) {
-
-    samp_rate <- schema$Payload$samples
-    if (samp_rate == 0) samp_rate <- 100
-    if (label == "ACTIVITY2") {
-      samp_rate <- as.numeric(
-        as.character(parameters$Payload$SAMPLE_RATE)
-      )
-    }
-    records$Timestamp <- timestamp_recalc(
-      records$Timestamp, tz, schema,
-      verbose, samp_rate, label
-    )
-  } else {
-    records$Timestamp <- lubridate::force_tz(
-      records$Timestamp, tz
-    )
-  }
+  records <- record_set_extras(
+    records, label, do_post_process,
+    info, schema, tz, verbose
+  )
 
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",

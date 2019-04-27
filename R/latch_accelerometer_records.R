@@ -16,9 +16,16 @@ latch_accelerometer_records <- function(
   ## Fix the missing indices per se
 
     missing_indices <- which(missing_records)
+    missing_timestamps <- lapply(
+      records[missing_indices],
+      function(x) x$Timestamp
+    )
 
     new_records <- lapply(
-      missing_indices, accel_latch, records = records
+      missing_timestamps,
+      create_zero_record,
+      Type = records[[1]]$Type,
+      info = info
     )
 
     records[missing_indices] <- new_records
@@ -82,6 +89,13 @@ latch_accelerometer_records <- function(
 #'
 accel_latch <- function(index, records) {
 
+  .Defunct(
+    msg = paste(
+      "The latching process here is most likely useless.",
+      "\n  `create_zero_record` should be used instead."
+    )
+  )
+
   # index <- missing_indices[1]
   last_value <- records[[index - 1]]$Payload
   last_value <- last_value[nrow(last_value), ]
@@ -116,7 +130,18 @@ accel_latch <- function(index, records) {
 #' @keywords internal
 #'
 accel_zero_fill <- function(
-  records, index, n_missing_rows, info
+  records, index, n_missing_rows, info, ...
+) {
+
+  UseMethod("accel_zero_fill", records)
+
+}
+
+#' @rdname accel_zero_fill
+#' @keywords internal
+#'
+accel_zero_fill.list <- function(
+  records, index, n_missing_rows, info, ...
 ) {
 
   # index <- index[1]
@@ -131,5 +156,66 @@ accel_zero_fill <- function(
   )
 
   c(old_record, new_records)
+
+}
+
+#' @rdname accel_zero_fill
+#' @keywords internal
+#'
+accel_zero_fill.data.frame <- function(
+  records, index, n_missing_rows,
+  info, ...
+) {
+
+  Type <- switch(
+    records$Type[1],
+    "ACTIVITY2" = "26"
+  )
+
+  stopifnot(!is.null(Type))
+
+  ## Insert zeroes at start ####
+
+    first_time <- records$Timestamp[1]
+    tz <- lubridate::tz(first_time)
+    start_time <- info$Start_Date
+    stopifnot(tz == lubridate::tz(start_time))
+
+    timestamps <- seq(start_time, first_time - 1, "1 sec")
+
+    new_records <- sapply(
+      timestamps, create_zero_record,
+      Type = Type, info = info,
+      simplify = FALSE, USE.NAMES = FALSE
+    )
+
+    new_records <- collapse_records(
+      new_records, records$Type[1]
+    )
+    new_records <- post_process(new_records)
+
+    records <- rbind(new_records, records)
+
+    ## Insert zeroes at end ####
+
+    last_time <- records$Timestamp[nrow(records)]
+    stop_time <- info$Last_Sample_Time
+    stopifnot(tz == lubridate::tz(stop_time))
+
+    timestamps <- seq(last_time + 1, stop_time, "1 sec")
+
+    new_records <- sapply(
+      timestamps, create_zero_record,
+      Type = Type,
+      info = info, simplify = FALSE,
+      USE.NAMES = FALSE
+    )
+
+    new_records <- collapse_records(
+      new_records, records$Type[1]
+    )
+    new_records <- post_process(new_records)
+
+    rbind(records, new_records)
 
 }

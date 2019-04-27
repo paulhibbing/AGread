@@ -2,15 +2,14 @@
 #' packets
 #'
 #' @param timestamps POSIX-formatted vector of timestamps
-#' @inheritParams read_record
-#' @param verbose logical. Print updates to console?
+#' @inheritParams read_gt3x
 #' @param samp_rate integer. The sampling rate.
 #' @param label character. The packet type
 #'
 #' @keywords internal
 #'
 timestamp_recalc <- function(
-  timestamps, tz, schema, verbose, samp_rate, label
+  timestamps, tz, verbose, samp_rate, label
 ) {
 
   if (verbose) cat(
@@ -36,4 +35,3 @@ timestamp_recalc <- function(
   return(timestamps)
 
 }
-
