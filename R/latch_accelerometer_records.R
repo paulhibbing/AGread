@@ -21,14 +21,35 @@ latch_accelerometer_records <- function(
       function(x) x$Timestamp
     )
 
-    new_records <- lapply(
-      missing_timestamps,
-      create_zero_record,
-      Type = records[[1]]$Type,
-      info = info
+    records[missing_indices] <- mapply(
+      function(missing_record, previous_record) {
+
+        ## Repeat last row of previous payload n times, where n is the number of
+        ## rows in the missing payload
+        new_payload <- previous_record$Payload[
+          rep(
+            nrow(previous_record$Payload),
+            nrow(missing_record$Payload)
+          ),
+
+        ]
+        missing_record$Payload <- data.frame(
+          new_payload, row.names = NULL
+        )
+        return(missing_record)
+      },
+      missing_record = records[missing_indices],
+      previous_record = records[missing_indices - 1],
+      SIMPLIFY = FALSE
     )
 
-    records[missing_indices] <- new_records
+    stopifnot(!any(
+      sapply(
+        records,
+        function(x) all(is.na(x$Payload)),
+        USE.NAMES = FALSE
+      )
+    ))
 
   ## Now insert zeroes to fill in any gaps
 
@@ -42,7 +63,7 @@ latch_accelerometer_records <- function(
         records[[x + 1]]$Timestamp,
         records[[x]]$Timestamp,
         units = "sec"
-      ) - 1
+      )
     )
 
     # Split based on membership in a missing sequence

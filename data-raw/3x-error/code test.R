@@ -19,10 +19,18 @@ test2 <- read_AG_raw(
 
 nrow(test_raw) - nrow(test2)
 
-test_raw <- test_raw[seq(nrow(test2)), ]
 names(test2) <- gsub(" ", "_", names(test2))
-test2 <- data.frame(test2, stringsAsFactors = FALSE, row.names = NULL)
+test2 <- data.frame(
+  test2,
+  stringsAsFactors = FALSE,
+  row.names = NULL
+)
 
 test2 <- test2[ ,names(test_raw)]
 
-all.equal(test_raw, test2)
+all.equal(
+  test_raw,
+  test2[seq(nrow(test_raw)), ],
+  tolerance = 0.0015,
+  scale = 1
+)

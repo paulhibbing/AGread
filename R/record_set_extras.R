@@ -46,23 +46,31 @@ ACTIVITY2_extras <- function(
       missing_records, records, info
     )
 
-    if (verbose) cat(
-      "\r  Parsing", label, "packet(s)",
-      "  ............. COMPLETE               ",
-      "      "
-    )
-
   }
+
+  if (verbose) cat(
+    "\r  Collapsing", label, "packet(s)",
+    "  .............                        ",
+    "      "
+  )
 
   records <- collapse_records(records, label)
   records <- post_process(records)
+
+  if (verbose) cat(
+    "\r  Checking for missing packets",
+    "and correcting if necessary            ",
+    "      "
+  )
+
+  records <- accel_zero_fill(records, info = info)
 
   records$Timestamp <- timestamp_recalc(
     records$Timestamp, tz,
     verbose, info$Sample_Rate, label
   )
 
-  accel_zero_fill(records, info = info)
+  records
 
 }
 

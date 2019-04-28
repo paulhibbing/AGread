@@ -151,3 +151,57 @@ devtools::load_all()
   rm(list = ls())
   devtools::load_all()
   load("data-raw/3x-error/Step4.RData")
+
+  n_vals <- nrow(record_set)
+  label <- RECORDS$Type[match(
+    record_set$type[1],
+    as.character(RECORDS$ID)
+  )]
+
+  if (verbose) cat(
+    "\n  Parsing", label, "packet(s)"
+  )
+
+  records <- lapply(
+    seq(n_vals),
+    function(i) {
+
+      if (verbose & (i != n_vals)) cat(
+        "\r  Parsing", label, "packet(s)",
+        "  .............",
+        paste(
+          c(round(i/n_vals * 100, 0), "%"),
+          collapse = ""
+        )
+      )
+
+      result <- read_record(
+        record_set[i, ], log, tz,
+        info, give_timestamp, parameters, schema,
+        is_last_packet = i == n_vals
+      )
+
+      if (is.null(result$Payload)) return(NULL)
+      return(result)
+    }
+  )
+
+  records[sapply(records, is.null)] <- NULL
+
+  save.image("data-raw/3x-error/Step5.RData")
+
+## Step 6 ####
+
+  rm(list = ls())
+  devtools::load_all()
+  load("data-raw/3x-error/Step5.RData")
+
+  if (verbose) cat(
+    "\r  Parsing", label, "packet(s)",
+    "-- applying extra processes"
+  )
+
+  records <- record_set_extras(
+    records, label, do_post_process,
+    info, schema, tz, verbose
+  )
