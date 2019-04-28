@@ -5,14 +5,12 @@
 \title{Re-calculate IMU timestamps after parsing and interpolating SENSOR_DATA
 packets}
 \usage{
-timestamp_recalc(timestamps, tz, schema, verbose, samp_rate, label)
+timestamp_recalc(timestamps, tz, verbose, samp_rate, label)
 }
 \arguments{
 \item{timestamps}{POSIX-formatted vector of timestamps}
 
 \item{tz}{character. The timezone to use}
-
-\item{schema}{result of parsing the SENSOR_SCHEMA packet}
 
 \item{verbose}{logical. Print updates to console?}
 

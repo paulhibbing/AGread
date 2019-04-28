@@ -21,7 +21,9 @@ record_set_extras <- function(
     "ACTIVITY2" = ACTIVITY2_extras(
       records, info, tz, label, verbose
     ),
-    "SENSOR_DATA" = SENSOR_DATA_extras(records)
+    "SENSOR_DATA" = SENSOR_DATA_extras(
+      records, sensor_schema, tz, label, verbose
+    )
   )
 
 }
@@ -78,18 +80,30 @@ SENSOR_DATA_extras <- function(
   records, schema, tz, label, verbose
 ) {
 
+  time_gaps <- diff(
+    sapply(
+      records,
+      function(x) x$Timestamp,
+      USE.NAMES = FALSE
+    )
+  )
+
+  records <- fill_imu_records(
+    time_gaps, records, verbose
+  )
+
+  records <- collapse_records(
+    records, label
+  )
+
   records <- interpolate_sensor_records(
     records, schema, verbose
   )
 
-  records <- collapse_records(
-    records, label = label
-  )
   records <- post_process(records)
 
   samp_rate <- schema$Payload$samples
   if (samp_rate == 0) samp_rate <- 100
-
 
   records$Timestamp <- timestamp_recalc(
     records$Timestamp, tz,

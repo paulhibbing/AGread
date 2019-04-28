@@ -26,8 +26,20 @@ interpolate_sensor_records <- function(record_set, schema, verbose) {
   # record_set <- records
 
   ## Check if interpolation is necessary
+  # n_to_interpolate <- sum(
+  #   sapply(
+  #     records,
+  #     function(x) max(x$Payload$interpolate),
+  #     USE.NAMES = FALSE
+  #   )
+  # )
   n_to_interpolate <- sum(record_set$Result.interpolate)
   if (n_to_interpolate == 0) return(record_set)
+
+  stop(paste(
+    "Interpolation is broken and may not be",
+    "proper or necessary."
+  ))
 
   ## Get set up if so
   if (verbose) cat(

@@ -43,6 +43,10 @@ payload_parse_sensor_data_25 <- function(
     #   all_indices, payload, schema$Payload$samples
     # )
 
+    if (nrow(all_indices) == 1) stop(
+      "USB connection detected."
+    )
+
   ## Account for missing samples
     missing_rows <- apply(
       all_indices <= length(payload),

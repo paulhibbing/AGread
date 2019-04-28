@@ -3,7 +3,9 @@ create_zero_record <- function(
 ) {
 
   Payload <- switch(
-    Type, "26" = zero_payload_26(info)
+    Type,
+    "25" = zero_payload_25(info),
+    "26" = zero_payload_26(info)
   )
 
   list(
@@ -13,6 +15,33 @@ create_zero_record <- function(
     Payload = Payload,
     Checksum = "OK"
   )
+
+}
+
+zero_payload_25 <- function(schema) {
+
+  n_rows <- schema$Payload$samples
+  if (n_rows == 0) n_rows <- 100
+
+  col_names <- schema$Payload$sensorColumns$label
+  col_names <- col_names[col_names != ""]
+  col_names <- gsub(" ", "_", col_names)
+
+  payload <- matrix(
+    0, n_rows, length(col_names)
+  )
+
+  payload <- stats::setNames(
+    data.frame(
+      payload,
+      row.names = NULL
+    ),
+    col_names
+  )
+
+  payload$interpolate <- 0
+
+  payload
 
 }
 

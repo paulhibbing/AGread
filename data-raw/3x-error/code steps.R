@@ -1,18 +1,19 @@
 rm(list = ls())
 devtools::load_all()
 
-## Step 1 ####
+## Step 1: Set starter variables ####
 
   file <- "data-raw/3x-error/FLPAY002S1D2LW (2017-01-28).gt3x"
+  # test <- read_gt3x(file)
   tz <- "UTC"
   verbose <- TRUE
   give_timestamp <- TRUE
   include <- c(
     "METADATA", "PARAMETERS",
-    "SENSOR_SCHEMA", "ACTIVITY2"
+    "SENSOR_SCHEMA", "SENSOR_DATA"
   )
 
-## Step 2 ####
+## Step 2: read_gt3x ####
 
   timer <- proc.time()
   if (verbose) cat("\nProcessing", basename(file), "\n")
@@ -52,7 +53,7 @@ devtools::load_all()
 
   n_records <- file_3x["log.bin", "Length"]
 
-## Step 3 ####
+## Step 3: parse_log_bin ####
 
   ## Read the bin file
   if (verbose) cat("\n  Reading log.bin")
@@ -102,8 +103,10 @@ devtools::load_all()
   # rm(list = ls())
   # load("data-raw/3x-error/Step3.RData")
 
-## Step 4 ####
+## Step 4: process_record_set ####
 
+  rm(list = ls())
+  devtools::load_all()
   load("data-raw/3x-error/Step3.RData")
   record_set <- record_headers[[2]]
 
@@ -146,55 +149,11 @@ devtools::load_all()
 
   save.image("data-raw/3x-error/Step4.RData")
 
-## Step 5 ####
+## Step 5: record_set_extras ####
 
   rm(list = ls())
   devtools::load_all()
   load("data-raw/3x-error/Step4.RData")
-
-  n_vals <- nrow(record_set)
-  label <- RECORDS$Type[match(
-    record_set$type[1],
-    as.character(RECORDS$ID)
-  )]
-
-  if (verbose) cat(
-    "\n  Parsing", label, "packet(s)"
-  )
-
-  records <- lapply(
-    seq(n_vals),
-    function(i) {
-
-      if (verbose & (i != n_vals)) cat(
-        "\r  Parsing", label, "packet(s)",
-        "  .............",
-        paste(
-          c(round(i/n_vals * 100, 0), "%"),
-          collapse = ""
-        )
-      )
-
-      result <- read_record(
-        record_set[i, ], log, tz,
-        info, give_timestamp, parameters, schema,
-        is_last_packet = i == n_vals
-      )
-
-      if (is.null(result$Payload)) return(NULL)
-      return(result)
-    }
-  )
-
-  records[sapply(records, is.null)] <- NULL
-
-  save.image("data-raw/3x-error/Step5.RData")
-
-## Step 6 ####
-
-  rm(list = ls())
-  devtools::load_all()
-  load("data-raw/3x-error/Step5.RData")
 
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",
