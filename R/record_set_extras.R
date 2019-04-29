@@ -1,11 +1,11 @@
 record_set_extras <- function(
   records, label, do_post_process,
-  info, sensor_schema, tz, verbose
+  info, sensor_schema, tz, verbose = FALSE
 ) {
 
   if (! label %in% c("ACTIVITY2", "SENSOR_DATA")) {
 
-    records <- collapse_records(records, label)
+    records <- collapse_records(records, label, verbose)
     records$Timestamp <- lubridate::force_tz(
       records$Timestamp, tz
     )
@@ -29,43 +29,23 @@ record_set_extras <- function(
 }
 
 ACTIVITY2_extras <- function(
-  records, info, tz, label, verbose
+  records, info, tz, label,
+  verbose = FALSE
 ) {
 
-  missing_records <- sapply(
-      records,
-      function(x) all(is.na(x$Payload))
+  records <- fix_usb(
+    Type = records[[1]]$Type,
+    verbose = verbose,
+    records = records,
+    info = info
   )
-
-  if (any(missing_records)) {
-
-    if (verbose) cat(
-      "\r  Parsing", label, "packet(s)",
-      "-- interrupting to fill in USB connection time"
-    )
-
-    records <- latch_accelerometer_records(
-      missing_records, records, info
-    )
-
-  }
-
-  if (verbose) cat(
-    "\r  Collapsing", label, "packet(s)",
-    "  .............                        ",
-    "      "
+  records <- collapse_records(
+    records, label, verbose
   )
-
-  records <- collapse_records(records, label)
   records <- post_process(records)
-
-  if (verbose) cat(
-    "\r  Checking for missing packets",
-    "and correcting if necessary            ",
-    "      "
+  records <- zero_fill(
+    records, info = info, verbose = verbose
   )
-
-  records <- accel_zero_fill(records, info = info)
 
   records$Timestamp <- timestamp_recalc(
     records$Timestamp, tz,
@@ -80,34 +60,25 @@ SENSOR_DATA_extras <- function(
   records, schema, tz, label, verbose
 ) {
 
-  time_gaps <- diff(
-    sapply(
-      records,
-      function(x) x$Timestamp,
-      USE.NAMES = FALSE
-    )
-  )
-
-  records <- fill_imu_records(
-    time_gaps, records, verbose
+  records <- fix_usb(
+    Type = records[[1]]$Type,
+    verbose = verbose,
+    records = records
   )
 
   records <- collapse_records(
-    records, label
+    records, label, verbose
   )
 
-  records <- interpolate_sensor_records(
-    records, schema, verbose
-  )
+  # records <- interpolate_sensor_records(
+  #   records, schema, verbose
+  # )
 
   records <- post_process(records)
 
-  samp_rate <- schema$Payload$samples
-  if (samp_rate == 0) samp_rate <- 100
-
   records$Timestamp <- timestamp_recalc(
     records$Timestamp, tz,
-    verbose, samp_rate, label
+    verbose, schema$Payload$samples, label
   )
 
   records

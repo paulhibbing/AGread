@@ -8,6 +8,8 @@ create_zero_record <- function(
     "26" = zero_payload_26(info)
   )
 
+  stopifnot(!is.null(Payload))
+
   list(
     Type = Type,
     Timestamp = Timestamp,
