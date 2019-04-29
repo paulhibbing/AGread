@@ -7,7 +7,7 @@
 process_parameters(payload_chunk, tz)
 }
 \arguments{
-\item{tz}{character. The timezone to use.}
+\item{tz}{character. The timezone to use}
 }
 \description{
 Dispatches to a third-level function (e.g. \code{\link{par_battery_state}})

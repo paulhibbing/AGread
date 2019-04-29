@@ -11,7 +11,7 @@ payload_parse_parameters_21(payload, info, tz = "UTC")
 
 \item{info}{result of \code{\link{parse_info_txt}}}
 
-\item{tz}{character. The timezone to use.}
+\item{tz}{character. The timezone to use}
 }
 \description{
 Master function to parse PARAMETERS packets

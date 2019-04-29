@@ -5,7 +5,7 @@
 \title{Format columns in collapsed IMU data}
 \usage{
 ag_imu_format(AG, output_window_secs = 1, filter, samp_rate, filter_hz = 35,
-  verbose, block_size)
+  verbose, block_size, return_raw = FALSE)
 }
 \arguments{
 \item{AG}{data frame containing IMU data}
@@ -21,6 +21,8 @@ ag_imu_format(AG, output_window_secs = 1, filter, samp_rate, filter_hz = 35,
 \item{verbose}{A logical scalar: Print processing updates?}
 
 \item{block_size}{integer. Rows of raw data per output window}
+
+\item{return_raw}{logical. Return raw triaxial data?}
 }
 \description{
 Format columns in collapsed IMU data

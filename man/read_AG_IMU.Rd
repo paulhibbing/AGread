@@ -6,7 +6,7 @@
 \usage{
 read_AG_IMU(file, output_window_secs = 1, verbose = FALSE, skip = 10,
   filter = TRUE, filter_hz = 35, output_vars = c("accelerometer",
-  "temperature", "gyroscope", "magnetometer"))
+  "temperature", "gyroscope", "magnetometer"), return_raw = FALSE)
 }
 \arguments{
 \item{file}{character scalar giving the path to the IMU file}
@@ -22,6 +22,8 @@ read_AG_IMU(file, output_window_secs = 1, verbose = FALSE, skip = 10,
 \item{filter_hz}{The cutoff for the low-pass filter}
 
 \item{output_vars}{character. IMU variables to include in output.}
+
+\item{return_raw}{logical. Return raw triaxial data?}
 }
 \value{
 A dataframe giving processed IMU data in the specified epoch length

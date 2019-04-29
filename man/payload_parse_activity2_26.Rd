@@ -4,12 +4,15 @@
 \alias{payload_parse_activity2_26}
 \title{Parse ACTIVITY2 packet}
 \usage{
-payload_parse_activity2_26(payload, info, is_last_packet = FALSE)
+payload_parse_activity2_26(payload, info, scale_factor,
+  is_last_packet = FALSE)
 }
 \arguments{
 \item{payload}{raw. The payload}
 
 \item{info}{result of \code{\link{parse_info_txt}}}
+
+\item{scale_factor}{scale_factor for ACTIVITY2 packets}
 
 \item{is_last_packet}{logical. Is the current packet the last in the file?}
 }

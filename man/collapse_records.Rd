@@ -5,7 +5,7 @@
 \alias{generic_record_collapse}
 \title{Dispatch-like function for combining packet records of a certain type}
 \usage{
-collapse_records(records, label)
+collapse_records(records, label, verbose = FALSE)
 
 generic_record_collapse(records, label)
 }
@@ -13,6 +13,8 @@ generic_record_collapse(records, label)
 \item{records}{The records to combine}
 
 \item{label}{The record type}
+
+\item{verbose}{logical. Print updates to console?}
 }
 \description{
 Dispatch-like function for combining packet records of a certain type

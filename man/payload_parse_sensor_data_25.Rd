@@ -4,12 +4,10 @@
 \alias{payload_parse_sensor_data_25}
 \title{Parse SENSOR_DATA packet}
 \usage{
-payload_parse_sensor_data_25(payload, info, parameters, schema, record_header)
+payload_parse_sensor_data_25(payload, parameters, schema, record_header)
 }
 \arguments{
 \item{payload}{raw. The payload}
-
-\item{info}{result of \code{\link{parse_info_txt}}}
 
 \item{parameters}{result of parsing the PARAMETERS packet}
 

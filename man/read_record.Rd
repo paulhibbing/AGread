@@ -5,7 +5,7 @@
 \title{High-level function to read a packet of data from a gt3x file}
 \usage{
 read_record(record_header, log, tz = "UTC", info, give_timestamp = TRUE,
-  parameters = NULL, schema = NULL, ...)
+  parameters = NULL, schema = NULL, scale_factor, ...)
 }
 \arguments{
 \item{record_header}{data frame containing information about the packet
@@ -22,6 +22,8 @@ indices etc.}
 \item{parameters}{result of parsing the PARAMETERS packet}
 
 \item{schema}{result of parsing the SENSOR_SCHEMA packet}
+
+\item{scale_factor}{scale_factor for ACTIVITY2 packets}
 
 \item{...}{further arguments passed to \code{\link{payload_parse}}}
 }

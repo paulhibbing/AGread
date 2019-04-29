@@ -5,7 +5,8 @@
 \title{Dispatch-like function for parsing different types of payloads}
 \usage{
 payload_parse(type, payload, info, tz = "UTC", parameters = NULL,
-  schema = NULL, record_header = NULL, is_last_packet = FALSE)
+  schema = NULL, record_header = NULL, scale_factor,
+  is_last_packet = FALSE)
 }
 \arguments{
 \item{type}{The payload type}
@@ -14,7 +15,7 @@ payload_parse(type, payload, info, tz = "UTC", parameters = NULL,
 
 \item{info}{result of \code{\link{parse_info_txt}}}
 
-\item{tz}{character. The timezone to use.}
+\item{tz}{character. The timezone to use}
 
 \item{parameters}{result of parsing the PARAMETERS packet}
 
@@ -22,6 +23,8 @@ payload_parse(type, payload, info, tz = "UTC", parameters = NULL,
 
 \item{record_header}{information for
 \code{\link{payload_parse_sensor_data_25}} about the packet indices etc.}
+
+\item{scale_factor}{scale_factor for ACTIVITY2 packets}
 
 \item{is_last_packet}{logical. Is the current packet the last in the file?}
 }

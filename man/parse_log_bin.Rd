@@ -17,7 +17,7 @@ parse_log_bin(log_file, n_records, info, tz, verbose = FALSE,
 
 \item{info}{result of \code{\link{parse_info_txt}}}
 
-\item{tz}{character. The timezone to use.}
+\item{tz}{character. The timezone to use}
 
 \item{verbose}{logical. Print updates to console?}
 
