@@ -3,14 +3,17 @@ devtools::load_all()
 
 ## Step 1: Set starter variables ####
 
-  file <- "data-raw/3x-error/FLPAY002S1D2LW (2017-01-28).gt3x"
+  # file <- "data-raw/3x-error/FLPAY002S1D2LW (2017-01-28).gt3x"
+  file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
+  # file <- "inst/extdata/example.gt3x"
   # test <- read_gt3x(file)
   tz <- "UTC"
   verbose <- TRUE
   give_timestamp <- TRUE
   include <- c(
     "METADATA", "PARAMETERS",
-    "SENSOR_SCHEMA", "SENSOR_DATA"
+    "SENSOR_SCHEMA", "ACTIVITY2"#,
+    # "SENSOR_DATA"
   )
 
 ## Step 2: read_gt3x ####
@@ -98,16 +101,16 @@ devtools::load_all()
   record_headers <- sort_records(record_headers)
   record_headers <- select_records(record_headers, include)
 
-  save.image("data-raw/3x-error/Step3.RData")
+  # save.image("data-raw/3x-error/Step3.RData")
 
   # rm(list = ls())
   # load("data-raw/3x-error/Step3.RData")
 
 ## Step 4: process_record_set ####
 
-  rm(list = ls())
-  devtools::load_all()
-  load("data-raw/3x-error/Step3.RData")
+  # rm(list = ls())
+  # devtools::load_all()
+  # load("data-raw/3x-error/Step3.RData")
   record_set <- record_headers[[2]]
 
   ## Setup
@@ -147,13 +150,13 @@ devtools::load_all()
 
   records[sapply(records, is.null)] <- NULL
 
-  save.image("data-raw/3x-error/Step4.RData")
+  # save.image("data-raw/3x-error/Step4.RData")
 
 ## Step 5: record_set_extras ####
 
-  rm(list = ls())
-  devtools::load_all()
-  load("data-raw/3x-error/Step4.RData")
+  # rm(list = ls())
+  # devtools::load_all()
+  # load("data-raw/3x-error/Step4.RData")
 
   if (verbose) cat(
     "\r  Parsing", label, "packet(s)",
