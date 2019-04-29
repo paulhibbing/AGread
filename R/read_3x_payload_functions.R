@@ -2,10 +2,7 @@
 #'
 #' @param type The payload type
 #' @param payload raw. The payload
-#' @param info result of \code{\link{parse_info_txt}}
-#' @param tz character. The timezone to use.
-#' @param parameters result of parsing the PARAMETERS packet
-#' @param schema result of parsing the SENSOR_SCHEMA packet
+#' @inheritParams read_record
 #' @param record_header information for
 #'   \code{\link{payload_parse_sensor_data_25}} about the packet indices etc.
 #' @param is_last_packet logical. Is the current packet the last in the file?
@@ -14,7 +11,8 @@
 #'
 payload_parse <- function(
   type, payload, info, tz = "UTC", parameters = NULL,
-  schema = NULL, record_header = NULL, is_last_packet = FALSE
+  schema = NULL, record_header = NULL, scale_factor,
+  is_last_packet = FALSE
 ) {
   switch(
     type,
@@ -35,10 +33,10 @@ payload_parse <- function(
     "21"=	payload_parse_parameters_21(payload, info, tz),
     "24"=	payload_parse_sensor_schema_24(payload, info),
     "25"=	payload_parse_sensor_data_25(
-      payload, info, parameters, schema, record_header
+      payload, parameters, schema, record_header
     ),
     "26"=	payload_parse_activity2_26(
-      payload, info, is_last_packet
+      payload, info, scale_factor, is_last_packet
     )
   )
 }

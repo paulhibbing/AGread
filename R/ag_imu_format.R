@@ -9,7 +9,7 @@
 #'
 ag_imu_format <- function(
   AG, output_window_secs = 1, filter, samp_rate,
-  filter_hz = 35, verbose, block_size
+  filter_hz = 35, verbose, block_size, return_raw = FALSE
 ) {
 
   AG <- check_second(AG)
@@ -52,15 +52,23 @@ ag_imu_format <- function(
     )
   }
 
-  AG <- imu_collapse(
-    AG, block_size, verbose = verbose
-  )
+  if (!return_raw) {
+    AG <- imu_collapse(
+      AG, block_size, verbose = verbose
+    )
+  } else {
+    names(AG) <- gsub("\\.", "_", names(AG))
+  }
 
   first_variables <- c(
     "file_source_IMU", "date_processed_IMU", "Timestamp"
   )
 
-  AG <- AG[, c(first_variables, setdiff(names(AG), first_variables))]
+  ordered_names <- c(
+    first_variables,
+    setdiff(names(AG), first_variables)
+  )
+  AG <- AG[ ,ordered_names]
 
   AG$epoch <- NULL
 

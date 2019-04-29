@@ -25,8 +25,9 @@ read_AG_IMU <- function(
   skip = 10, filter = TRUE, filter_hz = 35,
   output_vars = c(
     "accelerometer", "temperature", "gyroscope", "magnetometer"
-  )
+  ), return_raw = FALSE
 ) {
+
   timer <- proc.time()
   if (verbose) message_update(1, file = file)
 
@@ -41,15 +42,16 @@ read_AG_IMU <- function(
   ## Carry on with IMU processing
   meta <- get_imu_file_meta(file, output_window_secs)
 
-  AG <-
-    suppressWarnings(try(data.table::fread(
+  AG <- suppressWarnings(
+    try(data.table::fread(
       file,
       stringsAsFactors = FALSE,
       skip = skip,
       #nrows = 25,
       showProgress = FALSE
     ))
-    )
+  )
+
   if ("try-error" %in% class(AG)) {
     message_update(18, is_message = TRUE)
     return(NULL)
@@ -64,7 +66,7 @@ read_AG_IMU <- function(
   AG <- ag_imu_format(
     AG, output_window_secs, filter,
     meta$samp_rate, filter_hz, verbose,
-    meta$block_size
+    meta$block_size, return_raw
   )
 
   ## Figure out which columns to return
@@ -78,5 +80,7 @@ read_AG_IMU <- function(
   AG <- AG[ ,output_cols]
 
   if (verbose) message_update(16, dur = get_duration(timer))
+
   return(AG)
+
 }

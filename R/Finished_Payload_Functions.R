@@ -67,7 +67,7 @@ payload_parse_capsense_13 <- function(payload, info) {
 #' @keywords internal
 #'
 payload_parse_activity2_26 <- function(
-  payload, info, is_last_packet = FALSE
+  payload, info, scale_factor, is_last_packet = FALSE
 ) {
 
   if (length(payload) != 1) {
@@ -79,17 +79,6 @@ payload_parse_activity2_26 <- function(
     if (is_last_packet & !test_pass) return(NULL)
 
     stopifnot(test_pass)
-
-    scale_factor <- switch(
-      substring(info$Serial_Number, 1, 3),
-      "NEO" = 341,
-      "CLE" = 341,
-      "MOS" = 256
-    )
-
-    if ("Acceleration_Scale" %in% names(info)) {
-      scale_factor <- info$Acceleration_Scale
-    }
 
     payload <- readBin(
       payload, "integer", length(payload) / 2, 2, TRUE

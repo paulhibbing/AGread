@@ -15,12 +15,29 @@ process_record_set <- function(record_set, log, tz,
 
   # record_set <- record_headers[[6]]
   # record_set <- record_set[1:100, ]
+
   ## Setup
   n_vals <- nrow(record_set)
   label <- RECORDS$Type[match(
     record_set$type[1],
     as.character(RECORDS$ID)
   )]
+
+  scale_factor <- NULL
+  if (label == "ACTIVITY2") {
+
+    scale_factor <- switch(
+      substring(info$Serial_Number, 1, 3),
+      "NEO" = 341,
+      "CLE" = 341,
+      "MOS" = 256
+    )
+
+    if ("Acceleration_Scale" %in% names(info)) {
+      scale_factor <- info$Acceleration_Scale
+    }
+
+  }
 
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"
@@ -42,7 +59,7 @@ process_record_set <- function(record_set, log, tz,
       result <- read_record(
         record_set[i, ], log, tz,
         info, give_timestamp, parameters, schema,
-        is_last_packet = i == n_vals
+        scale_factor, is_last_packet = i == n_vals
       )
 
       if (is.null(result$Payload)) return(NULL)
@@ -76,10 +93,18 @@ process_record_set <- function(record_set, log, tz,
 #'
 #' @param records The records to combine
 #' @param label The record type
+#' @inheritParams read_gt3x
 #'
 #' @keywords internal
 #'
-collapse_records <- function(records, label) {
+collapse_records <- function(records, label, verbose = FALSE) {
+
+  if (verbose) cat(
+    "\r  Collapsing", label, "packet(s)",
+    "  .............                        ",
+    "      "
+  )
+
   switch(
     label,
     "METADATA" = generic_record_collapse(records, label),
@@ -101,6 +126,7 @@ collapse_records <- function(records, label) {
     "SENSOR_DATA" = generic_record_collapse(records, label),
     "ACTIVITY2" = generic_record_collapse(records, label)
   )
+
 }
 
 #' @rdname collapse_records
@@ -129,7 +155,11 @@ generic_record_collapse <- function(records, label) {
 post_process <- function(result) {
 
   names(result) <- gsub("^Result\\.", "", names(result))
-  result <- data.frame(result, stringsAsFactors = FALSE)
+  result <- data.frame(
+    result,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
 
   if (sum(grepl("Timestamp", names(result))) >1) {
     col_to_drop <- which(grepl("Timestamp", names(result)))[1]
@@ -140,4 +170,5 @@ post_process <- function(result) {
   }
 
   return(result)
+
 }

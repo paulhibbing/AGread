@@ -8,13 +8,14 @@
 #' @param give_timestamp logical. Include timestamp in output?
 #' @param parameters result of parsing the PARAMETERS packet
 #' @param schema result of parsing the SENSOR_SCHEMA packet
+#' @param scale_factor scale_factor for ACTIVITY2 packets
 #' @param ... further arguments passed to \code{\link{payload_parse}}
 #'
 #' @keywords internal
 #'
 read_record <- function(
   record_header, log, tz = "UTC", info, give_timestamp = TRUE,
-  parameters = NULL, schema = NULL, ...
+  parameters = NULL, schema = NULL, scale_factor, ...
 ) {
 
   log_indices <- seq(
@@ -29,7 +30,8 @@ read_record <- function(
 
   payload <- payload_parse(
     record_header$type, payload_raw, info, tz,
-    parameters, schema, record_header, ...
+    parameters, schema, record_header, scale_factor,
+    ...
   )
 
   checksum <- checksum_calculate(

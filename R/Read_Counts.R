@@ -303,17 +303,40 @@ check_inc <- function(AG, verbose = FALSE) {
   return(AG)
 }
 
+
 #' Provide the run time of processing
 #'
-#' @param timer The initial time
+#' @param timer a proc_time object giving the initial time
 #'
 #' @examples
 #' timer <- proc.time()
 #' Sys.sleep(2.2)
-#' AGread:::message_update(16, dur = get_duration(timer))
+#' \donttest{
+#'   # Gives warning about deprecation
+#'   get_duration(timer)
+#'
+#'   # Instead use
+#'   PAutilities::get_duration(timer)
+#' }
+#'
+#'
+#' @name get_duration-deprecated
+#' @usage get_duration(timer)
+#' @seealso \code{\link{AGread-deprecated}}
+#' @keywords internal
+NULL
+
+#' @rdname AGread-deprecated
+#' @section \code{get_duration}:
+#' For \code{get_duration}, use \code{\link[PAutilities]{get_duration}}
 #'
 #' @export
-#'
 get_duration <- function(timer) {
-  format((proc.time() - timer)[3] / 60, digits = 1, nsmall = 1)
+
+  .Deprecated("PAutilities::get_duration", "PAutilities")
+  format(
+    (proc.time() - timer)[3] / 60,
+    digits = 1,
+    nsmall = 1
+  )
 }

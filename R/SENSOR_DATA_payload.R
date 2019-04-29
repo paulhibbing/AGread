@@ -6,7 +6,7 @@
 #' @keywords internal
 #'
 payload_parse_sensor_data_25 <- function(
-  payload, info, parameters, schema, record_header
+  payload, parameters, schema, record_header
 ) {
 
   ## Setup
@@ -28,10 +28,6 @@ payload_parse_sensor_data_25 <- function(
 
     firstSample <- record_header$timestamp
 
-    if (schema$Payload$samples == 0) {
-      schema$Payload$samples <- 100
-    }
-
   ## Column-wise starting indices for each record
     all_indices <- lapply(
       seq(schema$Payload$samples) - 1,
@@ -47,17 +43,17 @@ payload_parse_sensor_data_25 <- function(
       "USB connection detected."
     )
 
-  ## Account for missing samples
-    missing_rows <- apply(
-      all_indices <= length(payload),
-      1, all
-    )
-    all_indices <- all_indices[missing_rows, ]
-    interpolate <- schema$Payload$samples -
-      nrow(all_indices)
+  # ## Account for missing samples
+  #   missing_rows <- apply(
+  #     all_indices <= length(payload),
+  #     1, all
+  #   )
+  #   all_indices <- all_indices[missing_rows, ]
+  #   interpolate <- schema$Payload$samples -
+  #     nrow(all_indices)
 
     stopifnot(all(
-      # nrow(all_indices) == schema$Payload$samples,
+      nrow(all_indices) == schema$Payload$samples,
       all_indices[1,1] == orig_offset,
       ncol(all_indices) == schema$Payload$columns
     ))
@@ -92,8 +88,8 @@ payload_parse_sensor_data_25 <- function(
     # row_ms <- seq(nrow(result)) - 1
     # result$Timestamp <- firstSample + (row_ms / schema$Payload$samples)
 
-    result$interpolate <- 0
-    result$interpolate[nrow(result)] <- interpolate
+    # result$interpolate <- 0
+    # result$interpolate[nrow(result)] <- interpolate
     return(result)
 }
 

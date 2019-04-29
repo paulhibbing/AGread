@@ -97,6 +97,10 @@ payload_parse_sensor_schema_24 <- function(payload, info) {
 
   }
 
+  if (schema$samples == 0) {
+    schema$samples <- 100
+  }
+
   return(schema)
 
 }
