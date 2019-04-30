@@ -4,22 +4,23 @@ devtools::load_all()
 ## Step 1: Set starter variables ####
 
   # file <- "data-raw/3x-error/FLPAY002S1D2LW (2017-01-28).gt3x"
-  file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
-  # file <- "inst/extdata/example.gt3x"
+  # file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
+  file <- "inst/extdata/example.gt3x"
   # test <- read_gt3x(file)
   tz <- "UTC"
   verbose <- TRUE
   give_timestamp <- TRUE
   include <- c(
     "METADATA", "PARAMETERS",
-    "SENSOR_SCHEMA", "ACTIVITY2"#,
-    # "SENSOR_DATA"
+    "SENSOR_SCHEMA", #"ACTIVITY2"#,
+    "SENSOR_DATA"
   )
 
 ## Step 2: read_gt3x ####
 
-  timer <- proc.time()
-  if (verbose) cat("\nProcessing", basename(file), "\n")
+  timer <- PAutilities::manage_procedure(
+    "Start", "\nProcessing", basename(file), "\n", verbose = verbose
+  )
 
   #1) Verify .gt3x file is a zip file
   file_3x <- try(
@@ -120,9 +121,37 @@ devtools::load_all()
     as.character(RECORDS$ID)
   )]
 
+  scale_factor <- NULL
+  if (label == "ACTIVITY2") {
+
+    scale_factor <- switch(
+      substring(info$Serial_Number, 1, 3),
+      "NEO" = 341,
+      "CLE" = 341,
+      "MOS" = 256
+    )
+
+    if ("Acceleration_Scale" %in% names(info)) {
+      scale_factor <- info$Acceleration_Scale
+    }
+
+  }
+
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"
   )
+
+  # record_header <- record_set[155, ]
+  # log_indices <- seq(
+  #   record_header$index,
+  #   record_header$index + 8 + record_header$payload_size
+  # )
+  #
+  # record <- log[log_indices]
+  #
+  # type <- record_header$type
+  # payload <- record[9:(length(record) - 1)]
+  # save.image("data-raw/3x-error/problem_packet.RData")
 
   records <- lapply(
     seq(n_vals),
@@ -140,7 +169,7 @@ devtools::load_all()
       result <- read_record(
         record_set[i, ], log, tz,
         info, give_timestamp, parameters, schema,
-        is_last_packet = i == n_vals
+        scale_factor, is_last_packet = i == n_vals
       )
 
       if (is.null(result$Payload)) return(NULL)
