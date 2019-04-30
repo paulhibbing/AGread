@@ -37,8 +37,9 @@ read_gt3x <- function(
   "SENSOR_DATA")
 ) {
 
-  timer <- proc.time()
-  if (verbose) cat("\nProcessing", basename(file), "\n")
+  timer <- PAutilities::manage_procedure(
+    "Start", "\nProcessing", basename(file), "\n", verbose = verbose
+  )
 
   #1) Verify .gt3x file is a zip file
   file_3x <- try(
@@ -77,12 +78,6 @@ read_gt3x <- function(
     verbose, give_timestamp, include
   )
 
-  if (verbose) cat(
-    "\n\nProcessing complete. Elapsed time",
-    AGread::get_duration(timer),
-    "minutes.\n"
-  )
-
   log <- name_log(log)
   if ("RAW" %in% names(log)) {
     class(log$RAW) <- c(class(log$RAW), "RAW")
@@ -90,6 +85,12 @@ read_gt3x <- function(
   if ("IMU" %in% names(log)) {
     class(log$IMU) <- c(class(log$IMU), "IMU")
   }
+
+  PAutilities::manage_procedure(
+    "End", "\n\nProcessing complete. Elapsed time",
+    PAutilities::get_duration(timer),
+    "minutes.\n", verbose = verbose
+  )
 
   return(log)
 
