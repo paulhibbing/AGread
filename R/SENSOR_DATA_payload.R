@@ -43,15 +43,6 @@ payload_parse_sensor_data_25 <- function(
       "USB connection detected."
     )
 
-  # ## Account for missing samples
-  #   missing_rows <- apply(
-  #     all_indices <= length(payload),
-  #     1, all
-  #   )
-  #   all_indices <- all_indices[missing_rows, ]
-  #   interpolate <- schema$Payload$samples -
-  #     nrow(all_indices)
-
     stopifnot(all(
       nrow(all_indices) == schema$Payload$samples,
       all_indices[1,1] == orig_offset,
@@ -85,12 +76,8 @@ payload_parse_sensor_data_25 <- function(
     result[sapply(result, is.null)] <- NULL
     result <- do.call(cbind, result)
 
-    # row_ms <- seq(nrow(result)) - 1
-    # result$Timestamp <- firstSample + (row_ms / schema$Payload$samples)
-
-    # result$interpolate <- 0
-    # result$interpolate[nrow(result)] <- interpolate
     return(result)
+
 }
 
 #' Parse a column of sensor data
