@@ -1,14 +1,14 @@
 #' Parse the log component of a gt3x file
 #'
 #' @param log_file character. Path to the log.bin file
-#' @param n_records integer. Length of the log
-#' @inheritParams payload_parse
+#' @param file_3x data frame containing information about the zip archive
+#' @param info result of \code{\link{parse_info_txt}}
 #' @inheritParams read_gt3x
 #'
 #' @keywords internal
 #'
 parse_log_bin <- function(
-  log_file, n_records, info, tz, verbose = FALSE,
+  log_file, file_3x, info, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, include = c(
     "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
     "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
@@ -36,13 +36,11 @@ parse_log_bin <- function(
 
   ## Read the bin file
     if (verbose) cat("\n  Reading log.bin")
-      log <- readBin(log_file, "raw", n_records)
+      log <- readBin(log_file, "raw", file_3x["log.bin", "Length"])
     if (verbose) cat("  ............. COMPLETE")
 
   ## Get headers
-    record_headers <- get_headers(
-      log, n_records, tz, verbose = verbose
-    )
+    record_headers <- get_headers(log, tz, verbose)
 
     stopifnot(
       all(

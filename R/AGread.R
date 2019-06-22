@@ -52,3 +52,7 @@
 #' @docType package
 #' @name AGread
 NULL
+
+#' @useDynLib AGread
+#' @importFrom Rcpp sourceCpp
+NULL
