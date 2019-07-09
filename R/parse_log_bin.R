@@ -1,14 +1,15 @@
 #' Parse the log component of a gt3x file
 #'
 #' @param log_file character. Path to the log.bin file
-#' @param file_3x data frame containing information about the zip archive
+#' @param file_3x_len length of log.bin, obtained from the \code{file_3x} object
+#'   from the parent function \code{\link{read_gt3x}}
 #' @param info result of \code{\link{parse_info_txt}}
 #' @inheritParams read_gt3x
 #'
 #' @keywords internal
 #'
 parse_log_bin <- function(
-  log_file, file_3x, info, tz = "UTC", verbose = FALSE,
+  log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, include = c(
     "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
     "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
@@ -36,7 +37,7 @@ parse_log_bin <- function(
 
   ## Read the bin file
     if (verbose) cat("\n  Reading log.bin")
-      log <- readBin(log_file, "raw", file_3x["log.bin", "Length"])
+      log <- readBin(log_file, "raw", file_3x_len)
     if (verbose) cat("  ............. COMPLETE")
 
   ## Get headers
@@ -50,33 +51,44 @@ parse_log_bin <- function(
     )
 
   ## Get parameters (if applicable)
-    par_index <- which(record_headers$type == "21")
-    if (!!length(par_index)) {
-      parameters <- process_record_set(
-        record_headers[par_index, ],
-        log, tz, info, give_timestamp,
-        verbose = verbose, do_post_process = FALSE
-      )
-      record_headers <- record_headers[-par_index, ]
+    par_info <- special_header(
+      record_headers, "21", log, tz,
+      info, give_timestamp, verbose, FALSE
+    )
+    if (!is.null(par_info)) {
+      parameters <- par_info$result
+      record_headers <- record_headers[-par_info$index, ]
     }
 
   ## Get schema (if applicable)
-    schema_index <- which(record_headers$type == "24")
-    if (!!length(schema_index)) {
-      schema <- process_record_set(
-        record_headers[schema_index, ],
-        log, tz, info, give_timestamp,
-        verbose = verbose, do_post_process = FALSE
-      )
-      record_headers <- record_headers[-schema_index, ]
+    schema_info <- special_header(
+      record_headers, "24", log, tz,
+      info, give_timestamp, verbose, FALSE
+    )
+    if (!is.null(schema_info)) {
+      schema <- schema_info$result
+      record_headers <- record_headers[-schema_info$index, ]
     }
 
-  ## Process the remaining packets
+  ## Arrange the remaining packets
     record_headers <- sort_records(record_headers)
     record_headers <- select_records(record_headers, include)
+    types <- sapply(record_headers, function(x) x$type[1])
 
     # save.image("data-raw/example_data.RData")
 
+  ## If applicable, deal with ACTIVITY2 packets in C++
+    if ("26" %in% types) {
+      if (verbose) cat("\n")
+      index <- which(types == "26")
+      primary_records <- record_headers[[index]]
+      record_headers <- record_headers[-index]
+      RAW <- parse_primary_accelerometer(
+        primary_records, log, info, tz, verbose
+      )
+    }
+
+  ## Now process the remaining packets
     results <- lapply(
       record_headers,
       process_record_set,
@@ -92,6 +104,9 @@ parse_log_bin <- function(
     if(all("SENSOR_SCHEMA" %in% include, exists("schema"))) {
       results$SENSOR_SCHEMA <- schema
     }
+    if ("26" %in% types) {
+      results$RAW <- RAW
+    }
 
     return(results)
 
@@ -106,10 +121,19 @@ parse_log_bin <- function(
 name_log <- function(log) {
 
   log_names <- sapply(
-    log, function(x) x$Type[1]
+    log, function(x) {
+      type_name <- x$Type[1]
+      if (is.null(type_name)) return(NA)
+      type_name
+    }
   )
 
-  log_names <- gsub("ACTIVITY2", "RAW", log_names)
+  log_names <- unname(ifelse(
+    is.na(log_names), names(log_names), log_names
+  ))
+
+  log_names <- gsub("^21$", "PARAMETERS", log_names)
+  log_names <- gsub("^24$", "SENSOR_SCHEMA", log_names)
   log_names <- gsub("SENSOR_DATA", "IMU", log_names)
 
   log <- stats::setNames(
@@ -137,14 +161,6 @@ name_log <- function(log) {
     log$IMU <- IMU[ ,ordered_names]
   }
 
-  log <- stats::setNames(
-    log,
-    gsub(
-      "^21$", "PARAMETERS", gsub(
-        "^24", "SENSOR_SCHEMA", names(log)
-        )
-    )
-  )
   return(log)
 
 }

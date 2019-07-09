@@ -27,7 +27,7 @@ load("data-raw/example_data.RData")
 #   "SENSOR_DATA"
 # )
 
-# n_records <- file_3x["log.bin", "Length"]
+# file_3x_len <- file_3x["log.bin", "Length"]
 
 # record_set <- record_headers[[6]]
 # record_header <- record_set[20, ]

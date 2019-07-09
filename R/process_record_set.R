@@ -24,20 +24,6 @@ process_record_set <- function(record_set, log, tz,
   )]
 
   scale_factor <- NULL
-  if (label == "ACTIVITY2") {
-
-    scale_factor <- switch(
-      substring(info$Serial_Number, 1, 3),
-      "NEO" = 341,
-      "CLE" = 341,
-      "MOS" = 256
-    )
-
-    if ("Acceleration_Scale" %in% names(info)) {
-      scale_factor <- info$Acceleration_Scale
-    }
-
-  }
 
   if (verbose) cat(
     "\n  Parsing", label, "packet(s)"

@@ -5,3 +5,78 @@ get_headersC <- function(x) {
     .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
 }
 
+#' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
+#'
+#' @param x the bytes (RawVector) from which to extract the short
+#' @param i1 integer. The index of the first byte
+#' @param i2 integer. The index of the second byte
+#' @param is_signed boolean. Return a signed value?
+#'
+#' @keywords internal
+get_short <- function(x, i1, i2, is_signed) {
+    .Call('_AGread_get_short', PACKAGE = 'AGread', x, i1, i2, is_signed)
+}
+
+#' Print progress updates while parsing packets in C++
+#'
+#' @param n percentage progress
+#' @param label the packet type, as character
+#'
+#' @keywords internal
+print_progC <- function(n, label) {
+    invisible(.Call('_AGread_print_progC', PACKAGE = 'AGread', n, label))
+}
+
+#' Calculate checksum for a packet in C++
+#'
+#' @param log RawVector representing the contents of log.bin
+#' @param start_index the packet start index
+#' @param end_index the packet end index
+#'
+#' @keywords internal
+checksumC <- function(log, start_index, end_index) {
+    invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
+}
+
+#' Check sensor payload ID prior to parsing the packet
+#'
+#' @param x the raw payload
+#' @param payload the sensor schema payload (as list) to compare against
+#'
+#' @keywords internal
+check_id <- function(x, payload) {
+    invisible(.Call('_AGread_check_id', PACKAGE = 'AGread', x, payload))
+}
+
+#' Parse SENSOR_DATA packet in c++
+#'
+#' @inheritParams payload_parse_sensor_data_25
+#'
+#' @keywords internal
+payload_parse_sensor_data_25C <- function(payload, schema) {
+    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, schema)
+}
+
+#' Parse a packet of primary accelerometer data in C++
+#'
+#' @param payload RawVector containing the payload bytes
+#' @param is_last_packet logical. Is this the last packet in the file?
+#' @inheritParams parse_primary_accelerometer
+#'
+#' @keywords internal
+payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet) {
+    .Call('_AGread_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet)
+}
+
+#' Parse all primary accelerometer packets in a file
+#'
+#' @param primary_records DataFrame with information about each packet
+#' @param log RawVector containing all payload bytes
+#' @param samp_rate the sampling rate
+#' @param scale_factor the accelerometer scale factor
+#' @param verbose logical. Print updates to console?
+#' @keywords internal
+parse_primary_accelerometerC <- function(primary_records, log, scale_factor, samp_rate, verbose) {
+    .Call('_AGread_parse_primary_accelerometerC', PACKAGE = 'AGread', primary_records, log, scale_factor, samp_rate, verbose)
+}
+

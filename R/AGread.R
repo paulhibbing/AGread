@@ -49,10 +49,8 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom rlang :=
+#' @import Rcpp
 #' @docType package
-#' @name AGread
-NULL
-
 #' @useDynLib AGread
-#' @importFrom Rcpp sourceCpp
+#' @name AGread
 NULL
