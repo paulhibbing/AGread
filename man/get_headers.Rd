@@ -4,12 +4,10 @@
 \alias{get_headers}
 \title{Retrieve record headers from .gt3x binary data}
 \usage{
-get_headers(log, n_records, tz = "UTC", verbose = FALSE)
+get_headers(log, tz = "UTC", verbose = FALSE)
 }
 \arguments{
 \item{log}{raw. The data from log.bin}
-
-\item{n_records}{integer. The length of log.bin}
 
 \item{tz}{character. The timezone to use}
 

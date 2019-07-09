@@ -4,7 +4,7 @@
 \alias{payload_parse_sensor_data_25}
 \title{Parse SENSOR_DATA packet}
 \usage{
-payload_parse_sensor_data_25(payload, parameters, schema, record_header)
+payload_parse_sensor_data_25(payload, parameters, schema)
 }
 \arguments{
 \item{payload}{raw. The payload}
@@ -12,10 +12,8 @@ payload_parse_sensor_data_25(payload, parameters, schema, record_header)
 \item{parameters}{result of parsing the PARAMETERS packet}
 
 \item{schema}{result of parsing the SENSOR_SCHEMA packet}
-
-\item{record_header}{data frame with information about the record in question}
 }
 \description{
-Parse SENSOR_DATA packet
+This is primarily a wrapper for \code{\link{payload_parse_sensor_data_25C}}
 }
 \keyword{internal}

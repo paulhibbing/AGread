@@ -4,7 +4,7 @@
 \alias{parse_log_bin}
 \title{Parse the log component of a gt3x file}
 \usage{
-parse_log_bin(log_file, n_records, info, tz, verbose = FALSE,
+parse_log_bin(log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, include = c("METADATA", "PARAMETERS",
   "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG", "ACTIVITY", "HEART_RATE_BPM",
   "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE", "EPOCH", "EPOCH2",
@@ -13,7 +13,8 @@ parse_log_bin(log_file, n_records, info, tz, verbose = FALSE,
 \arguments{
 \item{log_file}{character. Path to the log.bin file}
 
-\item{n_records}{integer. Length of the log}
+\item{file_3x_len}{length of log.bin, obtained from the \code{file_3x} object
+from the parent function \code{\link{read_gt3x}}}
 
 \item{info}{result of \code{\link{parse_info_txt}}}
 

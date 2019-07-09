@@ -21,8 +21,8 @@ payload_parse(type, payload, info, tz = "UTC", parameters = NULL,
 
 \item{schema}{result of parsing the SENSOR_SCHEMA packet}
 
-\item{record_header}{information for
-\code{\link{payload_parse_sensor_data_25}} about the packet indices etc.}
+\item{record_header}{data frame containing information about the packet
+indices etc.}
 
 \item{scale_factor}{scale_factor for ACTIVITY2 packets}
 
