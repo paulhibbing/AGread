@@ -3,8 +3,6 @@
 #' @param type The payload type
 #' @param payload raw. The payload
 #' @inheritParams read_record
-#' @param record_header information for
-#'   \code{\link{payload_parse_sensor_data_25}} about the packet indices etc.
 #' @param is_last_packet logical. Is the current packet the last in the file?
 #'
 #' @keywords internal
@@ -32,9 +30,7 @@ payload_parse <- function(
     "16"=	payload_parse_epoch_16(payload, info),
     "21"=	payload_parse_parameters_21(payload, info, tz),
     "24"=	payload_parse_sensor_schema_24(payload, info),
-    "25"=	payload_parse_sensor_data_25(
-      payload, parameters, schema, record_header
-    ),
+    "25" = payload_parse_sensor_data_25(payload, parameters, schema),
     "26"=	payload_parse_activity2_26(
       payload, info, scale_factor, is_last_packet
     )

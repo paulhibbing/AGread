@@ -1,82 +1,31 @@
 #' Parse SENSOR_DATA packet
 #'
+#' This is primarily a wrapper for \code{\link{payload_parse_sensor_data_25C}}
+#'
 #' @inheritParams payload_parse
-#' @param record_header data frame with information about the record in question
 #'
 #' @keywords internal
 #'
 payload_parse_sensor_data_25 <- function(
-  payload, parameters, schema, record_header
+  payload, parameters, schema
 ) {
 
-  ## Setup
-    id <- readBin(
-      payload[1:2], "integer", 2, 2, TRUE, "little"
+  result <- payload_parse_sensor_data_25C(payload, schema)
+  result <- lapply(
+    result,
+    function(x) if(!length(x)) return(NULL) else return(x)
+  )
+  result <- result[!sapply(result, is.null)]
+  result <- do.call(data.frame, result)
+
+  if ("Temperature" %in% names(result)) {
+    result$Temperature <- result$Temperature + as.numeric(
+      as.character(parameters$Payload$IMU_TEMP_OFFSET)
     )
-    stopifnot(id == schema$Payload$id)
+  }
+  if ("Discard" %in% names(result)) result$Discard <- NULL
 
-    BITS_PER_BYTE <- 8
-
-    BYTES_PER_RECORD <- sum(
-      schema$Payload$sensorColumns$size
-    ) / BITS_PER_BYTE
-
-    BYTE_OFFSETS <- schema$Payload$sensorColumns$offset /
-      BITS_PER_BYTE
-
-    orig_offset <- 3
-
-    firstSample <- record_header$timestamp
-
-  ## Column-wise starting indices for each record
-    all_indices <- lapply(
-      seq(schema$Payload$samples) - 1,
-      function(i) ((i) * BYTES_PER_RECORD) +
-        BYTE_OFFSETS + orig_offset
-    )
-    all_indices <- do.call(rbind, all_indices)
-    # all_indices <- row_test(
-    #   all_indices, payload, schema$Payload$samples
-    # )
-
-    if (nrow(all_indices) == 1) stop(
-      "USB connection detected."
-    )
-
-    stopifnot(all(
-      nrow(all_indices) == schema$Payload$samples,
-      all_indices[1,1] == orig_offset,
-      ncol(all_indices) == schema$Payload$columns
-    ))
-
-    result <- lapply(
-      seq(nrow(schema$Payload$sensorColumns)),
-      function(i) {
-        column <- schema$Payload$sensorColumns[i, ]
-
-        bytesInValue <- column$size/BITS_PER_BYTE
-        stopifnot(bytesInValue %in% 1:2)
-
-        is_signed <- column$is_signed
-
-        endianness <- "little"
-        if (column$is_big_endian) endianness <- "big"
-
-        scale_factor <- column$scale_factor
-        label <- gsub(" ", "_", column$label)
-        indices <- all_indices[ ,i]
-
-        get_sensor_column(
-          payload, indices, bytesInValue,
-          is_signed, endianness, scale_factor, label
-        )
-      }
-    )
-
-    result[sapply(result, is.null)] <- NULL
-    result <- do.call(cbind, result)
-
-    return(result)
+  return(result)
 
 }
 

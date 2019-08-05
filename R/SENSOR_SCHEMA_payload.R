@@ -77,6 +77,8 @@ payload_parse_sensor_schema_24 <- function(payload, info) {
 
     columnLabel <- rawToChar(payload[startingOffset + 7:22])
     columnLabel <- gsub("^ *", "", gsub(" *$", "", columnLabel))
+    columnLabel <- gsub(" ", "_", columnLabel)
+    columnLabel <- ifelse(columnLabel == "", "Discard", columnLabel)
 
     new_column <- data.frame(
       is_big_endian = bigEndian,
@@ -84,9 +86,15 @@ payload_parse_sensor_schema_24 <- function(payload, info) {
       offset = readBin(
         columnOffset, "integer", 1, 1, FALSE, "little"
       ),
+      offset_bytes = readBin(
+        columnOffset, "integer", 1, 1, FALSE, "little"
+      ) / 8,
       size = readBin(
         columnSize, "integer", 1, 1, FALSE, "little"
       ),
+      n_bytes = readBin(
+        columnSize, "integer", 1, 1, FALSE, "little"
+      ) / 8,
       scale_factor = columnScaleFactor,
       label = columnLabel,
       stringsAsFactors = FALSE,
