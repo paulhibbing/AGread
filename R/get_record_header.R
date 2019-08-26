@@ -16,6 +16,13 @@ get_headers <- function(log, tz = "UTC", verbose = FALSE) {
     record_headers$timestamp, tz
   )
 
+  stopifnot(
+    all(
+      sum(record_headers$type == "21") <= 1,
+      sum(record_headers$type == "24") <= 1
+    )
+  )
+
   if (verbose) cat("............... COMPLETE")
 
   return(record_headers)

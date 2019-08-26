@@ -20,7 +20,23 @@ sort_records <- function(record_headers) {
   )
 
   record_headers[sapply(record_headers, is.null)] <- NULL
-  record_headers
+
+  record_types <- sapply(
+    record_headers, function(x) x$type[1]
+  )
+  record_types <- RECORDS$Type[
+    match(record_types, RECORDS$ID)
+  ]
+
+  record_headers <- mapply(
+    function(x,y) structure(
+      x, class = append(class(x), y, 0)
+    ),
+    x = record_headers, y = record_types,
+    SIMPLIFY = FALSE
+  )
+
+  stats::setNames(record_headers, record_types)
 
 }
 
@@ -35,21 +51,11 @@ sort_records <- function(record_headers) {
 #'
 select_records <- function(record_headers, include) {
 
-  record_types <- unlist(lapply(
-    record_headers,
-    function(x) {
-      RECORDS$Type[match(
-        x$type[1],
-        as.character(RECORDS$ID)
-      )]
-    }
-  ))
-
-  keep <- record_types %in% include
+  keep <- names(record_headers) %in% include
   if (!any(keep)) stop(
     "gt3x file does not contain any packets specified in `include`"
   )
 
-  record_headers[record_types %in% include]
+  record_headers[names(record_headers) %in% include]
 
 }

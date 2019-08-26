@@ -18,22 +18,8 @@ parse_log_bin <- function(
   )
 ) {
 
-  ## Set up information about which packets to include
-  choices <- c(
-    "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-    "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
-    "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-    "SENSOR_DATA"
-  )
-  stopifnot(all(include %in% choices))
-  include <- match.arg(include, c(choices, "Error"), TRUE)
-
-  if (verbose) {
-    CHOICES <- split(include, cumsum(seq(include)%%4 == 1))
-    CHOICES <- lapply(CHOICES, function(x) paste(x, collapse = ", "))
-    cat("\n\n  Will parse the following packet types, if available:\n")
-    lapply(CHOICES, function(x) cat("   ", x, "\n"))
-  }
+  ## Validate the input to `include`
+    include <- validate_include(include, verbose)
 
   ## Read the bin file
     if (verbose) cat("\n  Reading log.bin")
@@ -42,22 +28,17 @@ parse_log_bin <- function(
 
   ## Get headers
     record_headers <- get_headers(log, tz, verbose)
-
-    stopifnot(
-      all(
-        sum(record_headers$type == "21") <= 1,
-        sum(record_headers$type == "24") <= 1
-      )
-    )
+    record_headers <- sort_records(record_headers)
+    record_headers <- select_records(record_headers, include)
 
   ## Get parameters (if applicable)
-    par_info <- special_header(
-      record_headers, "21", log, tz,
-      info, give_timestamp, verbose, FALSE
-    )
-    if (!is.null(par_info)) {
-      parameters <- par_info$result
-      record_headers <- record_headers[-par_info$index, ]
+    if ("PARAMETERS" %in% names(record_headers)) {
+      parameters <- parse_packet_set(
+        record_headers$PARAMETERS, log, tz, verbose, give_timestamp
+      )
+      record_headers$PARAMETERS <- NULL
+    } else {
+      parameters <- NULL
     }
 
   ## Get schema (if applicable)
@@ -71,8 +52,7 @@ parse_log_bin <- function(
     }
 
   ## Arrange the remaining packets
-    record_headers <- sort_records(record_headers)
-    record_headers <- select_records(record_headers, include)
+
     types <- sapply(record_headers, function(x) x$type[1])
 
     # save.image("data-raw/example_data.RData")

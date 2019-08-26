@@ -1,26 +1,8 @@
-#' Master function to parse PARAMETERS packets
-#'
-#' @inheritParams payload_parse
-#'
-#' @keywords internal
-#'
-payload_parse_parameters_21 <- function(payload, info, tz = "UTC") {
-
-  payload <- split(payload, cumsum(seq(payload) %% 8 == 1))
-  payload <- do.call(rbind, lapply(payload, process_parameters, tz = tz))
-
-  payload <- payload[payload$Label != "UNUSED KEY", ]
-  stats::setNames(
-    as.list(payload$value),
-    payload$Label
-  )
-
-}
-
 #' Second-level function for parsing PARAMETERS packets
 #'
-#' Dispatches to a third-level function (e.g. \code{\link{par_battery_state}})
-#' depending on the packet address and identifier
+#' This is a helper function for \code{\link{parse_packet_set.PARAMETERS}}. It
+#' dispatches to third-level functions (e.g. \code{\link{par_battery_state}})
+#' that correspond to each packet address and identifier.
 #'
 #' @inheritParams payload_parse
 #'
