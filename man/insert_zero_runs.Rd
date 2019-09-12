@@ -2,18 +2,16 @@
 % Please edit documentation in R/zero_fill.R
 \name{insert_zero_runs}
 \alias{insert_zero_runs}
-\title{Wrapper for \code{\link{zero_fill}} used to fix data files when the device
+\title{Wrapper for \code{\link{zero_pad}} used to fix data files when the device
 was connected to USB}
 \usage{
 insert_zero_runs(records, run_break_indices)
 }
 \arguments{
-\item{records}{list of parsed packets}
-
 \item{run_break_indices}{indices at which a break occurs}
 }
 \description{
-Wrapper for \code{\link{zero_fill}} used to fix data files when the device
+Wrapper for \code{\link{zero_pad}} used to fix data files when the device
 was connected to USB
 }
 \keyword{internal}

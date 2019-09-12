@@ -10,7 +10,8 @@ process_parameters(payload_chunk, tz)
 \item{tz}{character. The timezone to use}
 }
 \description{
-Dispatches to a third-level function (e.g. \code{\link{par_battery_state}})
-depending on the packet address and identifier
+This is a helper function for \code{\link{parse_packet_set.PARAMETERS}}. It
+dispatches to third-level functions (e.g. \code{\link{par_battery_state}})
+that correspond to each packet address and identifier.
 }
 \keyword{internal}

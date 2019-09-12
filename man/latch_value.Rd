@@ -6,11 +6,6 @@
 \usage{
 latch_value(records, index)
 }
-\arguments{
-\item{records}{list of parsed packets}
-
-\item{index}{index of record after which packets are missing}
-}
 \description{
 Latch a data packet to the last payload sample of the previous packet
 }
