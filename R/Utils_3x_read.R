@@ -162,7 +162,7 @@ capability_collapse <- function(caps) {
 
 #' Retrieve the primary accelerometer scale factor
 #'
-#' @inheritParams parse_primary_accelerometer
+#' @param info the contents of \code{info.txt}
 #'
 #' @return the scale factor, as integer
 #' @keywords internal

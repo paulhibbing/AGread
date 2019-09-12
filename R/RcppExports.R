@@ -61,7 +61,8 @@ payload_parse_sensor_data_25C <- function(payload, schema) {
 #'
 #' @param payload RawVector containing the payload bytes
 #' @param is_last_packet logical. Is this the last packet in the file?
-#' @inheritParams parse_primary_accelerometer
+#' @param samp_rate integer reflecting the sampling rate
+#' @param scale_factor integer reflecting the scale factor
 #'
 #' @keywords internal
 payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet) {

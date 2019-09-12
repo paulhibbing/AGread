@@ -9,6 +9,10 @@ payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet)
 \arguments{
 \item{payload}{RawVector containing the payload bytes}
 
+\item{samp_rate}{integer reflecting the sampling rate}
+
+\item{scale_factor}{integer reflecting the scale factor}
+
 \item{is_last_packet}{logical. Is this the last packet in the file?}
 }
 \description{

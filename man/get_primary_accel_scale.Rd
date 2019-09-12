@@ -6,6 +6,9 @@
 \usage{
 get_primary_accel_scale(info)
 }
+\arguments{
+\item{info}{the contents of \code{info.txt}}
+}
 \value{
 the scale factor, as integer
 }

@@ -6,7 +6,8 @@ using namespace Rcpp;
 //'
 //' @param payload RawVector containing the payload bytes
 //' @param is_last_packet logical. Is this the last packet in the file?
-//' @inheritParams parse_primary_accelerometer
+//' @param samp_rate integer reflecting the sampling rate
+//' @param scale_factor integer reflecting the scale factor
 //'
 //' @keywords internal
 // [[Rcpp::export]]
