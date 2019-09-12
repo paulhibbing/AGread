@@ -159,3 +159,31 @@ capability_collapse <- function(caps) {
   if (cap_length == 2) caps <- gsub(", and", " and", caps)
   return(caps)
 }
+
+#' Retrieve the primary accelerometer scale factor
+#'
+#' @inheritParams parse_primary_accelerometer
+#'
+#' @return the scale factor, as integer
+#' @keywords internal
+get_primary_accel_scale <- function(info) {
+
+  scale_factor <- switch(
+    substring(info$Serial_Number, 1, 3),
+    "NEO" = 341,
+    "CLE" = 341,
+    "MOS" = 256
+  )
+
+  if ("Acceleration_Scale" %in% names(info)) {
+    scale_factor <- info$Acceleration_Scale
+  }
+
+  stopifnot(all.equal(
+    scale_factor, as.integer(scale_factor),
+    scale = 1, tolerance = 0.0
+  ))
+
+  as.integer(scale_factor)
+
+}

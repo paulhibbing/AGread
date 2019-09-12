@@ -1,0 +1,82 @@
+#' @rdname parse_packet_set
+#' @export
+parse_packet_set.SENSOR_SCHEMA <- function(
+  set, log, tz = "UTC", verbose = FALSE,
+  give_timestamp = TRUE, ...
+) {
+
+  BYTES_PER_COLUMN <- 23
+
+  payload <- setup_payload(set, log)
+  schema <- schema_meta(payload)
+
+  stopifnot(
+    (schema$columns * BYTES_PER_COLUMN) + 6 ==
+      length(payload)
+  )
+
+  for (i in seq(schema$columns) - 1) {
+    # i <- 0
+    startingOffset <- 7 + (BYTES_PER_COLUMN * i)
+    # indices <- seq(
+    #   startingOffset,
+    #   startingOffset + BYTES_PER_COLUMN - 1
+    # )
+    columnFlags <- payload[startingOffset]
+
+    bigEndian <- bin_int(
+      AG_binary(columnFlags[1]) &
+        AG_binary(bitwShiftL(1, 0))
+    ) != 0
+    signed <- bin_int(
+      AG_binary(columnFlags[1]) &
+        AG_binary(bitwShiftL(1, 1))
+    ) != 0
+
+    columnOffset <- payload[startingOffset + 1]
+    columnSize <- payload[startingOffset + 2]
+    value <- payload[startingOffset + 3:6]
+
+    columnScaleFactor <- AG_round(
+      get_float_value(value)
+    )
+
+    columnLabel <- rawToChar(payload[startingOffset + 7:22])
+    columnLabel <- gsub("^ *", "", gsub(" *$", "", columnLabel))
+    columnLabel <- gsub(" ", "_", columnLabel)
+    columnLabel <- ifelse(columnLabel == "", "Discard", columnLabel)
+
+    new_column <- data.frame(
+      is_big_endian = bigEndian,
+      is_signed = signed,
+      offset = readBin(
+        columnOffset, "integer", 1, 1, FALSE, "little"
+      ),
+      offset_bytes = readBin(
+        columnOffset, "integer", 1, 1, FALSE, "little"
+      ) / 8,
+      size = readBin(
+        columnSize, "integer", 1, 1, FALSE, "little"
+      ),
+      n_bytes = readBin(
+        columnSize, "integer", 1, 1, FALSE, "little"
+      ) / 8,
+      scale_factor = columnScaleFactor,
+      label = columnLabel,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )
+
+    schema$sensorColumns <- rbind(schema$sensorColumns, new_column)
+
+  }
+
+  if (schema$samples == 0) {
+    schema$samples <- 100
+  }
+
+  if (verbose) packet_print("cleanup", class(set)[1])
+
+  structure(schema, class = class(set)[1])
+
+}

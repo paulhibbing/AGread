@@ -34,7 +34,8 @@ parse_log_bin <- function(
   ## Get parameters (if applicable)
     if ("PARAMETERS" %in% names(record_headers)) {
       parameters <- parse_packet_set(
-        record_headers$PARAMETERS, log, tz, verbose, give_timestamp
+        record_headers$PARAMETERS, log, tz,
+        verbose, give_timestamp
       )
       record_headers$PARAMETERS <- NULL
     } else {
@@ -42,36 +43,21 @@ parse_log_bin <- function(
     }
 
   ## Get schema (if applicable)
-    schema_info <- special_header(
-      record_headers, "24", log, tz,
-      info, give_timestamp, verbose, FALSE
-    )
-    if (!is.null(schema_info)) {
-      schema <- schema_info$result
-      record_headers <- record_headers[-schema_info$index, ]
-    }
-
-  ## Arrange the remaining packets
-
-    types <- sapply(record_headers, function(x) x$type[1])
-
-    # save.image("data-raw/example_data.RData")
-
-  ## If applicable, deal with ACTIVITY2 packets in C++
-    if ("26" %in% types) {
-      if (verbose) cat("\n")
-      index <- which(types == "26")
-      primary_records <- record_headers[[index]]
-      record_headers <- record_headers[-index]
-      RAW <- parse_primary_accelerometer(
-        primary_records, log, info, tz, verbose
+    if ("SENSOR_SCHEMA" %in% names(record_headers)) {
+      schema <- parse_packet_set(
+        record_headers$SENSOR_SCHEMA, log, tz,
+        verbose, give_timestamp
       )
+      record_headers$SENSOR_SCHEMA <- NULL
+    } else {
+      schema <- NULL
     }
 
   ## Now process the remaining packets
+
     results <- lapply(
       record_headers,
-      process_record_set,
+      parse_packet_set,
       log = log, tz = tz, info = info,
       give_timestamp = give_timestamp,
       parameters = parameters, schema = schema,
@@ -84,63 +70,13 @@ parse_log_bin <- function(
     if(all("SENSOR_SCHEMA" %in% include, exists("schema"))) {
       results$SENSOR_SCHEMA <- schema
     }
-    if ("26" %in% types) {
-      results$RAW <- RAW
-    }
 
-    return(results)
-
-}
-
-#' Lightly format a processed log
-#'
-#' @param log the log to process
-#'
-#' @keywords internal
-#'
-name_log <- function(log) {
-
-  log_names <- sapply(
-    log, function(x) {
-      type_name <- x$Type[1]
-      if (is.null(type_name)) return(NA)
-      type_name
-    }
-  )
-
-  log_names <- unname(ifelse(
-    is.na(log_names), names(log_names), log_names
-  ))
-
-  log_names <- gsub("^21$", "PARAMETERS", log_names)
-  log_names <- gsub("^24$", "SENSOR_SCHEMA", log_names)
-  log_names <- gsub("SENSOR_DATA", "IMU", log_names)
-
-  log <- stats::setNames(
-    log, log_names
-  )
-
-  log <- lapply(
-    log,
-    function(x) {
-      x$Type <- NULL
-      return(x)
-    }
-  )
-
-  if ("IMU" %in% names(log)) {
-    IMU <- log$IMU
-    desired_order <- c(
-      "Timestamp",
-      "Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z",
-      "Temperature",
-      "Gyroscope_X", "Gyroscope_Y", "Gyroscope_Z",
-      "Magnetometer_X", "Magnetometer_Y", "Magnetometer_Z"
+    new_names <- sapply(results, function(x) class(x)[1])
+    new_names <- unname(
+      ifelse(new_names == "NULL", names(new_names), new_names)
     )
-    ordered_names <- desired_order[desired_order %in% names(IMU)]
-    log$IMU <- IMU[ ,ordered_names]
-  }
 
-  return(log)
+    if (verbose) cat("\n")
+    stats::setNames(results, new_names)
 
 }

@@ -79,7 +79,9 @@ read_AG_IMU <- function(
   output_cols <- output_cols[!duplicated(output_cols)]
   AG <- AG[ ,output_cols]
 
-  if (verbose) message_update(16, dur = get_duration(timer))
+  if (verbose) message_update(
+    16, dur = PAutilities::get_duration(timer)
+  )
 
   return(AG)
 

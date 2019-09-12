@@ -101,7 +101,9 @@ read_AG_raw <- function(file, output_window_secs = 1,
       )
       names(AG) <- gsub("\\.", "_", names(AG))
 
-      if (verbose) message_update(16, dur = get_duration(timer))
+      if (verbose) message_update(
+        16, dur = PAutilities::get_duration(timer)
+      )
       return(AG)
     }
 
@@ -112,7 +114,9 @@ read_AG_raw <- function(file, output_window_secs = 1,
   AG$file_source_PrimaryAccel <- basename(file)
   AG <- ag_raw_format(AG, meta$start, output_window_secs)
 
-  if (verbose) message_update(16, dur = get_duration(timer))
+  if (verbose) message_update(
+    16, dur = PAutilities::get_duration(timer)
+  )
 
   return(AG)
 }

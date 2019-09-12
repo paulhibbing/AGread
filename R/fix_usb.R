@@ -1,54 +1,69 @@
-fix_usb <- function(Type, verbose = FALSE, ...) {
+#' Repair packet streams interrupted by USB connection events
+#'
+#' @param object the sensor stream to repair
+#' @param ... further arguments to methods
+#'
+#' @keywords internal
+fix_usb <- function(object, ...) {
 
-  if (verbose) cat(
-    "\r  Checking/addressing USB connection time(s)",
-    "                                              "
-  )
-
-  switch(
-    Type,
-    "25" = imu_fix_usb(...),
-    "26" = accel_fix_usb(...)
-  )
+  UseMethod("fix_usb", object)
 
 }
 
-#' Address breaks in the primary accelerometer data stream due to device USB
-#' connection
-#'
-#' @inheritParams zero_fill
-#' @inheritParams read_record
-#'
-#' @keywords internal
-accel_fix_usb <- function(records, info) {
+#' @rdname fix_usb
+#' @param info the content of \code{info.txt}
+#' @export
+fix_usb.RAW <- function(object, info, ...) {
 
-  missing_records <- sapply(
-    records,
-    function(x) all(is.na(x$Payload))
+  accel_names <- paste(
+    "Accelerometer", c("X","Y","Z"), sep = "_"
   )
 
-  missing_records <- which(missing_records)
+  missing_check <- apply(
+    object[ ,accel_names], 1, function(x) all(is.na(x))
+  )
 
-  if (!length(missing_records)) return(records)
+  if (!any(missing_check)) return(object)
 
-  records[[missing_records]] <- do.call(
-    c,
-    lapply(
-      missing_records, latch_value, records = records
+  gaps <- do.call(data.frame, rle(missing_check))
+  gap_names <- append(
+    names(gaps), c("start_index", "end_index"), 2
+  )
+
+  gaps$end_index <- cumsum(gaps$lengths)
+  gaps$start_index <- cumsum(
+    c(1, gaps$lengths[-nrow(gaps)])
+  )
+
+  gaps <- gaps[gaps$values, gap_names]
+
+  for (i in seq(nrow(gaps))) {
+
+    gap_indices <- gaps$start_index[i]:gaps$end_index[i]
+
+    object[gap_indices, accel_names] <- 0
+
+    latch_indices <- (
+      gaps$start_index[i] + seq(info$Sample_Rate) - 1
     )
-  )
 
-  insert_zero_runs(records, missing_records)
+    latch_values <- object[
+      gaps$start_index[i]-1, accel_names
+    ]
+
+    object[latch_indices, accel_names] <- latch_values
+
+  }
+
+  object
 
 }
 
-#' Address breaks in the IMU data stream due to device USB connection
-#'
-#' @inheritParams zero_fill
-#'
-#' @keywords internal
-imu_fix_usb <- function(records) {
+#' @rdname fix_usb
+#' @export
+fix_usb.SENSOR_DATA <- function(records) {
 
+  stop("No updated USB method for IMU packets.")
   time_gaps <- diff(
     sapply(
       records,

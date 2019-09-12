@@ -1,33 +1,24 @@
-#' Parse primary accelerometer packets
-#'
-#' @param primary_records data frame with information about the primary
-#'   accelerometer packets
-#' @param log the gt3x raw data
+#' @rdname parse_packet_set
 #' @param info the result of \code{\link{parse_info_txt}}
-#' @inheritParams read_gt3x
-#'
-#' @return
 #' @export
-#'
-#' @examples
-parse_primary_accelerometer <- function(
-  primary_records, log, info, tz, verbose = FALSE
+parse_packet_set.ACTIVITY2 <- function(
+  set, log, tz = "UTC", verbose = FALSE,
+  give_timestamp = TRUE, info, ...
 ) {
 
   scale_factor <- get_primary_accel_scale(info)
-  primary_records$timestamp <- as.character(
-    primary_records$timestamp
-  )
+  set$timestamp <- as.character(set$timestamp)
 
   RAW <- parse_primary_accelerometerC(
-    primary_records, log,
-    scale_factor, info$Sample_Rate, verbose
+    set, log, scale_factor,
+    info$Sample_Rate, verbose
   )
 
   if (verbose) cat(
     "\r  Calculating timestamps",
     "                         "
   )
+
     RAW <- lapply(RAW, function(x) {
       value <- as.POSIXct(x$Timestamp, tz)
       increments <- seq_along(value) - 1
@@ -35,19 +26,28 @@ parse_primary_accelerometer <- function(
       x
     })
 
+  if (verbose) cat(
+    "\r  Merging packets       ",
+    "                         "
+  )
+
     RAW <- data.frame(
       data.table::rbindlist(RAW),
       stringsAsFactors = FALSE,
       row.names = NULL
     )
 
+    class(RAW) <- append(class(RAW), "RAW", 0)
+
   if (verbose) cat(
     "\r  Rounding accelerations",
     "                         "
   )
+
     accel_names <- paste(
       "Accelerometer", c("X", "Y", "Z"), sep = "_"
     )
+
     stopifnot(all(accel_names %in% names(RAW)))
 
     RAW[ ,accel_names] <- sapply(
@@ -55,10 +55,21 @@ parse_primary_accelerometer <- function(
     )
 
   if (verbose) cat(
-    "\r  Parsing", "ACTIVITY2", "packet(s)",
-    "  ............. COMPLETE               ",
-    "      "
+    "\r  Checking for gaps in the",
+    "time series                 "
   )
+
+    RAW <- check_gaps(RAW, info = info, verbose = verbose)
+
+  if (verbose) cat(
+    "\r  Checking/addressing USB connection time(s)",
+    "                                              "
+  )
+
+    RAW <- fix_usb(RAW, info)
+
+  if (verbose) packet_print("cleanup", class(set)[1])
+
     RAW
 
 }

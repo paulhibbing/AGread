@@ -38,7 +38,8 @@ read_gt3x <- function(
 ) {
 
   timer <- PAutilities::manage_procedure(
-    "Start", "\nProcessing", basename(file), "\n", verbose = verbose
+    "Start", "\nProcessing", basename(file), "\n",
+    verbose = verbose
   )
 
   #1) Verify .gt3x file is a zip file
@@ -47,7 +48,7 @@ read_gt3x <- function(
     TRUE
   )
 
-  if (class(file_3x) == "try-error") {
+  if ("try-error" %in% class(file_3x)) {
     stop(paste(
       deparse(substitute(file)),
       "is not a valid gt3x file."
@@ -77,14 +78,6 @@ read_gt3x <- function(
     log_file, file_3x["log.bin", "Length"], info, tz,
     verbose, give_timestamp, include
   )
-
-  log <- name_log(log)
-  if ("RAW" %in% names(log)) {
-    class(log$RAW) <- c(class(log$RAW), "RAW")
-  }
-  if ("IMU" %in% names(log)) {
-    class(log$IMU) <- c(class(log$IMU), "IMU")
-  }
 
   PAutilities::manage_procedure(
     "End", "\n\nProcessing complete. Elapsed time",

@@ -24,7 +24,7 @@
       class(set)[1], "packets -- returning NULL."
     ))
 
-    returning(NULL)
+    return(NULL)
 
   }
 
