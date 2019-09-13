@@ -1,16 +1,3 @@
-#' Parse BATTERY packet
-#'
-#' @inheritParams payload_parse
-#'
-#' @keywords internal
-#'
-payload_parse_battery_2 <- function(payload, info) {
-  paste(
-    "BATTERY VOLTAGE:",
-    readBin(payload, "integer", 2, 2, FALSE) / 1000
-  )
-}
-
 #' Parse EVENT packet
 #'
 #' @inheritParams payload_parse
@@ -22,42 +9,6 @@ payload_parse_event_3 <- function(payload, info) {
     payload = paste(as.character(payload), collapse = " "),
     description = "ActiGraph internal use. No further documentation."
   ))
-}
-
-#' Parse METADATA packet
-#'
-#' @inheritParams payload_parse
-#'
-#' @keywords internal
-#'
-payload_parse_infodata_6 <- function(payload, info) {
-  rawToChar(payload)
-}
-
-#' Parse CAPSENSE packet
-#'
-#' @inheritParams payload_parse
-#'
-#' @keywords internal
-#'
-payload_parse_capsense_13 <- function(payload, info) {
-
-  stopifnot(length(payload) == 6)
-
-  signal <- readBin(payload[1:2], "integer", 2, 2, FALSE)
-  reference <- readBin(payload[3:4], "integer", 2, 2, FALSE)
-  state <- readBin(payload[5], "integer", 1, 1, FALSE)
-  if (state == 0) state <- "Not Worn" else state <- "Worn"
-  bursts <- readBin(payload[6], "integer", 1, 1, FALSE)
-
-  data.frame(
-    signal = signal,
-    reference = reference,
-    state = state,
-    bursts = bursts,
-    stringsAsFactors = FALSE
-  )
-
 }
 
 #' Parse ACTIVITY2 packet

@@ -69,7 +69,30 @@ parse_packet_set.PARAMETERS <- function(
 
 #' @rdname parse_packet_set
 #' @export
-parse_packet_set.METADATA <- function(
+parse_packet_set.BATTERY <- function(
+  set, log, tz = "UTC", verbose = FALSE,
+  give_timestamp = TRUE, ...
+) {
+
+  results <- lapply(
+    split(set, seq(nrow(set))),
+    function(x) data.frame(
+      battery_voltage = readBin(
+        setup_payload(x, log), "integer",
+        2, 2, FALSE
+      ) / 1000
+    )
+  )
+
+  if (verbose) packet_print("cleanup", class(set)[1])
+
+  collapse_packet_set(set, results)
+
+}
+
+#' @rdname parse_packet_set
+#' @export
+parse_packet_set.EVENT <- function(
   set, log, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, ...
 ) {
@@ -78,44 +101,19 @@ parse_packet_set.METADATA <- function(
     split(set, seq(nrow(set))),
     setup_payload,
     log = log
-  ) %>% lapply(
-    function(x) {
-      gsub("[{}]", "", rawToChar(x)) %>%
-      gsub(pattern = "[\"]", replacement = "") %>%
-      gsub(pattern = "\\\\", replacement = "") %>%
-      gsub(pattern = "JSON:", replacement = "") %>%
-      strsplit(",") %>%
-      {do.call(data.frame,
-        c(., stringsAsFactors = FALSE,
-          row.names = NULL)
-      )} %>%
-      stats::setNames("Meta")
-    }
-  )
+  ) %>%
+  {lapply(., function(x) data.frame(
+    raw_chars = rawToChar(x),
+    description = paste(
+      "ActiGraph internal use.",
+      "No further documentation."
+    ),
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  ))}
 
-  results <- do.call(
-    rbind, c(results, make.row.names = FALSE)
-  )
+  if (verbose) packet_print("cleanup", class(set)[1])
 
-  drop_rows <- grepl("^Parsed:", results$Meta) |
-    grepl("^null$", results$Meta)
-
-  results <- results[!drop_rows, ]
-
-  results <- split(
-    results, cumsum(grepl("^MetadataType", results))
-  )
-
-  results <- results[!duplicated(results)]
-  meta_names <- sapply(
-    results,
-    function(x) gsub("^MetadataType:", "", x[1]),
-    USE.NAMES = FALSE
-  )
-
-  results <- stats::setNames(results, meta_names)
-  results <- lapply(results, function(x) x[-1])
-
-  structure(results, class = class(set)[1])
+  collapse_packet_set(set, results)
 
 }
