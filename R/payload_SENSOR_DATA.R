@@ -2,7 +2,9 @@
 #'
 #' This is primarily a wrapper for \code{\link{payload_parse_sensor_data_25C}}
 #'
-#' @inheritParams payload_parse
+#' @param payload raw. The packet payload
+#' @param parameters a PARAMETERS object
+#' @param schema a SENSOR_SCHEMA object
 #'
 #' @keywords internal
 #'

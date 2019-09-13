@@ -16,8 +16,8 @@ seq_interpolate <- function(from, to, ...) {
 #'
 #' @param record_set data frame. Information about the SENSOR_DATA packets (one
 #'   row per packet)
-#' @inheritParams read_record
-#' @param verbose logical. Print updates to console?
+#' @param schema a SENSOR_SCHEMA object
+#' @inheritParams read_gt3x
 #'
 #' @keywords internal
 #'

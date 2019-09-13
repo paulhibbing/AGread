@@ -4,7 +4,8 @@
 #' dispatches to third-level functions (e.g. \code{\link{par_battery_state}})
 #' that correspond to each packet address and identifier.
 #'
-#' @inheritParams payload_parse
+#' @param payload_chunk raw. A subset of the PARAMETERS payload
+#' @inheritParams read_gt3x
 #'
 #' @keywords internal
 #'

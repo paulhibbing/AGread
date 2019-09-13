@@ -7,9 +7,9 @@
 payload_parse_sensor_data_25C(payload, schema)
 }
 \arguments{
-\item{payload}{raw. The payload}
+\item{payload}{raw. The packet payload}
 
-\item{schema}{result of parsing the SENSOR_SCHEMA packet}
+\item{schema}{a SENSOR_SCHEMA object}
 }
 \description{
 Parse SENSOR_DATA packet in c++

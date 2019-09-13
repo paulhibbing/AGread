@@ -39,7 +39,6 @@ get_minute <- function(timestamp, format = "%Y-%m-%d %H:%M:%S", rational = FALSE
 
 }
 
-
 #' Julian Date
 #'
 #' A wrapper to retrieve the Julian date.

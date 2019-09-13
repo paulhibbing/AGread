@@ -80,3 +80,34 @@ parse_packet_set.SENSOR_SCHEMA <- function(
   structure(schema, class = class(set)[1])
 
 }
+
+#' Parse metadata from a SENSOR_SCHEMA packet
+#'
+#' @param payload raw. the packet payload
+#'
+#' @keywords internal
+#'
+schema_meta <- function(payload) {
+
+  id <- payload[1:2]
+  id <- readBin(
+    id, "integer", 2, 2, TRUE, "little"
+  )
+
+  columns <- payload[3:4]
+  columns <- readBin(
+    columns, "integer", 2, 2, TRUE, "little"
+  )
+
+  samples <- payload[5:6]
+  samples <- readBin(
+    samples, "integer", 2, 2, TRUE, "little"
+  )
+
+  return(
+    list(
+      id = id, columns = columns,
+      samples = samples, sensorColumns = data.frame()
+    )
+  )
+}
