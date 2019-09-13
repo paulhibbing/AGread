@@ -66,3 +66,56 @@ parse_packet_set.PARAMETERS <- function(
   structure(value, class = class(set)[1])
 
 }
+
+#' @rdname parse_packet_set
+#' @export
+parse_packet_set.METADATA <- function(
+  set, log, tz = "UTC", verbose = FALSE,
+  give_timestamp = TRUE, ...
+) {
+
+  results <- lapply(
+    split(set, seq(nrow(set))),
+    setup_payload,
+    log = log
+  ) %>% lapply(
+    function(x) {
+      gsub("[{}]", "", rawToChar(x)) %>%
+      gsub(pattern = "[\"]", replacement = "") %>%
+      gsub(pattern = "\\\\", replacement = "") %>%
+      gsub(pattern = "JSON:", replacement = "") %>%
+      strsplit(",") %>%
+      {do.call(data.frame,
+        c(., stringsAsFactors = FALSE,
+          row.names = NULL)
+      )} %>%
+      stats::setNames("Meta")
+    }
+  )
+
+  results <- do.call(
+    rbind, c(results, make.row.names = FALSE)
+  )
+
+  drop_rows <- grepl("^Parsed:", results$Meta) |
+    grepl("^null$", results$Meta)
+
+  results <- results[!drop_rows, ]
+
+  results <- split(
+    results, cumsum(grepl("^MetadataType", results))
+  )
+
+  results <- results[!duplicated(results)]
+  meta_names <- sapply(
+    results,
+    function(x) gsub("^MetadataType:", "", x[1]),
+    USE.NAMES = FALSE
+  )
+
+  results <- stats::setNames(results, meta_names)
+  results <- lapply(results, function(x) x[-1])
+
+  structure(results, class = class(set)[1])
+
+}

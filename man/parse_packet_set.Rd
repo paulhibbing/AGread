@@ -8,6 +8,7 @@
 \alias{parse_packet_set}
 \alias{parse_packet_set.default}
 \alias{parse_packet_set.PARAMETERS}
+\alias{parse_packet_set.METADATA}
 \title{Parse all packets of a given type}
 \usage{
 \method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC", verbose = FALSE,
@@ -23,6 +24,9 @@ parse_packet_set(set, log, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, ...)
 
 \method{parse_packet_set}{PARAMETERS}(set, log, tz = "UTC", verbose = FALSE,
+  give_timestamp = TRUE, ...)
+
+\method{parse_packet_set}{METADATA}(set, log, tz = "UTC", verbose = FALSE,
   give_timestamp = TRUE, ...)
 }
 \arguments{
