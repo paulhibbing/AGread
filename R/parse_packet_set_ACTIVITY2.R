@@ -56,17 +56,10 @@ parse_packet_set.ACTIVITY2 <- function(
 
   if (verbose) cat(
     "\r  Checking for gaps in the",
-    "time series                 "
+    "time series. Fixing if found."
   )
 
-    RAW <- check_gaps(RAW, info = info, verbose = verbose)
-
-  if (verbose) cat(
-    "\r  Checking/addressing USB connection time(s)",
-    "                                              "
-  )
-
-    RAW <- fix_usb(RAW, info)
+    RAW <- check_gaps(RAW, info = info)
 
   if (verbose) packet_print("cleanup", class(set)[1])
 

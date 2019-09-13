@@ -2,13 +2,10 @@
 % Please edit documentation in R/fix_usb.R
 \name{fix_usb}
 \alias{fix_usb}
-\alias{fix_usb.RAW}
 \alias{fix_usb.SENSOR_DATA}
 \title{Repair packet streams interrupted by USB connection events}
 \usage{
 fix_usb(object, ...)
-
-\method{fix_usb}{RAW}(object, info, ...)
 
 \method{fix_usb}{SENSOR_DATA}(records)
 }
@@ -16,8 +13,6 @@ fix_usb(object, ...)
 \item{object}{the sensor stream to repair}
 
 \item{...}{further arguments to methods}
-
-\item{info}{the content of \code{info.txt}}
 }
 \description{
 Repair packet streams interrupted by USB connection events

@@ -18,46 +18,96 @@ check_gaps <- function(object, ...) {
 #' @export
 check_gaps.RAW <- function(object, info, ...) {
 
-  current_times <- unique(
-    lubridate::floor_date(object$Timestamp)
-  )
+  ## Identify all expected timestamps
 
-  start_time <- current_times[1]
-  end_time <- current_times[length(current_times)]
+    current_times <- unique(
+      lubridate::floor_date(object$Timestamp, "second")
+    )
+    tz <- unique(lubridate::tz(current_times))
 
-  expected_times <- seq(start_time, end_time, "1 sec")
+    start_time <- info$Start_Date
+      stopifnot(tz == lubridate::tz(start_time))
 
-  missing_times <- setdiff(
-    as.character(expected_times),
-    as.character(current_times)
-  )
+    stop_time <- info$Last_Sample_Time - 1
+      stopifnot(tz == lubridate::tz(stop_time))
 
-  missing_times <- as.POSIXct(
-    missing_times, lubridate::tz(start_time)
-  )
+    expected_times <- seq(start_time, stop_time, "1 sec")
 
-  milliseconds <- seq(info$Sample_Rate) - 1
-  milliseconds <- milliseconds / info$Sample_Rate
-  missing_entries <- sapply(
-    missing_times, function(x) {
-      data.frame(
-        Timestamp = x + milliseconds,
-        Accelerometer_X = NA,
-        Accelerometer_Y = NA,
-        Accelerometer_Z = NA
+  ## Identify missing timestamps, and (in the original object)
+  ## construct NA representation for each one
+
+    missing_times <- setdiff(
+      as.character(expected_times),
+      as.character(current_times)
+    )
+
+    if (!length(missing_times)) return(
+      structure(object, row.names = NULL)
+    )
+
+    missing_times <- as.POSIXct(missing_times, tz)
+
+    milliseconds <- seq(info$Sample_Rate) - 1
+    milliseconds <- milliseconds / info$Sample_Rate
+
+    missing_entries <- sapply(
+      missing_times, function(x) {
+        data.frame(
+          Timestamp = x + milliseconds,
+          Accelerometer_X = NA,
+          Accelerometer_Y = NA,
+          Accelerometer_Z = NA
+        )
+      },
+      simplify = FALSE
+    )
+
+    missing_entries <- do.call(rbind, missing_entries)
+
+    object <- rbind(object, missing_entries) %>%
+      {.[order(.$Timestamp), ]}
+
+  ## Populate values for the missing entries via latch or zero insertion
+
+    accel_names <- paste(
+      "Accelerometer", c("X","Y","Z"), sep = "_"
+    )
+
+    missing_check <- apply(
+      object[ ,accel_names], 1, function(x) all(is.na(x))
+    )
+
+    gaps <- do.call(data.frame, rle(missing_check))
+    gap_names <- append(
+      names(gaps), c("start_index", "end_index"), 2
+    )
+
+    gaps$end_index <- cumsum(gaps$lengths)
+    gaps$start_index <- cumsum(
+      c(1, gaps$lengths[-nrow(gaps)])
+    )
+
+    gaps <- gaps[gaps$values, gap_names]
+
+    for (i in seq(nrow(gaps))) {
+
+      gap_indices <- gaps$start_index[i]:gaps$end_index[i]
+
+      object[gap_indices, accel_names] <- 0
+
+      latch_indices <- (
+        gaps$start_index[i] + seq(info$Sample_Rate) - 1
       )
-    },
-    simplify = FALSE
-  )
 
-  missing_entries <- do.call(rbind, missing_entries)
+      latch_values <- object[
+        gaps$start_index[i]-1, accel_names
+      ]
 
-  object <- rbind(object, missing_entries) %>%
-    {.[order(.$Timestamp), ]}
+      object[latch_indices, accel_names] <- latch_values
 
-  object <- zero_pad(object, info = info, ...)
+    }
+
   row.names(object) <- NULL
-
   object
 
 }

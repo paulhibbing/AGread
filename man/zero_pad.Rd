@@ -3,14 +3,11 @@
 \name{zero_pad}
 \alias{zero_pad}
 \alias{zero_pad.list}
-\alias{zero_pad.RAW}
 \title{Fill in missing data packets at start/end of file}
 \usage{
 zero_pad(object, ...)
 
 \method{zero_pad}{list}(object, index, info = NULL, schema = NULL, ...)
-
-\method{zero_pad}{RAW}(object, info, verbose, ...)
 }
 \arguments{
 \item{object}{the packet stream}
@@ -18,8 +15,6 @@ zero_pad(object, ...)
 \item{...}{further arguments passed to methods and \code{\link{zero_pad}}}
 
 \item{info}{the content of \code{info.txt}}
-
-\item{verbose}{logical. Print updates to console?}
 }
 \description{
 This function checks whether a packet stream's starting and ending timestamps
