@@ -69,23 +69,3 @@ List parse_primary_accelerometerC(
   return result;
 
 }
-
-  // checksum <- checksum_calculate(
-  //     record = record,
-  //     final_index = log_indices[length(log_indices)]
-  // )
-  // checksum <- if (is.null(checksum)) "OK" else "ERROR"
-  //
-  // value <- list(
-  //     Type = record_header$type,
-  //     Timestamp = lubridate::force_tz(
-  //       record_header$timestamp, tz
-  //     ),
-  //     Size = record_header$size,
-  //     Payload = payload,
-  //     Checksum = checksum
-  // )
-  //
-  //   if (!give_timestamp) value$Timestamp <- NULL
-  //
-  //   return(value)
