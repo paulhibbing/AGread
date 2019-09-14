@@ -193,7 +193,9 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     }
 
     AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(timer))
+    if (verbose) message_update(
+      16, dur = PAutilities::get_duration(timer)
+    )
     return(AG)
   }
 }
@@ -325,18 +327,3 @@ check_inc <- function(AG, verbose = FALSE) {
 #' @seealso \code{\link{AGread-deprecated}}
 #' @keywords internal
 NULL
-
-#' @rdname AGread-deprecated
-#' @section \code{get_duration}:
-#' For \code{get_duration}, use \code{\link[PAutilities]{get_duration}}
-#'
-#' @export
-get_duration <- function(timer) {
-
-  .Deprecated("PAutilities::get_duration", "PAutilities")
-  format(
-    (proc.time() - timer)[3] / 60,
-    digits = 1,
-    nsmall = 1
-  )
-}
