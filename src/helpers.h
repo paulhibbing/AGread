@@ -1,5 +1,5 @@
-#ifndef GET_SHORT_H
-#define GET_SHORT_H
+#ifndef HELPERS_H
+#define HELPERS_H
 
 #include <Rcpp.h>
 int get_short(Rcpp::RawVector x, int i1, int i2, bool is_signed);

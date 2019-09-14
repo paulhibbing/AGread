@@ -4,12 +4,16 @@
 \alias{payload_parse_sensor_data_25C}
 \title{Parse SENSOR_DATA packet in c++}
 \usage{
-payload_parse_sensor_data_25C(payload, schema)
+payload_parse_sensor_data_25C(payload, info, id)
 }
 \arguments{
-\item{payload}{raw. The packet payload}
+\item{payload}{raw vector of payload bytes}
 
-\item{schema}{a SENSOR_SCHEMA object}
+\item{info}{\code{sensorColumns} information from a \code{SENSOR_SCHEMA}
+object}
+
+\item{id}{integer. The \code{id} information from a \code{SENSOR_SCHEMA}
+object}
 }
 \description{
 Parse SENSOR_DATA packet in c++

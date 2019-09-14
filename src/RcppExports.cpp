@@ -53,26 +53,53 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// parse_IMU_C
+List parse_IMU_C(DataFrame imu_records, RawVector log, DataFrame info, int id, bool verbose);
+RcppExport SEXP _AGread_parse_IMU_C(SEXP imu_recordsSEXP, SEXP logSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type imu_records(imu_recordsSEXP);
+    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< int >::type id(idSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_IMU_C(imu_records, log, info, id, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_id
-void check_id(RawVector x, List payload);
-RcppExport SEXP _AGread_check_id(SEXP xSEXP, SEXP payloadSEXP) {
+void check_id(RawVector x, int id);
+RcppExport SEXP _AGread_check_id(SEXP xSEXP, SEXP idSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List >::type payload(payloadSEXP);
-    check_id(x, payload);
+    Rcpp::traits::input_parameter< int >::type id(idSEXP);
+    check_id(x, id);
     return R_NilValue;
 END_RCPP
 }
+// imu_df
+DataFrame imu_df(List input);
+RcppExport SEXP _AGread_imu_df(SEXP inputSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type input(inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(imu_df(input));
+    return rcpp_result_gen;
+END_RCPP
+}
 // payload_parse_sensor_data_25C
-List payload_parse_sensor_data_25C(RawVector payload, List schema);
-RcppExport SEXP _AGread_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP schemaSEXP) {
+DataFrame payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id);
+RcppExport SEXP _AGread_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type payload(payloadSEXP);
-    Rcpp::traits::input_parameter< List >::type schema(schemaSEXP);
-    rcpp_result_gen = Rcpp::wrap(payload_parse_sensor_data_25C(payload, schema));
+    Rcpp::traits::input_parameter< DataFrame >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< int >::type id(idSEXP);
+    rcpp_result_gen = Rcpp::wrap(payload_parse_sensor_data_25C(payload, info, id));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -111,8 +138,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
+    {"_AGread_parse_IMU_C", (DL_FUNC) &_AGread_parse_IMU_C, 5},
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
-    {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 2},
+    {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
+    {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 3},
     {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 4},
     {"_AGread_parse_primary_accelerometerC", (DL_FUNC) &_AGread_parse_primary_accelerometerC, 5},
     {NULL, NULL, 0}

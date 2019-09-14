@@ -38,23 +38,50 @@ checksumC <- function(log, start_index, end_index) {
     invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
 }
 
+#' Parse all IMU packets in a file
+#'
+#' @param imu_records DataFrame with information about each packet
+#' @param log RawVector containing all payload bytes
+#' @param info The \code{sensorColumns} information of a \code{SENSOR_SCHEMA}
+#'   object
+#' @param id integer. The \code{id} information of a \code{SENSOR_SCHEMA}
+#'   object
+#' @param verbose logical. Print updates to console?
+#' @keywords internal
+parse_IMU_C <- function(imu_records, log, info, id, verbose) {
+    .Call('_AGread_parse_IMU_C', PACKAGE = 'AGread', imu_records, log, info, id, verbose)
+}
+
 #' Check sensor payload ID prior to parsing the packet
 #'
 #' @param x the raw payload
-#' @param payload the sensor schema payload (as list) to compare against
+#' @param id integer. The \code{SENSOR_SCHEMA} id
 #'
 #' @keywords internal
-check_id <- function(x, payload) {
-    invisible(.Call('_AGread_check_id', PACKAGE = 'AGread', x, payload))
+check_id <- function(x, id) {
+    invisible(.Call('_AGread_check_id', PACKAGE = 'AGread', x, id))
+}
+
+#' Convert parsed packet data from list to data frame
+#'
+#' @param input parsed packet data (as list)
+#'
+#' @keywords internal
+imu_df <- function(input) {
+    .Call('_AGread_imu_df', PACKAGE = 'AGread', input)
 }
 
 #' Parse SENSOR_DATA packet in c++
 #'
-#' @inheritParams payload_parse_sensor_data_25
+#' @param payload raw vector of payload bytes
+#' @param info \code{sensorColumns} information from a \code{SENSOR_SCHEMA}
+#'   object
+#' @param id integer. The \code{id} information from a \code{SENSOR_SCHEMA}
+#'   object
 #'
 #' @keywords internal
-payload_parse_sensor_data_25C <- function(payload, schema) {
-    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, schema)
+payload_parse_sensor_data_25C <- function(payload, info, id) {
+    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id)
 }
 
 #' Parse a packet of primary accelerometer data in C++

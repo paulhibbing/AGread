@@ -5,13 +5,13 @@ using namespace Rcpp;
 //' Check sensor payload ID prior to parsing the packet
 //'
 //' @param x the raw payload
-//' @param payload the sensor schema payload (as list) to compare against
+//' @param id integer. The \code{SENSOR_SCHEMA} id
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-void check_id(RawVector x, List payload) {
-  int id = int(x[1] << 8 | x[0]);
-  bool id_check = id == int(payload["id"]);
+void check_id(RawVector x, int id) {
+  int payload_id = int(x[1] << 8 | x[0]);
+  bool id_check = payload_id == id;
   try {
     if (id_check) {
       return;
@@ -23,21 +23,45 @@ void check_id(RawVector x, List payload) {
   }
 }
 
-//' Parse SENSOR_DATA packet in c++
+//' Convert parsed packet data from list to data frame
 //'
-//' @inheritParams payload_parse_sensor_data_25
+//' @param input parsed packet data (as list)
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-List payload_parse_sensor_data_25C(RawVector payload, List schema) {
+DataFrame imu_df(List input){
+
+  for (int i = 0; i < input.length(); ++i) {
+    NumericVector test = input[i];
+    if(test.size() == 0) input.erase(i);
+  }
+
+  CharacterVector frame_names = input.names();
+  DataFrame res(input);
+  res.names() = frame_names;
+  return res;
+
+}
+
+//' Parse SENSOR_DATA packet in c++
+//'
+//' @param payload raw vector of payload bytes
+//' @param info \code{sensorColumns} information from a \code{SENSOR_SCHEMA}
+//'   object
+//' @param id integer. The \code{id} information from a \code{SENSOR_SCHEMA}
+//'   object
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+DataFrame payload_parse_sensor_data_25C(
+    RawVector payload, DataFrame info, int id
+) {
 
   // Setup and check payload id
-  List schema_payload = schema["Payload"];
-  check_id(payload, schema_payload);
+  check_id(payload, id);
 
   // Pull apart the schema payload into separate vectors for use
   // in future for loop(s)
-  DataFrame info = schema_payload["sensorColumns"];
   LogicalVector endians = info["is_big_endian"];
   LogicalVector signs = info["is_signed"];
   CharacterVector labels = info["label"];
@@ -118,7 +142,8 @@ List payload_parse_sensor_data_25C(RawVector payload, List schema) {
   }
 
   result.erase(0);
+  DataFrame df_result = imu_df(result);
 
-  return result;
+  return df_result;
 
 }

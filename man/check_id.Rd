@@ -4,12 +4,12 @@
 \alias{check_id}
 \title{Check sensor payload ID prior to parsing the packet}
 \usage{
-check_id(x, payload)
+check_id(x, id)
 }
 \arguments{
 \item{x}{the raw payload}
 
-\item{payload}{the sensor schema payload (as list) to compare against}
+\item{id}{integer. The \code{SENSOR_SCHEMA} id}
 }
 \description{
 Check sensor payload ID prior to parsing the packet
