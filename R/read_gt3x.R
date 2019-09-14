@@ -3,7 +3,6 @@
 #' @param file character. Path to the file
 #' @param tz character. The timezone to use
 #' @param verbose logical. Print updates to console?
-#' @param give_timestamp logical. Include timestamp in output?
 #' @param include character. The PACKET types to parse
 #'
 #' @return A list of processed data, with one element for each of the relevant
@@ -30,7 +29,6 @@
 #'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE,
   include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
   "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
   "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
@@ -76,7 +74,7 @@ read_gt3x <- function(
   log_file  <- utils::unzip(file, "log.bin", exdir = tempdir())
   log  <- parse_log_bin(
     log_file, file_3x["log.bin", "Length"], info, tz,
-    verbose, give_timestamp, include
+    verbose, include
   )
 
   PAutilities::manage_procedure(

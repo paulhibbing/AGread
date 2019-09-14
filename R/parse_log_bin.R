@@ -10,7 +10,7 @@
 #'
 parse_log_bin <- function(
   log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, include = c(
+  include = c(
     "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
     "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
     "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
@@ -34,8 +34,8 @@ parse_log_bin <- function(
   ## Get parameters (if applicable)
     if ("PARAMETERS" %in% names(record_headers)) {
       parameters <- parse_packet_set(
-        record_headers$PARAMETERS, log, tz,
-        verbose, give_timestamp
+        record_headers$PARAMETERS, log,
+        tz, verbose
       )
       record_headers$PARAMETERS <- NULL
     } else {
@@ -46,7 +46,7 @@ parse_log_bin <- function(
     if ("SENSOR_SCHEMA" %in% names(record_headers)) {
       schema <- parse_packet_set(
         record_headers$SENSOR_SCHEMA, log, tz,
-        verbose, give_timestamp
+        verbose
       )
       record_headers$SENSOR_SCHEMA <- NULL
     } else {
@@ -58,10 +58,10 @@ parse_log_bin <- function(
     results <- lapply(
       record_headers,
       parse_packet_set,
-      log = log, tz = tz, info = info,
-      give_timestamp = give_timestamp,
-      parameters = parameters, schema = schema,
-      verbose = verbose, do_post_process = TRUE
+      log = log, tz = tz,
+      verbose = verbose, info = info,
+      schema = schema
+
     )
 
     if(all("PARAMETERS" %in% include, exists("parameters"))) {

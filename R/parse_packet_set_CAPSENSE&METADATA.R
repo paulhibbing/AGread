@@ -2,7 +2,7 @@
 #' @export
 parse_packet_set.CAPSENSE <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   results <- lapply(
@@ -52,7 +52,7 @@ parse_packet_set.CAPSENSE <- function(
 #' @export
 parse_packet_set.METADATA <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   results <- lapply(

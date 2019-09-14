@@ -17,34 +17,32 @@
 \title{Parse all packets of a given type}
 \usage{
 \method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, info, ...)
+  info, ...)
 
 \method{parse_packet_set}{CAPSENSE}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+  ...)
 
 \method{parse_packet_set}{METADATA}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+  ...)
 
 \method{parse_packet_set}{SENSOR_DATA}(set, log, tz = "UTC",
-  verbose = FALSE, give_timestamp = TRUE, ...)
+  verbose = FALSE, schema, ...)
 
 \method{parse_packet_set}{SENSOR_SCHEMA}(set, log, tz = "UTC",
-  verbose = FALSE, give_timestamp = TRUE, ...)
+  verbose = FALSE, ...)
 
-parse_packet_set(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
 \method{parse_packet_set}{default}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+  ...)
 
 \method{parse_packet_set}{PARAMETERS}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+  ...)
 
 \method{parse_packet_set}{BATTERY}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+  ...)
 
-\method{parse_packet_set}{EVENT}(set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...)
+\method{parse_packet_set}{EVENT}(set, log, tz = "UTC", verbose = FALSE, ...)
 }
 \arguments{
 \item{set}{the set of record headers corresponding to each packet}
@@ -54,8 +52,6 @@ parse_packet_set(set, log, tz = "UTC", verbose = FALSE,
 \item{tz}{character. The timezone to use}
 
 \item{verbose}{logical. Print updates to console?}
-
-\item{give_timestamp}{logical. Include timestamp in output?}
 
 \item{info}{the result of \code{\link{parse_info_txt}}}
 

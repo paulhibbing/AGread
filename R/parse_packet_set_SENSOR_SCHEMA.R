@@ -2,7 +2,7 @@
 #' @export
 parse_packet_set.SENSOR_SCHEMA <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   BYTES_PER_COLUMN <- 23

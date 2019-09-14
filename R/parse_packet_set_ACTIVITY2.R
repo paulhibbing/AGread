@@ -3,7 +3,7 @@
 #' @export
 parse_packet_set.ACTIVITY2 <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, info, ...
+  info, ...
 ) {
 
   scale_factor <- get_primary_accel_scale(info)

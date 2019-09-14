@@ -10,7 +10,7 @@
 #' @keywords internal
 parse_packet_set <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   if (verbose) packet_print("startup", class(set)[1])
@@ -24,7 +24,7 @@ parse_packet_set <- function(
 #' @export
 parse_packet_set.default <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   warning(paste(
@@ -40,7 +40,7 @@ parse_packet_set.default <- function(
 #' @export
 parse_packet_set.PARAMETERS <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   payload <- setup_payload(set, log) %>%
@@ -59,8 +59,6 @@ parse_packet_set.PARAMETERS <- function(
     Checksum = "OK"
   )
 
-  if (!give_timestamp) value$Timestamp <- NULL
-
   if (verbose) packet_print("cleanup", class(set)[1])
 
   structure(value, class = class(set)[1])
@@ -71,7 +69,7 @@ parse_packet_set.PARAMETERS <- function(
 #' @export
 parse_packet_set.BATTERY <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   results <- lapply(
@@ -94,7 +92,7 @@ parse_packet_set.BATTERY <- function(
 #' @export
 parse_packet_set.EVENT <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  give_timestamp = TRUE, ...
+  ...
 ) {
 
   results <- lapply(
