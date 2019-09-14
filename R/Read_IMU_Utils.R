@@ -99,14 +99,22 @@ imu_collapse <- function(AG, block_size, verbose = FALSE) {
 
   if (nrow(AG) %% block_size != 0) {
     message_update(24, is_message = TRUE)
-    final_obs <-
-      rev(seq_len(nrow(AG)))[which(rev(seq_len(nrow(AG)))[1:block_size] %%
-          (block_size) ==
-          0)[1]]
+    indices <- rev(
+      seq_len(nrow(AG))
+    )
+    final_obs <- indices[
+      which(
+        indices[1:block_size] %%
+          (block_size) == 0
+      )[1]
+    ]
     AG <- AG[1:final_obs, ]
   }
 
-  AG$epoch <- rep(1:(nrow(AG) / block_size), each = block_size)
+  AG$epoch <- rep(
+    1:(nrow(AG) / block_size),
+    each = block_size
+  )
 
   if (verbose) message_update(25)
 

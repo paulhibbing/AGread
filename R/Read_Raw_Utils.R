@@ -185,12 +185,17 @@ AG_collapse <- function(AG, output_window_secs = 1, samp_freq,
   # Old way of averaging (cuts out one second)
   if (method == "default") {
 
-    ENMO3 <- diff(
-      ENMO2[seq(
-        1, length(ENMO),
-        by = (samp_freq * output_window_secs)
-      )]
-    ) / (samp_freq * output_window_secs)
+    indices <- seq(
+      1, length(ENMO),
+      by = (samp_freq * output_window_secs)
+    )
+
+    if (length(ENMO) > max(indices)) message_update(
+      24, is_message = TRUE
+    )
+
+    ENMO3 <- diff(ENMO2[indices]) /
+      (samp_freq * output_window_secs)
     ENMO <- ENMO3 * 1000
     AG <- data.frame(Block = seq(ENMO), ENMO = ENMO)
 
