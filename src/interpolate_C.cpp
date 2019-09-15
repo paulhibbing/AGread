@@ -53,31 +53,29 @@ NumericVector interpolate_C(
   NumericVector intervals = zero2one(original_samples);
 
   // Interpolation information
-  Rcout << "\nInterpolation information";
-    NumericVector prop_min = clone(intervals);
 
-    int last_index = intervals.size();
-    prop_min.erase(last_index);
+    NumericVector prop_min(0);
+    for (int i=0; i < (intervals.size() - 1); i++) {
+      prop_min.push_back(intervals[i]);
+    }
 
-    NumericVector start = clone(original_samples);
-    start.erase(last_index);
+    NumericVector start(0);
+    for (int i=0; i < (original_samples.size() - 1); i++) {
+      start.push_back(original_samples[i]);
+    }
 
-  Rcout << "...Two arguments";
-    NumericVector rise = clone(original_samples);
-    rise = diff(rise);
+    NumericVector rise = diff(original_samples);
 
-    NumericVector run = clone(intervals);
-    run = diff(run);
+    NumericVector run = diff(intervals);
 
   // New Data
-  Rcout << "\nNew Data proportion";
+
     NumericVector proportion(0);
     for (double i = 0; i < target_frequency; i++) {
       double new_result = i / target_frequency;
       proportion.push_back(new_result);
     }
 
-  Rcout << "\nNew Data index";
     IntegerVector index(0);
     for (int i = 0; i < proportion.size(); i++) {
       int new_index = interval_match(
@@ -86,7 +84,6 @@ NumericVector interpolate_C(
       index.push_back(new_index);
     }
 
-  Rcout << "\nNew Data window_fraction";
     NumericVector window_fraction(0);
     for (int i = 0; i < index.size(); i++) {
       int j = index[i];
@@ -101,7 +98,6 @@ NumericVector interpolate_C(
       stop("Detected window fractions > 1");
     }
 
-  Rcout << "\nNew Data final_values\n";
     NumericVector final_values(0);
     for (int i = 0; i < window_fraction.size(); i++) {
       int j = index[i];
