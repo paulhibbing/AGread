@@ -11,12 +11,14 @@ using namespace Rcpp;
 //'   object
 //' @param id integer. The \code{id} information of a \code{SENSOR_SCHEMA}
 //'   object
+//' @param samp_rate integer. The IMU sampling rate.
 //' @param verbose logical. Print updates to console?
 //' @keywords internal
 // [[Rcpp::export]]
 List parse_IMU_C(
     DataFrame imu_records, RawVector log,
-    DataFrame info, int id, bool verbose
+    DataFrame info, int id, int samp_rate,
+    bool verbose
 ) {
 
   int n_records = imu_records.nrow();
@@ -50,7 +52,7 @@ List parse_IMU_C(
 
     //Process the packet
       DataFrame new_result = payload_parse_sensor_data_25C(
-        payload, info, id
+        payload, info, id, samp_rate
       );
 
       CharacterVector new_timestamp(0);

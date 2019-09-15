@@ -46,10 +46,38 @@ checksumC <- function(log, start_index, end_index) {
 #'   object
 #' @param id integer. The \code{id} information of a \code{SENSOR_SCHEMA}
 #'   object
+#' @param samp_rate integer. The IMU sampling rate.
 #' @param verbose logical. Print updates to console?
 #' @keywords internal
-parse_IMU_C <- function(imu_records, log, info, id, verbose) {
-    .Call('_AGread_parse_IMU_C', PACKAGE = 'AGread', imu_records, log, info, id, verbose)
+parse_IMU_C <- function(imu_records, log, info, id, samp_rate, verbose) {
+    .Call('_AGread_parse_IMU_C', PACKAGE = 'AGread', imu_records, log, info, id, samp_rate, verbose)
+}
+
+#' Interpolation-specific sequencer
+#'
+#' @param samples NumericVector. A data stream.
+#' @keywords internal
+zero2one <- function(samples) {
+    .Call('_AGread_zero2one', PACKAGE = 'AGread', samples)
+}
+
+#' Match a resampled interval proportion to its corresponding
+#' originally-sampled interval in C++.
+#'
+#' @param proportion double. The interval proportion to match.
+#' @param reference_frame DataFrame containing a \code{prop_min} column to
+#'   serve as originally-sampled interval proportions
+#'
+#' @keywords internal
+interval_match <- function(proportion, references) {
+    .Call('_AGread_interval_match', PACKAGE = 'AGread', proportion, references)
+}
+
+#' @rdname sensor_resample
+#' @aliases Resample Interpolate
+#' @keywords internal
+interpolate_C <- function(original_samples, target_frequency) {
+    .Call('_AGread_interpolate_C', PACKAGE = 'AGread', original_samples, target_frequency)
 }
 
 #' Check sensor payload ID prior to parsing the packet
@@ -78,10 +106,11 @@ imu_df <- function(input) {
 #'   object
 #' @param id integer. The \code{id} information from a \code{SENSOR_SCHEMA}
 #'   object
+#' @param samp_rate integer. The IMU sampling rate.
 #'
 #' @keywords internal
-payload_parse_sensor_data_25C <- function(payload, info, id) {
-    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id)
+payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
+    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate)
 }
 
 #' Parse a packet of primary accelerometer data in C++

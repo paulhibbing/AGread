@@ -4,7 +4,7 @@
 \alias{payload_parse_sensor_data_25C}
 \title{Parse SENSOR_DATA packet in c++}
 \usage{
-payload_parse_sensor_data_25C(payload, info, id)
+payload_parse_sensor_data_25C(payload, info, id, samp_rate)
 }
 \arguments{
 \item{payload}{raw vector of payload bytes}
@@ -14,6 +14,8 @@ object}
 
 \item{id}{integer. The \code{id} information from a \code{SENSOR_SCHEMA}
 object}
+
+\item{samp_rate}{integer. The IMU sampling rate.}
 }
 \description{
 Parse SENSOR_DATA packet in c++

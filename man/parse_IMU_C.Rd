@@ -4,7 +4,7 @@
 \alias{parse_IMU_C}
 \title{Parse all IMU packets in a file}
 \usage{
-parse_IMU_C(imu_records, log, info, id, verbose)
+parse_IMU_C(imu_records, log, info, id, samp_rate, verbose)
 }
 \arguments{
 \item{imu_records}{DataFrame with information about each packet}
@@ -16,6 +16,8 @@ object}
 
 \item{id}{integer. The \code{id} information of a \code{SENSOR_SCHEMA}
 object}
+
+\item{samp_rate}{integer. The IMU sampling rate.}
 
 \item{verbose}{logical. Print updates to console?}
 }

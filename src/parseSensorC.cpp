@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include "helpers.h"
+#include "interpolate.h"
 using namespace Rcpp;
 
 //' Check sensor payload ID prior to parsing the packet
@@ -31,7 +32,7 @@ void check_id(RawVector x, int id) {
 // [[Rcpp::export]]
 DataFrame imu_df(List input){
 
-  for (int i = 0; i < input.length(); ++i) {
+  for (int i = 0; i < input.length(); i++) {
     NumericVector test = input[i];
     if(test.size() == 0) input.erase(i);
   }
@@ -50,11 +51,13 @@ DataFrame imu_df(List input){
 //'   object
 //' @param id integer. The \code{id} information from a \code{SENSOR_SCHEMA}
 //'   object
+//' @param samp_rate integer. The IMU sampling rate.
 //'
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame payload_parse_sensor_data_25C(
-    RawVector payload, DataFrame info, int id
+    RawVector payload, DataFrame info,
+    int id, int samp_rate
 ) {
 
   // Setup and check payload id
@@ -65,7 +68,7 @@ DataFrame payload_parse_sensor_data_25C(
   LogicalVector endians = info["is_big_endian"];
   LogicalVector signs = info["is_signed"];
   CharacterVector labels = info["label"];
-  DoubleVector scales = info["scale_factor"];
+  NumericVector scales = info["scale_factor"];
   IntegerVector col_sizes = info["n_bytes"];
   IntegerVector orig_offsets = info["offset_bytes"];
   IntegerVector offsets = clone(orig_offsets);
@@ -74,7 +77,7 @@ DataFrame payload_parse_sensor_data_25C(
 
   // Identify the length of each total record
   int record_offset = 0;
-  for (int i = 0; i < col_sizes.length(); ++i) {
+  for (int i = 0; i < col_sizes.length(); i++) {
     record_offset += col_sizes[i];
   }
 
@@ -89,7 +92,7 @@ DataFrame payload_parse_sensor_data_25C(
   );
 
   // Loop over the columns and calculate the values
-  for (int i = 0; i < n_cols; ++i) {
+  for (int i = 0; i < n_cols; i++) {
 
     IntegerVector values = int(0); // initialize a vector
 
@@ -102,7 +105,7 @@ DataFrame payload_parse_sensor_data_25C(
     int offset = offsets[i] + 2;
 
     // Go row by row
-    for (int j = 0; j < n_samples; ++j) {
+    for (int j = 0; j < n_samples; j++) {
 
       int i1 = offset + (j * record_offset);
       int i2 = i1 + 1;
@@ -127,17 +130,26 @@ DataFrame payload_parse_sensor_data_25C(
 
     //values.erase(0);
 
-    DoubleVector scaled_values = 0;
-    // scaled_values = as<DoubleVector>(scaled_values);
+    NumericVector scaled_values(0);
+    NumericVector interp_values(0);
+
     bool scale_zero = scale == 0;
     if (!scale_zero) {
-      for (int i = 0; i < values.length(); ++i) {
-        // scaled_values[i] /= scale;
-        scaled_values.push_back(values[i] / scale);
+      for (int i = 0; i < values.length(); i++) {
+        double new_value = values[i] / scale;
+        scaled_values.push_back(new_value);
       }
+      NumericVector temp_interp = interpolate_C(
+        scaled_values, samp_rate
+      );
+      for (int i = 0; i < temp_interp.length(); i++) {
+        interp_values.push_back(temp_interp[i]);
+      }
+    } else {
+      interp_values.push_back(0);
     }
 
-    result.push_back(scaled_values, new_name);
+    result.push_back(interp_values, new_name);
 
   }
 

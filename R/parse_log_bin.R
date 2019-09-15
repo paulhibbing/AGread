@@ -60,7 +60,7 @@ parse_log_bin <- function(
       parse_packet_set,
       log = log, tz = tz,
       verbose = verbose, info = info,
-      schema = schema
+      parameters = parameters, schema = schema
 
     )
 

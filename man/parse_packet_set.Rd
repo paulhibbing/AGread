@@ -26,7 +26,7 @@
   ...)
 
 \method{parse_packet_set}{SENSOR_DATA}(set, log, tz = "UTC",
-  verbose = FALSE, schema, ...)
+  verbose = FALSE, parameters, schema, ...)
 
 \method{parse_packet_set}{SENSOR_SCHEMA}(set, log, tz = "UTC",
   verbose = FALSE, ...)
@@ -56,6 +56,10 @@ parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 \item{info}{the result of \code{\link{parse_info_txt}}}
 
 \item{...}{further arguments passed to methods}
+
+\item{parameters}{A PARAMETERS object}
+
+\item{schema}{A SENSOR_SCHEMA object}
 }
 \description{
 Parse all packets of a given type
