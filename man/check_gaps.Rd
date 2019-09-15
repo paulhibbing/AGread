@@ -12,7 +12,7 @@ check_gaps(object, ...)
 \arguments{
 \item{object}{the packet stream}
 
-\item{...}{further arguments passed to methods and \code{\link{zero_pad}}}
+\item{...}{further arguments passed to methods}
 
 \item{info}{the content of \code{info.txt}}
 }

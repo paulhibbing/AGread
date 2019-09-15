@@ -47,7 +47,7 @@ sensor_resample <- function(
   switch(
     method,
     "interpolate_R" = interpolate_R(
-      original_samples, target_frequency, ...
+      original_samples, target_frequency
     ),
     "interpolate_C" = interpolate_C(
       original_samples, target_frequency

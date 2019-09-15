@@ -55,7 +55,7 @@ testthat::test_that(
 
       testthat::expect_true(
         all(
-          test_errors(AG, test1, accel_vars)
+          PAutilities::test_errors(AG, test1, accel_vars)
         )
       )
 
@@ -72,7 +72,7 @@ testthat::test_that(
 
       testthat::expect_true(
         all(
-          test_errors(
+          PAutilities::test_errors(
             AG,
             test2,
             setdiff(names(AG), "Timestamp"),
@@ -96,7 +96,7 @@ testthat::test_that(
 
       testthat::expect_true(
         all(
-          test_errors(
+          PAutilities::test_errors(
             AG,
             test3,
             setdiff(names(AG), "Timestamp"),
@@ -121,7 +121,7 @@ testthat::test_that(
 
       testthat::expect_true(
         all(
-          test_errors(
+          PAutilities::test_errors(
             AG, test4, gyro_names,
             tolerance = 0.5
           )
@@ -135,8 +135,9 @@ testthat::test_that(
       ## ^^ Tolerance here is acceptable for degrees per second,
       ## but not other variables (see below)
 
+      other_vars <- setdiff(names(AG), gyro_names)
       testthat::expect_equal(
-        AG[ ,!gyro_names], test4[ ,!gyro_names],
+        AG[ ,other_vars], test4[ ,other_vars],
         tolerance = 0.001, scale = 1
       )
       ## ^^ Lower tolerance here because it's raw values

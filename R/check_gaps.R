@@ -4,7 +4,7 @@
 #' padding is necessary based on \code{info.txt}
 #'
 #' @param object the packet stream
-#' @param ... further arguments passed to methods and \code{\link{zero_pad}}
+#' @param ... further arguments passed to methods
 #'
 #' @keywords internal
 check_gaps <- function(object, ...) {
@@ -41,9 +41,10 @@ check_gaps.RAW <- function(object, info, ...) {
       as.character(current_times)
     )
 
-    if (!length(missing_times)) return(
-      structure(object, row.names = NULL)
-    )
+    if (!length(missing_times)) {
+      row.names(object) <- NULL
+      return(object)
+    }
 
     missing_times <- as.POSIXct(missing_times, tz)
 
