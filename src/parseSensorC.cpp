@@ -139,7 +139,7 @@ DataFrame payload_parse_sensor_data_25C(
         double new_value = values[i] / scale;
         scaled_values.push_back(new_value);
       }
-      NumericVector temp_interp = interpolate_C(
+      NumericVector temp_interp = interpolate_IMU(
         scaled_values, samp_rate
       );
       for (int i = 0; i < temp_interp.length(); i++) {

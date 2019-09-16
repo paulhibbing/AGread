@@ -104,6 +104,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// interpolate_IMU
+NumericVector interpolate_IMU(NumericVector samples, int target_freq);
+RcppExport SEXP _AGread_interpolate_IMU(SEXP samplesSEXP, SEXP target_freqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type target_freq(target_freqSEXP);
+    rcpp_result_gen = Rcpp::wrap(interpolate_IMU(samples, target_freq));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_id
 void check_id(RawVector x, int id);
 RcppExport SEXP _AGread_check_id(SEXP xSEXP, SEXP idSEXP) {
@@ -179,6 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_zero2one", (DL_FUNC) &_AGread_zero2one, 1},
     {"_AGread_interval_match", (DL_FUNC) &_AGread_interval_match, 2},
     {"_AGread_interpolate_C", (DL_FUNC) &_AGread_interpolate_C, 2},
+    {"_AGread_interpolate_IMU", (DL_FUNC) &_AGread_interpolate_IMU, 2},
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
     {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 4},
