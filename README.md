@@ -9,11 +9,8 @@ Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://tra
 -----
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/AGread)](https://cran.r-project.org/package=AGread)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.2.9000-orange.svg?style=flat-square)](commits/master)
 
 -----
-
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--09--15-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -25,8 +22,8 @@ file format is provided (currently supporting `.gt3x` and `.csv`).
 
 AGread can be used flexibly to develop new methods for handling
 ActiGraph data, or to invoke existing methods, many of which exist in
-other R packages (e.g.
-[PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
+other R packages
+(e.g. [PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
 and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
 or will soon.
 
@@ -34,7 +31,7 @@ New in AGread 1.0.0 (under development), `Rcpp` has been invoked to
 speed up the process of reading `.gt3x` files. There is still some
 trouble with the comparability of parsed SENSOR\_DATA packet values and
 the `*-IMU.csv` output from ActiLife. That is, IMU values are usually
-equivalent whether read from `.gt3x` or `*-IMU.csv`, but for ~2-3% of
+equivalent whether read from `.gt3x` or `*-IMU.csv`, but for \~2-3% of
 values there are puzzling differences. Thus, the binary file reading
 function of AGread should still be considered “under development”, but
 is safe to use for primary accelerometer data (i.e., ACTIVITY2 packets).

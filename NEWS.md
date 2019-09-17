@@ -1,3 +1,26 @@
+# AGread 1.0.0
+## Summary
+    Version 1.0.0 features speedup via Rcpp in the `read_gt3x`
+      function. There is also increased reliance on S3 OOP
+      in the background code. The output is now successfully
+      tested for alignment with \*RAW.csv and \*-IMU.csv
+      output, having accounted for several issues noted below.
+      
+## Changes
+
+  * Revised the flow of `parse_log_bin` to handle packet sets
+    via S3.
+  * Accounted for USB connections in `gt3x` files
+  * Corrected the interpolation of over- or under-sampled
+    IMU packets
+  * Incorporated Rcpp to speed up `read_gt3x`
+  * Deprecated `get_duration` in favor of the equivalent
+    function in PAutilities
+  * Revised unit tests to ensure equivalence between variuos
+    reading methods (csv output vs gt3x output etc.)
+  * Updated example data
+  * Implemented sensor resampling via interpolation
+  
 # AGread 0.2.2
 ## Summary
     This is a second resubmission of version 0.2.0
