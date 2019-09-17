@@ -12,4 +12,6 @@ This is a major version increment reflecting incorporation of
 There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Reverse dependencies
-There were no ERRORs, WARNINGs, or NOTEs for reverse dependencies.
+revdep_check indicates no problems for `Observation` or `Sojourn`.
+    The latter has one NOTE that AGread is imported but not used,
+    which I will fix on next submission (I am the maintainer).
