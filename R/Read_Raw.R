@@ -16,11 +16,16 @@
 #' @examples
 #' raw_file <- system.file(
 #'   "extdata",
-#'   "TestID_LeftWrist_RAW.csv",
+#'   "exampleRAW.csv",
 #'   package = "AGread"
 #' )
 #'
-#' read_AG_raw(raw_file)
+#' ## suppress messages that indicate truncation when sampling
+#' ## rate and output window don't line up
+#' AG_RAW <- suppressMessages(
+#'   read_AG_raw(raw_file)
+#' )
+#' head(AG_RAW)
 #'
 #' @export
 read_AG_raw <- function(file, output_window_secs = 1,

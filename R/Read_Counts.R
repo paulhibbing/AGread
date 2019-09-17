@@ -85,7 +85,7 @@ AG_col_names <- function(variable) {
 #' @export
 #'
 #' @examples
-#' read_AG_counts(
+#' AG_counts <- read_AG_counts(
 #'   system.file(
 #'     "extdata",
 #'     "example1sec.csv",
@@ -93,6 +93,7 @@ AG_col_names <- function(variable) {
 #'   ),
 #'   skip = 11
 #' )
+#' head(AG_counts)
 #'
 read_AG_counts <- function(file, verbose = FALSE, skip = 10,
     nrows = 10, header = FALSE, ...) {

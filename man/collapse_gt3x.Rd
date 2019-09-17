@@ -46,7 +46,7 @@ file <- system.file(
   package = "AGread"
 )
 data <- read_gt3x(file)
-collapse_gt3x(data$RAW)
-collapse_gt3x(data$IMU)
+head(collapse_gt3x(data$RAW))
+head(collapse_gt3x(data$IMU))
 }
 }

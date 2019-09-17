@@ -16,8 +16,8 @@
 #'   package = "AGread"
 #' )
 #' data <- read_gt3x(file)
-#' collapse_gt3x(data$RAW)
-#' collapse_gt3x(data$IMU)
+#' head(collapse_gt3x(data$RAW))
+#' head(collapse_gt3x(data$IMU))
 #' }
 collapse_gt3x <- function(
   AG, filename = "gt3x file", output_window_secs = 1,

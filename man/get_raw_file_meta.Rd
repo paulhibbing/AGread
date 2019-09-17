@@ -15,7 +15,7 @@ Get file metadata (sampling frequency and timestamps) for primary accelerometer
 \examples{
 raw_file <-
     system.file("extdata",
-    "TestID_LeftWrist_RAW.csv",
+    "exampleRAW.csv",
     package = "AGread")
 
 get_raw_file_meta(raw_file)

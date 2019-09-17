@@ -56,15 +56,22 @@ target_frequency <- 100
    original_samples <- sample(
      seq(1.3,2.4,0.12), 101, replace = TRUE
    )
-   sensor_resample(original_samples, target_frequency)
+   down_linear <- sensor_resample(
+     original_samples, target_frequency
+   )
+   head(down_linear)
 
 ## Upsample linear
    original_samples <- original_samples[1:99]
-   sensor_resample(original_samples, target_frequency)
+   up_linear <- sensor_resample(
+     original_samples, target_frequency
+   )
+   head(up_linear)
 
 ## Upsample IMU
-   sensor_resample(
+   up_IMU <- sensor_resample(
      original_samples, target_frequency, "IMU"
    )
+   head(up_IMU)
 }
 \keyword{internal}

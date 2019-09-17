@@ -25,6 +25,10 @@ vm_columns <-
         names(imu_to_collapse),
         ignore.case = TRUE)
 
-get_VM(data.frame(imu_to_collapse)[, vm_columns])
+vm_values <- get_VM(
+  data.frame(imu_to_collapse)[, vm_columns]
+)
+
+head(vm_values)
 
 }

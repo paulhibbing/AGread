@@ -21,9 +21,10 @@ check_columns(file, skip, ...)
 \examples{
 raw_file <-
     system.file("extdata",
-    "TestID_LeftWrist_RAW.csv",
+    "exampleRAW.csv",
     package = "AGread")
 
-check_columns(raw_file, skip = 10)
+col_check <- check_columns(raw_file, skip = 10)
+head(col_check)
 
 }

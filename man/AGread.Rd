@@ -27,7 +27,7 @@ primary accelerometer and inertial measurement unit files. Reading binary
 
 \examples{
 \donttest{
-read_AG_counts(
+AG_counts <- read_AG_counts(
   system.file(
   "extdata",
   "example1sec.csv",
@@ -35,14 +35,14 @@ read_AG_counts(
   ),
   skip = 11
 )
-read_AG_raw(
+AG_RAW <- read_AG_raw(
   system.file(
   "extdata",
-  "TestID_LeftWrist_RAW.csv",
+  "exampleRAW.csv",
   package = "AGread"
   )
 )
-read_AG_IMU(
+AG_IMU <- read_AG_IMU(
   system.file(
   "extdata",
   "example-IMU.csv",
@@ -52,7 +52,12 @@ read_AG_IMU(
 file_3x <- system.file(
   "extdata", "example.gt3x", package = "AGread"
 )
-read_gt3x(file_3x)
+AG_3x <- read_gt3x(file_3x)
+
+head(AG_counts)
+head(AG_RAW)
+head(AG_IMU)
+head(lapply(AG_3x, head))
 }
 
 }

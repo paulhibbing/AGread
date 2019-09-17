@@ -10,7 +10,9 @@
 #' imu_filter_gyroscope(imu_to_collapse, 100)
 #'
 #' @export
-imu_filter_gyroscope <- function(AG, samp_rate, filter_hz = 35, verbose = FALSE) {
+imu_filter_gyroscope <- function(
+  AG, samp_rate, filter_hz = 35, verbose = FALSE
+) {
 
   if (verbose) message_update(19, filter_hz = filter_hz)
 

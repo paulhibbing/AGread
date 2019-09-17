@@ -10,10 +10,11 @@
 #' @examples
 #' raw_file <-
 #'     system.file("extdata",
-#'     "TestID_LeftWrist_RAW.csv",
+#'     "exampleRAW.csv",
 #'     package = "AGread")
 #'
-#' check_columns(raw_file, skip = 10)
+#' col_check <- check_columns(raw_file, skip = 10)
+#' head(col_check)
 #'
 #' @export
 check_columns <- function(file, skip, ...) {
@@ -28,7 +29,7 @@ check_columns <- function(file, skip, ...) {
 #' @examples
 #' raw_file <-
 #'     system.file("extdata",
-#'     "TestID_LeftWrist_RAW.csv",
+#'     "exampleRAW.csv",
 #'     package = "AGread")
 #'
 #' get_raw_file_meta(raw_file)
@@ -143,7 +144,8 @@ ag_raw_format <- function(
 #'
 #' @examples
 #' data(raw_to_collapse)
-#' AG_collapse(raw_to_collapse, 1, 80)
+#' collapsed <- AG_collapse(raw_to_collapse, 1, 80)
+#' head(collapsed)
 #'
 #' @export
 AG_collapse <- function(AG, output_window_secs = 1, samp_freq,

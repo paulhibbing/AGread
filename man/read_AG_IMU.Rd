@@ -38,6 +38,7 @@ imu_file <- system.file(
   package = "AGread"
 )
 
-read_AG_IMU(imu_file)
+AG_IMU <- read_AG_IMU(imu_file)
+head(AG_IMU)
 
 }

@@ -24,7 +24,8 @@
 #' file_3x <- system.file(
 #'   "extdata", "example.gt3x", package = "AGread"
 #' )
-#' read_gt3x(file_3x)
+#' AG_3x <- read_gt3x(file_3x)
+#' head(lapply(AG_3x, head))
 #' }
 #'
 read_gt3x <- function(

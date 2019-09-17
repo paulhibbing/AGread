@@ -17,7 +17,8 @@
 #'   package = "AGread"
 #' )
 #'
-#' read_AG_IMU(imu_file)
+#' AG_IMU <- read_AG_IMU(imu_file)
+#' head(AG_IMU)
 #'
 #' @export
 read_AG_IMU <- function(

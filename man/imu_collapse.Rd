@@ -21,6 +21,7 @@ Collapse raw IMU data to a specified epoch
 }
 \examples{
 data(imu_to_collapse)
-imu_collapse(imu_to_collapse, 100)
+collapsed <- imu_collapse(imu_to_collapse, 100)
+head(collapsed)
 
 }

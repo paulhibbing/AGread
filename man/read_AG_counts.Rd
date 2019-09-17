@@ -29,7 +29,7 @@ A data frame reflecting the data contained in the csv file
 Read data table files containing count values
 }
 \examples{
-read_AG_counts(
+AG_counts <- read_AG_counts(
   system.file(
     "extdata",
     "example1sec.csv",
@@ -37,5 +37,6 @@ read_AG_counts(
   ),
   skip = 11
 )
+head(AG_counts)
 
 }

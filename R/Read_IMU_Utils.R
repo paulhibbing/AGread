@@ -4,7 +4,8 @@
 #'
 #' @examples
 #' data(imu_to_check)
-#' check_second(imu_to_check)
+#' sec_check <- check_second(imu_to_check)
+#' head(sec_check)
 #'
 #' @export
 check_second <- function(AG) {
@@ -89,7 +90,8 @@ get_imu_file_meta <- function(file, output_window_secs = 1) {
 #'
 #' @examples
 #' data(imu_to_collapse)
-#' imu_collapse(imu_to_collapse, 100)
+#' collapsed <- imu_collapse(imu_to_collapse, 100)
+#' head(collapsed)
 #'
 #' @export
 imu_collapse <- function(AG, block_size, verbose = FALSE) {
