@@ -28,23 +28,23 @@ testthat::test_that(
         file_RAW
       )[ ,-c(1:2)]
 
-      test3 <- read_AG_raw(
+      test3 <- suppressMessages(read_AG_raw(
         file_RAW,output_window_secs = 5
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
-      test4 <- read_AG_IMU(
+      test4 <- suppressMessages(read_AG_IMU(
         file_IMU, filter = FALSE,
         return_raw = TRUE
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
-      test5 <- read_AG_IMU(
+      test5 <- suppressMessages(read_AG_IMU(
         file_IMU
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
-      test6 <- read_AG_IMU(
+      test6 <- suppressMessages(read_AG_IMU(
         file_IMU,
         output_window_secs = 5
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
     ## Test 1: gt3x_raw equivalent to read_raw? ####
       # (Tolerance in milli-G's)
@@ -54,9 +54,9 @@ testthat::test_that(
       accel_vars <- names(AG)[grepl("Accelerometer", names(AG))]
 
       testthat::expect_true(
-        all(
-          PAutilities::test_errors(AG, test1, accel_vars)
-        )
+        all(PAutilities::test_errors(
+          AG, test1, accel_vars
+        ))
       )
 
       testthat::expect_equal(
@@ -68,7 +68,9 @@ testthat::test_that(
        # (Tolerance in milli-G's)
 
       AG <- reference_3x$RAW
-      AG <- collapse_gt3x(AG)[ ,-c(1:2)]
+      AG <- suppressMessages(
+        collapse_gt3x(AG)[ ,-c(1:2)]
+      )
 
       testthat::expect_true(
         all(
@@ -90,9 +92,9 @@ testthat::test_that(
       # (Tolerance in milli-G's)
 
       AG <- reference_3x$RAW
-      AG <- collapse_gt3x(
+      AG <- suppressMessages(collapse_gt3x(
         AG, output_window_secs = 5
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
       testthat::expect_true(
         all(
@@ -115,66 +117,43 @@ testthat::test_that(
       AG <- reference_3x$IMU
       test4 <- test4[ ,names(AG)]
       class(AG) <- class(test4)
-      gyro_names <- names(AG)[
-        grepl("Gyroscope", names(AG))
-      ]
 
       testthat::expect_true(
         all(
           PAutilities::test_errors(
-            AG, test4, gyro_names,
-            tolerance = 0.5
+            AG, test4,
+            setdiff(names(AG), "Timestamp"),
+            0.0005
           )
         )
       )
 
       testthat::expect_equal(
-        AG[ ,gyro_names], test4[ ,gyro_names],
-        tolerance = 0.05, scale = 1
+        AG, test4, tolerance = 0.0005,
+        scale = 1
       )
-      ## ^^ Tolerance here is acceptable for degrees per second,
-      ## but not other variables (see below)
-
-      other_vars <- setdiff(names(AG), gyro_names)
-      testthat::expect_equal(
-        AG[ ,other_vars], test4[ ,other_vars],
-        tolerance = 0.001, scale = 1
-      )
-      ## ^^ Lower tolerance here because it's raw values
-      ## (e.g. raw G's) rather than scaled (e.g. ENMO
-      ## in milli-G's)
 
     ## Test 5: gt3x_imu equivalent to read_imu, 1-s epochs? ####
 
       AG <- reference_3x$IMU
       AG <- collapse_gt3x(AG)[ ,-c(1:2)]
 
-      gyro_names <- grepl("Gyroscope", names(AG))
-
       testthat::expect_equal(
-        AG[ ,!gyro_names], test5[ ,!gyro_names],
-        tolerance = 0.05, scale = 1
-      )
-      testthat::expect_equal(
-        AG[ ,!gyro_names], test5[ ,!gyro_names],
-        tolerance = 0.001, scale = 1
+        AG, test5, tolerance = 0.0005,
+        scale = 1
       )
 
     ## Test 6: gt3x_imu equivalent to read_imu, 5-s epochs? ####
       # (Same tolerance notes as previous section)
 
       AG <- reference_3x$IMU
-      AG <- collapse_gt3x(
+      AG <- suppressMessages(collapse_gt3x(
         AG, output_window_secs = 5
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
       testthat::expect_equal(
-        AG[ ,gyro_names], test6[ ,gyro_names],
-        tolerance = 0.05, scale = 1
-      )
-      testthat::expect_equal(
-        AG[ ,!gyro_names], test6[ ,!gyro_names],
-        tolerance = 0.001, scale = 1
+        AG, test6, tolerance = 0.00005,
+        scale = 1
       )
 
   }

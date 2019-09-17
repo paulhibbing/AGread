@@ -10,7 +10,7 @@ NumericVector zero2one(NumericVector samples) {
   double length_out = samples.size();
   double by = 1/(length_out - 1);
   NumericVector result = 0;
-  for (int i= 0; i < length_out; i++) {
+  for (int i= 0; i < length_out; ++i) {
     double new_result = i * by;
     result.push_back(new_result);
   }
@@ -34,7 +34,7 @@ int interval_match(
   while ((proportion <= references[index]) & (index >= 0)) {
     index--;
   }
-  if (index < 0) index++;
+  if (index < 0) ++index;
   return index;
 }
 
@@ -55,12 +55,12 @@ NumericVector interpolate_C(
   // Interpolation information
 
     NumericVector prop_min(0);
-    for (int i=0; i < (intervals.size() - 1); i++) {
+    for (int i=0; i < (intervals.size() - 1); ++i) {
       prop_min.push_back(intervals[i]);
     }
 
     NumericVector start(0);
-    for (int i=0; i < (original_samples.size() - 1); i++) {
+    for (int i=0; i < (original_samples.size() - 1); ++i) {
       start.push_back(original_samples[i]);
     }
 
@@ -71,13 +71,13 @@ NumericVector interpolate_C(
   // New Data
 
     NumericVector proportion(0);
-    for (double i = 0; i < target_frequency; i++) {
+    for (double i = 0; i < target_frequency; ++i) {
       double new_result = i / target_frequency;
       proportion.push_back(new_result);
     }
 
     IntegerVector index(0);
-    for (int i = 0; i < proportion.size(); i++) {
+    for (int i = 0; i < proportion.size(); ++i) {
       int new_index = interval_match(
         proportion[i], prop_min
       );
@@ -85,7 +85,7 @@ NumericVector interpolate_C(
     }
 
     NumericVector window_fraction(0);
-    for (int i = 0; i < index.size(); i++) {
+    for (int i = 0; i < index.size(); ++i) {
       int j = index[i];
       double new_fraction = (proportion[i] - prop_min[j])/run[j];
       window_fraction.push_back(new_fraction);
@@ -99,7 +99,7 @@ NumericVector interpolate_C(
     }
 
     NumericVector final_values(0);
-    for (int i = 0; i < window_fraction.size(); i++) {
+    for (int i = 0; i < window_fraction.size(); ++i) {
       int j = index[i];
       double new_value =  start[j] + (
         rise[j] * window_fraction[i]

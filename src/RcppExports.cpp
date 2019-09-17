@@ -105,14 +105,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // interpolate_IMU
-NumericVector interpolate_IMU(NumericVector samples, int target_freq);
-RcppExport SEXP _AGread_interpolate_IMU(SEXP samplesSEXP, SEXP target_freqSEXP) {
+NumericVector interpolate_IMU(NumericVector original_samples, int target_frequency);
+RcppExport SEXP _AGread_interpolate_IMU(SEXP original_samplesSEXP, SEXP target_frequencySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type samples(samplesSEXP);
-    Rcpp::traits::input_parameter< int >::type target_freq(target_freqSEXP);
-    rcpp_result_gen = Rcpp::wrap(interpolate_IMU(samples, target_freq));
+    Rcpp::traits::input_parameter< NumericVector >::type original_samples(original_samplesSEXP);
+    Rcpp::traits::input_parameter< int >::type target_frequency(target_frequencySEXP);
+    rcpp_result_gen = Rcpp::wrap(interpolate_IMU(original_samples, target_frequency));
     return rcpp_result_gen;
 END_RCPP
 }

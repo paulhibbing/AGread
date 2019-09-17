@@ -32,7 +32,7 @@ void check_id(RawVector x, int id) {
 // [[Rcpp::export]]
 DataFrame imu_df(List input){
 
-  for (int i = 0; i < input.length(); i++) {
+  for (int i = 0; i < input.length(); ++i) {
     NumericVector test = input[i];
     if(test.size() == 0) input.erase(i);
   }
@@ -77,7 +77,7 @@ DataFrame payload_parse_sensor_data_25C(
 
   // Identify the length of each total record
   int record_offset = 0;
-  for (int i = 0; i < col_sizes.length(); i++) {
+  for (int i = 0; i < col_sizes.length(); ++i) {
     record_offset += col_sizes[i];
   }
 
@@ -92,7 +92,7 @@ DataFrame payload_parse_sensor_data_25C(
   );
 
   // Loop over the columns and calculate the values
-  for (int i = 0; i < n_cols; i++) {
+  for (int i = 0; i < n_cols; ++i) {
 
     IntegerVector values = int(0); // initialize a vector
 
@@ -105,7 +105,7 @@ DataFrame payload_parse_sensor_data_25C(
     int offset = offsets[i] + 2;
 
     // Go row by row
-    for (int j = 0; j < n_samples; j++) {
+    for (int j = 0; j < n_samples; ++j) {
 
       int i1 = offset + (j * record_offset);
       int i2 = i1 + 1;
@@ -135,14 +135,14 @@ DataFrame payload_parse_sensor_data_25C(
 
     bool scale_zero = scale == 0;
     if (!scale_zero) {
-      for (int i = 0; i < values.length(); i++) {
+      for (int i = 0; i < values.length(); ++i) {
         double new_value = values[i] / scale;
         scaled_values.push_back(new_value);
       }
       NumericVector temp_interp = interpolate_IMU(
         scaled_values, samp_rate
       );
-      for (int i = 0; i < temp_interp.length(); i++) {
+      for (int i = 0; i < temp_interp.length(); ++i) {
         interp_values.push_back(temp_interp[i]);
       }
     } else {

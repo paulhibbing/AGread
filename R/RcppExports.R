@@ -80,14 +80,11 @@ interpolate_C <- function(original_samples, target_frequency) {
     .Call('_AGread_interpolate_C', PACKAGE = 'AGread', original_samples, target_frequency)
 }
 
-#' Interpolate an IMU sensor column to the expected sampling frequency
-#'
-#' @param samples NumericVector. The original stream of sensor samples
-#' @param target_freq integer. The sampling frequency, in Hz
-#'
+#' @rdname sensor_resample
+#' @aliases Resample Interpolate
 #' @keywords internal
-interpolate_IMU <- function(samples, target_freq) {
-    .Call('_AGread_interpolate_IMU', PACKAGE = 'AGread', samples, target_freq)
+interpolate_IMU <- function(original_samples, target_frequency) {
+    .Call('_AGread_interpolate_IMU', PACKAGE = 'AGread', original_samples, target_frequency)
 }
 
 #' Check sensor payload ID prior to parsing the packet

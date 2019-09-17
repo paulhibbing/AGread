@@ -12,10 +12,12 @@
 #' @param method character. Resampling method to apply. Currently accepts only
 #'   \code{interpolate}.
 #'
-#' @details Currently, resampling is supported via linear interpolation. Two
-#'   methods are supported, i.e., an R based version
-#'   (\code{method="interpolate_R"}) and a C++ based version
-#'   (\code{method="interpolate_C"}). The latter is used by default.
+#' @details Currently, resampling is supported via linear interpolation and a
+#'   distance-based approach. Two linear methods are supported, i.e., an R based
+#'   version (\code{method="interpolate_R"}) and a C++ based version
+#'   (\code{method="interpolate_C"}). The latter is used by default. The
+#'   distance-based approach is used for resampling/interpolating SENSOR_DATA
+#'   packets (i.e., IMU data).
 #'
 #' @return An appropriately up/down-sampled data stream (numeric vector)
 #' @export
@@ -24,18 +26,23 @@
 #' set.seed(14)
 #' target_frequency <- 100
 #'
-#' ## Downsample
+#' ## Downsample linear
 #'    original_samples <- sample(
 #'      seq(1.3,2.4,0.12), 101, replace = TRUE
 #'    )
 #'    sensor_resample(original_samples, target_frequency)
 #'
-#' ## Upsample
+#' ## Upsample linear
 #'    original_samples <- original_samples[1:99]
 #'    sensor_resample(original_samples, target_frequency)
+#'
+#' ## Upsample IMU
+#'    sensor_resample(
+#'      original_samples, target_frequency, "IMU"
+#'    )
 sensor_resample <- function(
   original_samples, target_frequency,
-  method = c("interpolate_C", "interpolate_R")
+  method = c("linear_C", "linear_R", "IMU")
 ) {
 
   if (length(original_samples) == target_frequency) {
@@ -46,10 +53,13 @@ sensor_resample <- function(
 
   switch(
     method,
-    "interpolate_R" = interpolate_R(
+    "linear_R" = interpolate_R(
       original_samples, target_frequency
     ),
-    "interpolate_C" = interpolate_C(
+    "linear_C" = interpolate_C(
+      original_samples, target_frequency
+    ),
+    "IMU" = interpolate_IMU(
       original_samples, target_frequency
     )
   )

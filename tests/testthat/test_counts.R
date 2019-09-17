@@ -1,4 +1,4 @@
-context("RAW data processing")
+context("Count data processing")
 library(AGread)
 
 ## MANUAL LEGACY TEST (verified 2/14/19)

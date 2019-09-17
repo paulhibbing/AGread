@@ -4,6 +4,9 @@
 \alias{interpolate_C}
 \alias{Resample}
 \alias{Interpolate}
+\alias{interpolate_IMU}
+\alias{Resample}
+\alias{Interpolate}
 \alias{sensor_resample}
 \alias{Resample}
 \alias{Interpolate}
@@ -14,8 +17,10 @@
 \usage{
 interpolate_C(original_samples, target_frequency)
 
-sensor_resample(original_samples, target_frequency,
-  method = c("interpolate_C", "interpolate_R"))
+interpolate_IMU(original_samples, target_frequency)
+
+sensor_resample(original_samples, target_frequency, method = c("linear_C",
+  "linear_R", "IMU"))
 
 interpolate_R(original_samples, target_frequency)
 }
@@ -36,23 +41,30 @@ more or fewer times than expected over the time interval. However, this
 function may have more far-reaching applications.
 }
 \details{
-Currently, resampling is supported via linear interpolation. Two
-  methods are supported, i.e., an R based version
-  (\code{method="interpolate_R"}) and a C++ based version
-  (\code{method="interpolate_C"}). The latter is used by default.
+Currently, resampling is supported via linear interpolation and a
+  distance-based approach. Two linear methods are supported, i.e., an R based
+  version (\code{method="interpolate_R"}) and a C++ based version
+  (\code{method="interpolate_C"}). The latter is used by default. The
+  distance-based approach is used for resampling/interpolating SENSOR_DATA
+  packets (i.e., IMU data).
 }
 \examples{
 set.seed(14)
 target_frequency <- 100
 
-## Downsample
+## Downsample linear
    original_samples <- sample(
      seq(1.3,2.4,0.12), 101, replace = TRUE
    )
    sensor_resample(original_samples, target_frequency)
 
-## Upsample
+## Upsample linear
    original_samples <- original_samples[1:99]
    sensor_resample(original_samples, target_frequency)
+
+## Upsample IMU
+   sensor_resample(
+     original_samples, target_frequency, "IMU"
+   )
 }
 \keyword{internal}
