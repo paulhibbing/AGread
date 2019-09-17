@@ -16,11 +16,10 @@
   * Incorporated Rcpp to speed up `read_gt3x`
   * Deprecated `get_duration` in favor of the equivalent
     function in PAutilities
-  * Revised unit tests to ensure equivalence between variuos
+  * Revised unit tests to ensure equivalence between various
     reading methods (csv output vs gt3x output etc.)
   * Updated example data
-  * Implemented sensor resampling via interpolation
-  
+
 # AGread 0.2.2
 ## Summary
     This is a second resubmission of version 0.2.0

@@ -27,14 +27,10 @@ other R packages
 and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
 or will soon.
 
-New in AGread 1.0.0 (under development), `Rcpp` has been invoked to
-speed up the process of reading `.gt3x` files. There is still some
-trouble with the comparability of parsed SENSOR\_DATA packet values and
-the `*-IMU.csv` output from ActiLife. That is, IMU values are usually
-equivalent whether read from `.gt3x` or `*-IMU.csv`, but for \~2-3% of
-values there are puzzling differences. Thus, the binary file reading
-function of AGread should still be considered “under development”, but
-is safe to use for primary accelerometer data (i.e., ACTIVITY2 packets).
+New in AGread 1.0.0, `Rcpp` has been invoked to speed up the process of
+reading `.gt3x` files. There is now documented equivalence between the
+outcomes of `read_gt3x` and csv reading functions `read_AG__raw` and
+`read_AG_IMU`.
 
 ## Installation
 
@@ -49,8 +45,7 @@ Windows users, make sure you have
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed
 before running the above.
 
-Alternatively, AGread v0.2.2 is available on CRAN. It does not use Rcpp,
-and thus can be slow for binary reading. Install it with:
+Alternatively, AGread v1.0.0 is available on CRAN. Install it with:
 
 ``` r
 install.packages("AGread")
