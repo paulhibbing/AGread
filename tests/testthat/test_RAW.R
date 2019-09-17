@@ -14,21 +14,21 @@ library(AGread)
 testthat::test_that("File reading produces expected output", {
 
   testthat::expect_equal_to_reference(
-    read_AG_raw(
+    suppressMessages(read_AG_raw(
       system.file(
         "extdata", "exampleRAW.csv", package = "AGread"
       )
-    )[ ,-2],
+    )[ ,-2]),
     "RAW_read_cache_1.rds"
   )
 
   testthat::expect_equal_to_reference(
-    read_AG_raw(
+    suppressMessages(read_AG_raw(
       system.file(
         "extdata", "exampleRAW.csv", package = "AGread"
       ),
       5
-    )[ ,-2],
+    )[ ,-2]),
     "RAW_read_cache_5.rds"
   )
 

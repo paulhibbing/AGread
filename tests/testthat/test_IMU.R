@@ -24,12 +24,12 @@ testthat::test_that("File reading produces expected output", {
   )
 
   testthat::expect_equal_to_reference(
-    read_AG_IMU(
+    suppressMessages(read_AG_IMU(
       system.file(
         "extdata", "example-IMU.csv", package = "AGread"
       ), 5,
       output_vars = c("gyroscope", "magnetometer")
-    )[ ,-2],
+    )[ ,-2]),
     "IMU_read_cache_5.rds"
   )
 

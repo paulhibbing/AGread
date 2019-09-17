@@ -24,9 +24,9 @@ testthat::test_that(
         file_RAW, return_raw = TRUE
       )[ ,-c(1:2)]
 
-      test2 <- read_AG_raw(
+      test2 <- suppressMessages(read_AG_raw(
         file_RAW
-      )[ ,-c(1:2)]
+      )[ ,-c(1:2)])
 
       test3 <- suppressMessages(read_AG_raw(
         file_RAW,output_window_secs = 5
@@ -49,7 +49,7 @@ testthat::test_that(
     ## Test 1: gt3x_raw equivalent to read_raw? ####
       # (Tolerance in milli-G's)
 
-      AG <- reference_3x$RAW
+      AG <- reference_3x$RAW[seq(nrow(test1)), ]
       class(AG) <- class(test1)
       accel_vars <- names(AG)[grepl("Accelerometer", names(AG))]
 
@@ -61,7 +61,7 @@ testthat::test_that(
 
       testthat::expect_equal(
         AG, test1,
-        tolerance = 0.001, scale = 1
+        tolerance = 0.0015, scale = 1
       )
 
     ## Test 2: gt3x_raw equivalent to read_raw, 1-s epochs? ####
@@ -69,7 +69,7 @@ testthat::test_that(
 
       AG <- reference_3x$RAW
       AG <- suppressMessages(
-        collapse_gt3x(AG)[ ,-c(1:2)]
+        collapse_gt3x(AG)[seq(nrow(test2)), -c(1:2)]
       )
 
       testthat::expect_true(
@@ -94,7 +94,7 @@ testthat::test_that(
       AG <- reference_3x$RAW
       AG <- suppressMessages(collapse_gt3x(
         AG, output_window_secs = 5
-      )[ ,-c(1:2)])
+      )[seq(nrow(test3)), -c(1:2)])
 
       testthat::expect_true(
         all(
@@ -114,7 +114,7 @@ testthat::test_that(
 
     ## Test 4: gt3x_imu equivalent to read_imu? ####
 
-      AG <- reference_3x$IMU
+      AG <- reference_3x$IMU[seq(nrow(test4)), ]
       test4 <- test4[ ,names(AG)]
       class(AG) <- class(test4)
 
@@ -136,7 +136,7 @@ testthat::test_that(
     ## Test 5: gt3x_imu equivalent to read_imu, 1-s epochs? ####
 
       AG <- reference_3x$IMU
-      AG <- collapse_gt3x(AG)[ ,-c(1:2)]
+      AG <- collapse_gt3x(AG)[seq(nrow(test5)),-c(1:2)]
 
       testthat::expect_equal(
         AG, test5, tolerance = 0.0005,
@@ -149,7 +149,7 @@ testthat::test_that(
       AG <- reference_3x$IMU
       AG <- suppressMessages(collapse_gt3x(
         AG, output_window_secs = 5
-      )[ ,-c(1:2)])
+      )[seq(nrow(test6)),-c(1:2)])
 
       testthat::expect_equal(
         AG, test6, tolerance = 0.00005,
