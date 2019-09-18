@@ -9,7 +9,19 @@ This is a major version increment reflecting incorporation of
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs, WARNINGs, or NOTEs.
+There were no ERRORs or WARNINGs. There were 2 NOTEs.
+
+  ** running examples for arch 'i386' ... NOTE
+  Examples with CPU or elapsed time > 5s
+         user system elapsed
+  AGread 4.86    0.7   10.77
+  
+  ** running examples for arch 'x64' ... NOTE
+  Examples with CPU or elapsed time > 5s
+         user system elapsed
+  AGread 5.94   0.55    7.81
+  
+The affected examples are wrapped in \donttest{}.
 
 ## Reverse dependencies
 revdep_check indicates no problems for `Observation` or `Sojourn`.

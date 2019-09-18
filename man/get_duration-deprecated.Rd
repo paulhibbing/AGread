@@ -17,7 +17,7 @@ timer <- proc.time()
 Sys.sleep(2.2)
 \donttest{
   # Gives warning about deprecation
-  get_duration(timer)
+  # get_duration(timer)
 
   # Instead use
   PAutilities::get_duration(timer)

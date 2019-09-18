@@ -7,7 +7,6 @@
 #' @keywords internal
 NULL
 
-
 #' @rdname AGread-deprecated
 #' @section \code{get_duration}:
 #' For \code{get_duration}, use \code{PAutilities::get_duration}

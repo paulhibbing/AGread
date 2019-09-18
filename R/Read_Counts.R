@@ -150,7 +150,9 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
       }
       names(AG) <- variables
       AG <- AG_time(AG, meta)
-      if (verbose) message_update(16, dur = get_duration(timer))
+      if (verbose) message_update(
+        16, dur = PAutilities::get_duration(timer)
+      )
       return(AG)
     }
 
@@ -161,7 +163,7 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
       }
       names(AG) <- mode_vars
       AG <- AG_time(AG, meta)
-      if (verbose) message_update(16, dur = get_duration(timer))
+      if (verbose) message_update(16, dur = PAutilities::get_duration(timer))
       return(AG)
     }
 
@@ -171,7 +173,9 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
       message_update(3)
     }
     AG <- AG_time(AG, meta)
-    if (verbose) message_update(16, dur = get_duration(timer))
+    if (verbose) message_update(
+      16, dur = PAutilities::get_duration(timer)
+    )
     return(AG)
   } else {
     if (verbose) message_update(6)
@@ -306,7 +310,6 @@ check_inc <- function(AG, verbose = FALSE) {
   return(AG)
 }
 
-
 #' Provide the run time of processing
 #'
 #' @param timer a proc_time object giving the initial time
@@ -316,7 +319,7 @@ check_inc <- function(AG, verbose = FALSE) {
 #' Sys.sleep(2.2)
 #' \donttest{
 #'   # Gives warning about deprecation
-#'   get_duration(timer)
+#'   # get_duration(timer)
 #'
 #'   # Instead use
 #'   PAutilities::get_duration(timer)
