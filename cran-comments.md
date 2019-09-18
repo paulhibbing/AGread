@@ -13,5 +13,6 @@ There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Reverse dependencies
 revdep_check indicates no problems for `Observation` or `Sojourn`.
-    The latter has one NOTE that AGread is imported but not used,
-    which I will fix on next submission (I am the maintainer).
+    The latter has one NOTE that AGread (and caret) is imported
+    but not used, which I will fix on next submission (I am the
+    maintainer).
