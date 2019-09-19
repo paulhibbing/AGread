@@ -44,14 +44,10 @@ parse_packet_set.ACTIVITY2 <- function(
     "                         "
   )
 
-    accel_names <- paste(
-      "Accelerometer", c("X", "Y", "Z"), sep = "_"
-    )
+    stopifnot(all(.accel_names %in% names(RAW)))
 
-    stopifnot(all(accel_names %in% names(RAW)))
-
-    RAW[ ,accel_names] <- sapply(
-      RAW[ ,accel_names], round, digits = 3
+    RAW[ ,.accel_names] <- sapply(
+      RAW[ ,.accel_names], round, digits = 3
     )
 
   if (verbose) cat(

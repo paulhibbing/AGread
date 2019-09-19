@@ -33,8 +33,7 @@ check_gaps.RAW <- function(object, info, ...) {
 
     expected_times <- seq(start_time, stop_time, "1 sec")
 
-  ## Identify missing timestamps, and (in the original object)
-  ## construct NA representation for each one
+  ## Check whether any timestamps are missing at all
 
     missing_times <- setdiff(
       as.character(expected_times),
@@ -46,36 +45,38 @@ check_gaps.RAW <- function(object, info, ...) {
       return(object)
     }
 
-    missing_times <- as.POSIXct(missing_times, tz)
+  ## Identify timestamps that are missing from the end of the file, and
+  ## construct 0 representation for each one
 
-    milliseconds <- seq(info$Sample_Rate) - 1
-    milliseconds <- milliseconds / info$Sample_Rate
+    tail_entries <- NULL
 
-    missing_entries <- sapply(
-      missing_times, function(x) {
-        data.frame(
-          Timestamp = x + milliseconds,
-          Accelerometer_X = NA,
-          Accelerometer_Y = NA,
-          Accelerometer_Z = NA
-        )
-      },
-      simplify = FALSE
+    tail_times <- seq(
+      lubridate::floor_date(
+        object$Timestamp[nrow(object)] + 1,
+        "second"
+      ),
+      stop_time, by = "1 sec"
     )
 
-    missing_entries <- do.call(rbind, missing_entries)
+    if (length(tail_times) > 1) {
+      tail_entries <- empty_raw(tail_times, 0, info)
+    }
 
-    object <- rbind(object, missing_entries) %>%
+  ## Identify other missing timestamps, and (in the original object)
+  ## construct NA representation for each one
+
+    missing_times <- setdiff(missing_times, as.character(tail_times))
+    missing_times <- as.POSIXct(missing_times, tz)
+    missing_entries <- empty_raw(missing_times, NA, info)
+
+  ## Initialize the complete object
+    object <- rbind(object, missing_entries, tail_entries) %>%
       {.[order(.$Timestamp), ]}
 
   ## Populate values for the missing entries via latch or zero insertion
 
-    accel_names <- paste(
-      "Accelerometer", c("X","Y","Z"), sep = "_"
-    )
-
     missing_check <- apply(
-      object[ ,accel_names], 1, function(x) all(is.na(x))
+      object[ ,.accel_names], 1, function(x) all(is.na(x))
     )
 
     gaps <- do.call(data.frame, rle(missing_check))
@@ -94,17 +95,11 @@ check_gaps.RAW <- function(object, info, ...) {
 
       gap_indices <- gaps$start_index[i]:gaps$end_index[i]
 
-      object[gap_indices, accel_names] <- 0
-
-      latch_indices <- (
-        gaps$start_index[i] + seq(info$Sample_Rate) - 1
-      )
-
       latch_values <- object[
-        gaps$start_index[i]-1, accel_names
+        gaps$start_index[i]-1, .accel_names
       ]
 
-      object[latch_indices, accel_names] <- latch_values
+      object[gap_indices, accel_names] <- latch_values
 
     }
 

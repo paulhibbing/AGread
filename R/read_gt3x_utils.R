@@ -1,3 +1,35 @@
+#' Variable names for RAW objects
+#' @keywords internal
+.accel_names <- c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
+
+#' Construct missing packet entries for ACTIVITY2 (RAW) data
+#'
+#' @param timestamps the packet timestamps
+#' @param empty_value the value to assign missing accelerometer entries
+#' @param info output of \code{\link{parse_info_txt}}
+#'
+#' @keywords internal
+empty_raw <- function(timestamps, empty_value, info) {
+
+  milliseconds <- seq(info$Sample_Rate) - 1
+  milliseconds <- milliseconds / info$Sample_Rate
+
+  missing_times <- sapply(
+    timestamps, function(x) x + milliseconds,
+    simplify = FALSE
+  ) %>% {do.call(c, .)}
+
+  missing_entries <- data.frame(
+    Timestamp = missing_times,
+    Accelerometer_X = empty_value,
+    Accelerometer_Y = empty_value,
+    Accelerometer_Z = empty_value
+  )
+
+  missing_entries
+
+}
+
 #' Convert a tick value to a timestamp
 #'
 #' @param x the tick value
