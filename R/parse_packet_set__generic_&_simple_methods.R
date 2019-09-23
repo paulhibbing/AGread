@@ -87,31 +87,3 @@ parse_packet_set.BATTERY <- function(
   collapse_packet_set(set, results)
 
 }
-
-#' @rdname parse_packet_set
-#' @export
-parse_packet_set.EVENT <- function(
-  set, log, tz = "UTC", verbose = FALSE,
-  ...
-) {
-
-  results <- lapply(
-    split(set, seq(nrow(set))),
-    setup_payload,
-    log = log
-  ) %>%
-  {lapply(., function(x) data.frame(
-    raw_chars = rawToChar(x),
-    description = paste(
-      "ActiGraph internal use.",
-      "No further documentation."
-    ),
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  ))}
-
-  if (verbose) packet_print("cleanup", class(set)[1])
-
-  collapse_packet_set(set, results)
-
-}
