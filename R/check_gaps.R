@@ -31,8 +31,7 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
 
     object <- trailing_zeroes(object, tz, info)
 
-  ## Fill in values for any leftover missing cases using the
-  ## latch-one-then-fill-zeroes approach
+  ## Fill in latched values for any leftover cases
 
     missing_times <- get_missing_times(object, tz, info)
     if (!length(missing_times)) return(
@@ -44,32 +43,20 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
 
     runs <- cumsum(c(1, diff(missing_times)!=1))
 
-    missing_runs <- data.frame(
-      Timestamp = missing_times,
-      latch_index = get_latch_index(
-        missing_times, object$Timestamp, tz
-      ),
-      row.names = NULL
-    )
-
     missing_entries <- lapply(
-      split(missing_runs, runs),
+      split(missing_times, runs),
       function(x) {
 
-        latch_value <- empty_raw(
-          x$Timestamp[1],
+        latch_index <- get_latch_index(
+          x[1], object$Timestamp, tz
+        )
+
+        empty_raw(
+          x,
           info = info,
           empty_frame = object[
-            x$latch_index[1], .accel_names
+            latch_index, .accel_names
           ]
-        )
-
-        zero_values <- empty_raw(
-          x$Timestamp[-1], 0, info
-        )
-
-        data.table::rbindlist(
-          list(latch_value, zero_values)
         )
 
       }
