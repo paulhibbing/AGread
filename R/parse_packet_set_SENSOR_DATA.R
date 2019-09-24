@@ -69,8 +69,6 @@ parse_packet_set.SENSOR_DATA <- function(
       row.names = NULL
     )
 
-    if ("Discard" %in% names(IMU)) IMU$Discard <- NULL
-
     class(IMU) <- append(class(IMU), "IMU", 0)
 
   if ("Temperature" %in% names(IMU)) {

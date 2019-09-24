@@ -34,7 +34,7 @@ DataFrame imu_df(List input){
 
   for (int i = 0; i < input.length(); ++i) {
     NumericVector test = input[i];
-    if(test.size() == 0) input.erase(i);
+    if(test.size() <= 1) input.erase(i);
   }
 
   CharacterVector frame_names = input.names();
@@ -127,8 +127,6 @@ DataFrame payload_parse_sensor_data_25C(
       values.push_back(new_value);
 
     }
-
-    //values.erase(0);
 
     NumericVector scaled_values(0);
     NumericVector interp_values(0);
