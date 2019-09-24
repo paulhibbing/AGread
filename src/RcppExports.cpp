@@ -30,6 +30,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mid_round
+double mid_round(double input, int digits);
+RcppExport SEXP _AGread_mid_round(SEXP inputSEXP, SEXP digitsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< int >::type digits(digitsSEXP);
+    rcpp_result_gen = Rcpp::wrap(mid_round(input, digits));
+    return rcpp_result_gen;
+END_RCPP
+}
 // print_progC
 void print_progC(int n, const char* label);
 RcppExport SEXP _AGread_print_progC(SEXP nSEXP, SEXP labelSEXP) {
@@ -185,6 +197,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 1},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
+    {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
     {"_AGread_parse_IMU_C", (DL_FUNC) &_AGread_parse_IMU_C, 6},

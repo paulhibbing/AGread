@@ -42,17 +42,6 @@ parse_packet_set.ACTIVITY2 <- function(
     class(RAW) <- append(class(RAW), "RAW", 0)
 
   if (verbose) cat(
-    "\r  Rounding accelerations",
-    "                         "
-  )
-
-    stopifnot(all(.accel_names %in% names(RAW)))
-
-    RAW[ ,.accel_names] <- sapply(
-      RAW[ ,.accel_names], round, digits = 3
-    )
-
-  if (verbose) cat(
     "\r  Checking for gaps in the",
     "time series. Fixing if found."
   )

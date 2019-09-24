@@ -37,8 +37,8 @@ parse_packet_set.SENSOR_SCHEMA <- function(
     columnSize <- payload[startingOffset + 2]
     value <- payload[startingOffset + 3:6]
 
-    columnScaleFactor <- AG_round(
-      get_float_value(value)
+    columnScaleFactor <- mid_round(
+      get_float_value(value), 6
     )
 
     columnLabel <- rawToChar(payload[startingOffset + 7:22])

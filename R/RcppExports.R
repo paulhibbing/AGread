@@ -17,6 +17,19 @@ get_short <- function(x, i1, i2, is_signed) {
     .Call('_AGread_get_short', PACKAGE = 'AGread', x, i1, i2, is_signed)
 }
 
+#' Perform midpoint rounding the ActiGraph way
+#'
+#' This function is inefficient but necessary to ensure alignment between
+#' \code{\link{read_gt3x}} and \code{\link{read_AG_raw}}
+#'
+#' @param input double. The number to round
+#' @param digits int. The number of digits to round to
+#'
+#' @keywords internal
+mid_round <- function(input, digits) {
+    .Call('_AGread_mid_round', PACKAGE = 'AGread', input, digits)
+}
+
 #' Print progress updates while parsing packets in C++
 #'
 #' @param n percentage progress

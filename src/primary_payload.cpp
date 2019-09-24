@@ -68,7 +68,9 @@ DataFrame payload_parse_activity2_26C(
   for (int i = 0; i < (payload.size() - 1); i += 2) {
     int int_result = get_short(payload, i + 1, i, is_signed);
     double dub_result(int_result);
-    double scaled_result = dub_result / scale_factor;
+    double scaled_result = mid_round(
+      dub_result / scale_factor, 3
+    );
     int col = i % 3;
     if (col == 0) {
       accel_x.push_back(scaled_result);

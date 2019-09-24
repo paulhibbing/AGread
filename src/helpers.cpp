@@ -22,6 +22,46 @@ int get_short(RawVector x, int i1, int i2, bool is_signed) {
   }
 }
 
+//' Perform midpoint rounding the ActiGraph way
+//'
+//' This function is inefficient but necessary to ensure alignment between
+//' \code{\link{read_gt3x}} and \code{\link{read_AG_raw}}
+//'
+//' @param input double. The number to round
+//' @param digits int. The number of digits to round to
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+double mid_round(double input, int digits) {
+
+  if (input == 0) return 0;
+
+  int power = pow(10, digits + 1);
+  double high_number = input * power;
+  double remainder = int(high_number) % 10;
+
+  bool mid_test = abs(remainder) < 5;
+
+  if (input > 0) {
+    if (mid_test) {
+      return floor(high_number / 10) / (power / 10);
+    } else {
+      return ceil(high_number / 10) / (power / 10);
+    }
+  }
+
+  if (input < 0) {
+    if (mid_test) {
+      return ceil(high_number / 10) / (power / 10);
+    } else {
+      return floor(high_number / 10) / (power / 10);
+    }
+  }
+
+  return NA_REAL;
+
+}
+
 //' Print progress updates while parsing packets in C++
 //'
 //' @param n percentage progress

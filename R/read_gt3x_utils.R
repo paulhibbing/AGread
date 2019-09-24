@@ -75,25 +75,6 @@ tick_to_posix <- function(x, tz = "UTC", ...) {
 
 }
 
-#' Function to round away from zero
-#'
-#' @param x the value to round
-#' @param digits digits to round to
-#'
-#' @keywords internal
-#'
-AG_round <- function(x, digits = 6) {
-  # x <- c(7.5555555, -7.5555555)
-  # digits <- 6
-
-  signs <- sign(x)
-
-  DescTools::RoundTo(
-    abs(x), 5 / (10 ^ digits), "ceiling"
-  ) * signs
-
-}
-
 #' Calculate an integer from a binary sequence
 #'
 #' @param value_bin The binary sequence
