@@ -28,15 +28,15 @@ DataFrame payload_parse_activity2_26C(
   int usb_event = payload.size() == 1;
   if (usb_event) {
 
-    // NumericVector miss_vec(0);
-    // for (int i = 0; i < samp_rate; ++i) {
-    //   miss_vec.push_back(NA_REAL);
-    // }
+    NumericVector miss_vec(0);
+    for (int i = 0; i < samp_rate; ++i) {
+      miss_vec.push_back(0);
+    }
 
     DataFrame result = DataFrame::create(
-      Named("Accelerometer_X") = R_NilValue,
-      Named("Accelerometer_Y") = R_NilValue,
-      Named("Accelerometer_Z") = R_NilValue
+      Named("Accelerometer_X") = miss_vec,
+      Named("Accelerometer_Y") = miss_vec,
+      Named("Accelerometer_Z") = miss_vec
     );
 
     return result;

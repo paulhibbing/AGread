@@ -27,22 +27,6 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
       object <- sleep_latch(object, tz, info, events)
     }
 
-  ## Create zeroes for one-byte payloads
-
-    singles <- set[set$payload_size == 1, ]
-    if (nrow(singles) > 0) {
-      singles$timestamp <- as.POSIXct(
-        singles$timestamp, tz
-      )
-      singles <- empty_raw(singles$timestamp, 0, info)
-      object <- data.table::rbindlist(
-        list(object, singles)
-      ) %>% data.frame(
-        ., row.names = NULL
-      ) %>%
-      {.[order(.$Timestamp), ]}
-    }
-
   ## Next handle trailing zeroes
 
     object <- trailing_zeroes(object, tz, info)
