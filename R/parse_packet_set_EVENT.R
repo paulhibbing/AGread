@@ -5,8 +5,6 @@ parse_packet_set.EVENT <- function(
   ...
 ) {
 
-  # set <- record_headers$EVENT
-  stopifnot(all(set$payload_size == 1))
   set_class <- class(set)
 
   event_types <- lapply(

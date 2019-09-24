@@ -57,7 +57,10 @@ parse_packet_set.ACTIVITY2 <- function(
     "time series. Fixing if found."
   )
 
-    RAW <- check_gaps(RAW, info = info)
+    RAW <- check_gaps(
+      RAW, info = info,
+      events = events, set = set
+    )
 
   if (verbose) packet_print("cleanup", class(set)[1])
 

@@ -4,7 +4,7 @@
 \alias{empty_raw}
 \title{Construct missing packet entries for ACTIVITY2 (RAW) data}
 \usage{
-empty_raw(timestamps, empty_value, info)
+empty_raw(timestamps, empty_value = NA, info, empty_frame = NULL)
 }
 \arguments{
 \item{timestamps}{the packet timestamps}
@@ -12,6 +12,9 @@ empty_raw(timestamps, empty_value, info)
 \item{empty_value}{the value to assign missing accelerometer entries}
 
 \item{info}{output of \code{\link{parse_info_txt}}}
+
+\item{empty_frame}{optional data frame of values to pass for accelerometer
+axes (used for latching)}
 }
 \description{
 Construct missing packet entries for ACTIVITY2 (RAW) data

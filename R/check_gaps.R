@@ -16,109 +16,95 @@ check_gaps <- function(object, ...) {
 #' @rdname check_gaps
 #' @inheritParams parse_packet_set.ACTIVITY2
 #' @export
-check_gaps.RAW <- function(object, info, events, ...) {
+check_gaps.RAW <- function(object, set, info, events, ...) {
 
-  ## Identify all expected timestamps
+  tz <- unique(lubridate::tz(object$Timestamp))
+  stopifnot(length(tz) == 1)
 
-    current_times <- unique(
-      lubridate::floor_date(object$Timestamp, "second")
-    )
-    tz <- unique(lubridate::tz(current_times))
+  ## First handle idle sleep mode, if necessary
 
-    start_time <- info$Start_Date
-      stopifnot(
-        tz == lubridate::tz(start_time),
-        start_time %in% current_times
+    if (nrow(events$idle_sleep_events) != 0) {
+      object <- sleep_latch(object, tz, info, events)
+    }
+
+  ## Create zeroes for one-byte payloads
+
+    singles <- set[set$payload_size == 1, ]
+    if (nrow(singles) > 0) {
+      singles$timestamp <- as.POSIXct(
+        singles$timestamp, tz
       )
+      singles <- empty_raw(singles$timestamp, 0, info)
+      object <- data.table::rbindlist(
+        list(object, singles)
+      ) %>% data.frame(
+        ., row.names = NULL
+      ) %>%
+      {.[order(.$Timestamp), ]}
+    }
 
-    stop_time <- info$Last_Sample_Time - 1
-      stopifnot(tz == lubridate::tz(stop_time))
+  ## Next handle trailing zeroes
 
-    expected_times <- seq(start_time, stop_time, "1 sec")
+    object <- trailing_zeroes(object, tz, info)
 
-  ## Identify missing timestamps
+  ## Fill in values for any leftover missing cases using the
+  ## latch-one-then-fill-zeroes approach
 
-    missing_times <- setdiff(
-      as.character(expected_times), as.character(current_times)
+    missing_times <- get_missing_times(object, tz, info)
+    if (!length(missing_times)) return(
+      structure(
+        object,
+        class = unique(append(class(object), "RAW", 0))
+      )
     )
-    missing_times <- as.POSIXct(missing_times, tz)
 
-  ## Identify file tail and construct 0g entries
+    runs <- cumsum(c(1, diff(missing_times)!=1))
 
-    tail_entries <- NULL
-    tail_times <- NULL
+    missing_runs <- data.frame(
+      Timestamp = missing_times,
+      latch_index = get_latch_index(
+        missing_times, object$Timestamp, tz
+      ),
+      row.names = NULL
+    )
 
-    if (stop_time %in% missing_times) {
+    missing_entries <- lapply(
+      split(missing_runs, runs),
+      function(x) {
 
-      tail_times <- rev(missing_times)
-      stopifnot(tail_times[1] == stop_time)
+        latch_value <- empty_raw(
+          x$Timestamp[1],
+          info = info,
+          empty_frame = object[
+            x$latch_index[1], .accel_names
+          ]
+        )
 
-      if (length(tail_times) > 1) {
-        indices <- as.numeric(diff(tail_times))
-        end_index <- which(indices != -1)
+        zero_values <- empty_raw(
+          x$Timestamp[-1], 0, info
+        )
 
-        if (!length(end_index)) {
-          end_index <- length(end_index)
-        } else {
-          end_index <- end_index[1]
-        }
+        data.table::rbindlist(
+          list(latch_value, zero_values)
+        )
 
-        tail_times <- rev(tail_times[seq(end_index)])
       }
+    ) %>% data.table::rbindlist(
+      .
+    ) %>% data.frame(.)
 
-      tail_entries <- empty_raw(tail_times, 0, info)
-
-      missing_times <- setdiff(
-        as.character(missing_times), as.character(tail_times)
-      )
-      missing_times <- as.POSIXct(missing_times, tz)
-
-    }
-
-  ## Identify missing timestamps and construct NA entries
-
-    missing_entries <- NULL
-
-    if (!!length(missing_times)) {
-      missing_entries <- empty_raw(missing_times, NA, info)
-    }
-
-  ## Initialize the complete object
-
-    object <- rbind(object, missing_entries, tail_entries) %>%
+    object <- data.table::rbindlist(
+      list(object, missing_entries)
+      ) %>% data.frame(
+        ., row.names = NULL
+      ) %>%
       {.[order(.$Timestamp), ]}
 
-  ## Populate values for the missing entries via latch or zero insertion
+    row.names(object) <- NULL
 
-    missing_check <- apply(
-      object[ ,.accel_names], 1, function(x) all(is.na(x))
+    structure(
+      object,
+      class = unique(append(class(object), "RAW", 0))
     )
-
-    gaps <- do.call(data.frame, rle(missing_check))
-    gap_names <- append(
-      names(gaps), c("start_index", "end_index"), 2
-    )
-
-    gaps$end_index <- cumsum(gaps$lengths)
-    gaps$start_index <- cumsum(
-      c(1, gaps$lengths[-nrow(gaps)])
-    )
-
-    gaps <- gaps[gaps$values, gap_names]
-
-    for (i in seq(nrow(gaps))) {
-
-      gap_indices <- gaps$start_index[i]:gaps$end_index[i]
-
-      latch_values <- object[
-        gaps$start_index[i]-1, .accel_names
-      ]
-
-      object[gap_indices, .accel_names] <- latch_values
-
-    }
-
-  row.names(object) <- NULL
-  object
 
 }
