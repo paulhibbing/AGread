@@ -1,3 +1,64 @@
+.accel_names <- c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
+
+#' Construct missing packet entries for ACTIVITY2 (RAW) data
+#'
+#' @param timestamps the packet timestamps
+#' @param empty_value the value to assign missing accelerometer entries
+#' @param info output of \code{\link{parse_info_txt}}
+#' @param empty_frame optional data frame of values to pass for accelerometer
+#'   axes (used for latching)
+#'
+#' @keywords internal
+empty_raw <- function(
+  timestamps, empty_value = NA, info, empty_frame = NULL
+) {
+
+  if (!length(timestamps)) {
+    return(structure(
+      list(
+        Timestamp = structure(
+          numeric(0),
+          class = c("POSIXct", "POSIXt")
+        ),
+        Accelerometer_X = numeric(0),
+        Accelerometer_Y = numeric(0),
+        Accelerometer_Z = numeric(0)
+      ),
+      row.names = integer(0),
+      class = "data.frame"
+    ))
+  }
+
+  milliseconds <- seq(info$Sample_Rate) - 1
+  milliseconds <- milliseconds / info$Sample_Rate
+
+  missing_times <- sapply(
+    timestamps, function(x) x + milliseconds,
+    simplify = FALSE
+  ) %>% {do.call(c, .)}
+
+  if (is.null(empty_frame)) {
+
+    missing_entries <- data.frame(
+      Timestamp = missing_times,
+      Accelerometer_X = empty_value,
+      Accelerometer_Y = empty_value,
+      Accelerometer_Z = empty_value
+    )
+
+  } else {
+
+    missing_entries <- data.frame(
+      Timestamp = missing_times,
+      empty_frame, row.names = NULL
+    )
+
+  }
+
+  missing_entries
+
+}
+
 #' Convert a tick value to a timestamp
 #'
 #' @param x the tick value

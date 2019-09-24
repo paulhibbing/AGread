@@ -1,9 +1,10 @@
 #' @rdname parse_packet_set
 #' @param info the result of \code{\link{parse_info_txt}}
+#' @param events the result of parsing EVENTS packets
 #' @export
 parse_packet_set.ACTIVITY2 <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  info, ...
+  info, events, ...
 ) {
 
   scale_factor <- get_primary_accel_scale(info)
@@ -20,6 +21,7 @@ parse_packet_set.ACTIVITY2 <- function(
   )
 
     RAW <- lapply(RAW, function(x) {
+      if (length(x) == 0) return(x)
       value <- as.POSIXct(x$Timestamp, tz)
       increments <- seq_along(value) - 1
       x$Timestamp <- value + (increments / length(value))
@@ -44,14 +46,10 @@ parse_packet_set.ACTIVITY2 <- function(
     "                         "
   )
 
-    accel_names <- paste(
-      "Accelerometer", c("X", "Y", "Z"), sep = "_"
-    )
+    stopifnot(all(.accel_names %in% names(RAW)))
 
-    stopifnot(all(accel_names %in% names(RAW)))
-
-    RAW[ ,accel_names] <- sapply(
-      RAW[ ,accel_names], round, digits = 3
+    RAW[ ,.accel_names] <- sapply(
+      RAW[ ,.accel_names], round, digits = 3
     )
 
   if (verbose) cat(
@@ -59,7 +57,10 @@ parse_packet_set.ACTIVITY2 <- function(
     "time series. Fixing if found."
   )
 
-    RAW <- check_gaps(RAW, info = info)
+    RAW <- check_gaps(
+      RAW, info = info,
+      events = events, set = set
+    )
 
   if (verbose) packet_print("cleanup", class(set)[1])
 

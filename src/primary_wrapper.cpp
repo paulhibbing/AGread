@@ -52,11 +52,14 @@ List parse_primary_accelerometerC(
       payload, samp_rate, scale_factor, is_last_packet
     );
 
-    CharacterVector new_timestamp(0);
-    for (int j = 0; j < new_result.nrows(); ++j) {
-      new_timestamp.push_back(timestamps[i]);
+    if (new_result.size() != 0) {
+      CharacterVector new_timestamp(0);
+      for (int j = 0; j < new_result.nrows(); ++j) {
+        new_timestamp.push_back(timestamps[i]);
+      }
+      new_result.push_front(new_timestamp, "Timestamp");
     }
-    new_result.push_front(new_timestamp, "Timestamp");
+
     result.push_back(new_result);
 
   }
