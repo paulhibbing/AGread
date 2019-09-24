@@ -1,9 +1,10 @@
 #' @rdname parse_packet_set
 #' @param info the result of \code{\link{parse_info_txt}}
+#' @param events the result of parsing EVENTS packets
 #' @export
 parse_packet_set.ACTIVITY2 <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  info, ...
+  info, events, ...
 ) {
 
   scale_factor <- get_primary_accel_scale(info)
@@ -20,6 +21,7 @@ parse_packet_set.ACTIVITY2 <- function(
   )
 
     RAW <- lapply(RAW, function(x) {
+      if (length(x) == 0) return(x)
       value <- as.POSIXct(x$Timestamp, tz)
       increments <- seq_along(value) - 1
       x$Timestamp <- value + (increments / length(value))

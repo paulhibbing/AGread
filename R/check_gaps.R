@@ -14,9 +14,9 @@ check_gaps <- function(object, ...) {
 }
 
 #' @rdname check_gaps
-#' @param info the content of \code{info.txt}
+#' @inheritParams parse_packet_set.ACTIVITY2
 #' @export
-check_gaps.RAW <- function(object, info, ...) {
+check_gaps.RAW <- function(object, info, events, ...) {
 
   ## Identify all expected timestamps
 
@@ -26,50 +26,65 @@ check_gaps.RAW <- function(object, info, ...) {
     tz <- unique(lubridate::tz(current_times))
 
     start_time <- info$Start_Date
-      stopifnot(tz == lubridate::tz(start_time))
+      stopifnot(
+        tz == lubridate::tz(start_time),
+        start_time %in% current_times
+      )
 
     stop_time <- info$Last_Sample_Time - 1
       stopifnot(tz == lubridate::tz(stop_time))
 
     expected_times <- seq(start_time, stop_time, "1 sec")
 
-  ## Check whether any timestamps are missing at all
+  ## Identify missing timestamps
 
     missing_times <- setdiff(
-      as.character(expected_times),
-      as.character(current_times)
+      as.character(expected_times), as.character(current_times)
     )
+    missing_times <- as.POSIXct(missing_times, tz)
 
-    if (!length(missing_times)) {
-      row.names(object) <- NULL
-      return(object)
-    }
-
-  ## Identify timestamps that are missing from the end of the file, and
-  ## construct 0 representation for each one
+  ## Identify file tail and construct 0g entries
 
     tail_entries <- NULL
+    tail_times <- NULL
 
-    tail_times <- seq(
-      lubridate::floor_date(
-        object$Timestamp[nrow(object)] + 1,
-        "second"
-      ),
-      stop_time, by = "1 sec"
-    )
+    if (stop_time %in% missing_times) {
 
-    if (length(tail_times) > 1) {
+      tail_times <- rev(missing_times)
+      stopifnot(tail_times[1] == stop_time)
+
+      if (length(tail_times) > 1) {
+        indices <- as.numeric(diff(tail_times))
+        end_index <- which(indices != -1)
+
+        if (!length(end_index)) {
+          end_index <- length(end_index)
+        } else {
+          end_index <- end_index[1]
+        }
+
+        tail_times <- rev(tail_times[seq(end_index)])
+      }
+
       tail_entries <- empty_raw(tail_times, 0, info)
+
+      missing_times <- setdiff(
+        as.character(missing_times), as.character(tail_times)
+      )
+      missing_times <- as.POSIXct(missing_times, tz)
+
     }
 
-  ## Identify other missing timestamps, and (in the original object)
-  ## construct NA representation for each one
+  ## Identify missing timestamps and construct NA entries
 
-    missing_times <- setdiff(missing_times, as.character(tail_times))
-    missing_times <- as.POSIXct(missing_times, tz)
-    missing_entries <- empty_raw(missing_times, NA, info)
+    missing_entries <- NULL
+
+    if (!!length(missing_times)) {
+      missing_entries <- empty_raw(missing_times, NA, info)
+    }
 
   ## Initialize the complete object
+
     object <- rbind(object, missing_entries, tail_entries) %>%
       {.[order(.$Timestamp), ]}
 
@@ -99,7 +114,7 @@ check_gaps.RAW <- function(object, info, ...) {
         gaps$start_index[i]-1, .accel_names
       ]
 
-      object[gap_indices, accel_names] <- latch_values
+      object[gap_indices, .accel_names] <- latch_values
 
     }
 
