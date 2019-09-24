@@ -17,7 +17,13 @@ get_latch_index <- function(missing_times, reference_times, tz) {
   ) %>% lapply(
     as.numeric
   ) %>% sapply(
-    function(x) which(sign(x) < 0)[1] - 1
+    function(x) {
+      indices <- which(sign(x) < 0)
+      if (!length(indices)) return(
+        length(reference_times)
+      )
+      indices[1] - 1
+    }
   )
 
 }
@@ -70,46 +76,6 @@ sleep_latch <- function(object, tz, info, events) {
   row.names(object) <- NULL
 
   object
-
-}
-
-#' @rdname check_gaps
-#' @keywords internal
-trailing_zeroes <- function(object, tz, info) {
-
-  ## Identify current stop time and target stop time
-
-    current_stop <- lubridate::floor_date(
-      object$Timestamp[nrow(object)], "second"
-    )
-    target_stop  <- info$Last_Sample_Time - 1
-
-    stopifnot(
-      tz == lubridate::tz(target_stop)
-    )
-
-  ## Fill missing times (if any) with zeroes
-
-    if (current_stop >= target_stop) return(object)
-
-    zerotimes <- seq(
-      current_stop + 1, target_stop, "1 sec"
-    )
-
-    padding <- empty_raw(zerotimes, 0, info)
-
-  ## Combine, format, and return
-
-    object <- data.table::rbindlist(
-      list(object, padding)
-      ) %>% data.frame(
-        ., row.names = NULL
-      ) %>%
-      {.[order(.$Timestamp), ]}
-
-    row.names(object) <- NULL
-
-    object
 
 }
 

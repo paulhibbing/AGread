@@ -71,7 +71,6 @@ read_gt3x <- function(
 
   #7) Extract log.bin
   #8) Parse log.bin
-  # n_records <- file_3x["log.bin", "Length"]
   log_file  <- utils::unzip(file, "log.bin", exdir = tempdir())
   log  <- parse_log_bin(
     log_file, file_3x["log.bin", "Length"], info, tz,

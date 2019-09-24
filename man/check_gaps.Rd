@@ -5,7 +5,6 @@
 \alias{check_gaps.RAW}
 \alias{get_latch_index}
 \alias{sleep_latch}
-\alias{trailing_zeroes}
 \alias{get_missing_times}
 \title{Examine a packet stream for gaps}
 \usage{
@@ -16,8 +15,6 @@ check_gaps(object, ...)
 get_latch_index(missing_times, reference_times, tz)
 
 sleep_latch(object, tz, info, events)
-
-trailing_zeroes(object, tz, info)
 
 get_missing_times(object, tz, info)
 }

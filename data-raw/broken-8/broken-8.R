@@ -4,8 +4,8 @@ devtools::load_all()
 # Off-the-bat -------------------------------------------------------------
 
   # file <- "inst/extdata/example.gt3x"
-  # file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
-  file <- "data-raw/broken-8/TAS1H30182785 (2019-09-17).gt3x"
+  file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
+  # file <- "data-raw/broken-8/TAS1H30182785 (2019-09-17).gt3x"
   tz <- "UTC"
   verbose <- FALSE
   include <- c(
@@ -24,8 +24,8 @@ devtools::load_all()
 
   all_3x <- read_gt3x(
     # "data-raw/broken-8/TAS1H30182785 (2019-09-17).gt3x",
-    "data-raw/119AGBPFLW (2016-03-08).gt3x",
-    # "inst/extdata/example.gt3x",
+    # "data-raw/119AGBPFLW (2016-03-08).gt3x",
+    "inst/extdata/example.gt3x",
     include = setdiff(include, "SENSOR_DATA"),
     verbose = TRUE
   )
@@ -34,16 +34,17 @@ devtools::load_all()
 
   raw_csv <- read_AG_raw(
     # "data-raw/broken-8/TAS1H30182785 (2019-09-17)RAW.csv",
-    "data-raw/119AGBPFLW (2016-03-08)RAW.csv",
-    # "inst/extdata/exampleRAW.csv",
+    # "data-raw/119AGBPFLW (2016-03-08)RAW.csv",
+    "inst/extdata/exampleRAW.csv",
     verbose = TRUE, return_raw = TRUE
   )
 
   all.equal(
-    raw_3x, raw_csv[ ,names(raw_3x)],
+    raw_3x[seq(nrow(raw_csv)), ], raw_csv[ ,names(raw_3x)],
     scale = 1, tolerance = 0.0015
   )
 
   PAutilities::test_errors(
-    raw_3x, raw_csv, .accel_names, return_logical = FALSE
+    raw_3x[seq(nrow(raw_csv)), ], raw_csv,
+    .accel_names, return_logical = FALSE
   )

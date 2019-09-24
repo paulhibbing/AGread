@@ -19,17 +19,16 @@ check_gaps <- function(object, ...) {
 check_gaps.RAW <- function(object, set, info, events, ...) {
 
   tz <- unique(lubridate::tz(object$Timestamp))
-  stopifnot(length(tz) == 1)
+  stopifnot(
+    length(tz) == 1,
+    all(sign(as.numeric(diff(object$Timestamp)))==1)
+  )
 
   ## First handle idle sleep mode, if necessary
 
     if (nrow(events$idle_sleep_events) != 0) {
       object <- sleep_latch(object, tz, info, events)
     }
-
-  ## Next handle trailing zeroes
-
-    object <- trailing_zeroes(object, tz, info)
 
   ## Fill in latched values for any leftover cases
 
