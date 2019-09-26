@@ -16,6 +16,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_latch_index
+IntegerVector get_latch_index(DatetimeVector missing_times, DatetimeVector reference_times);
+RcppExport SEXP _AGread_get_latch_index(SEXP missing_timesSEXP, SEXP reference_timesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DatetimeVector >::type missing_times(missing_timesSEXP);
+    Rcpp::traits::input_parameter< DatetimeVector >::type reference_times(reference_timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_latch_index(missing_times, reference_times));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_latch_values
+DataFrame get_latch_values(DataFrame sleeps, DataFrame RAW);
+RcppExport SEXP _AGread_get_latch_values(SEXP sleepsSEXP, SEXP RAWSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type sleeps(sleepsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type RAW(RAWSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_latch_values(sleeps, RAW));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_short
 int get_short(RawVector x, int i1, int i2, bool is_signed);
 RcppExport SEXP _AGread_get_short(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP is_signedSEXP) {
@@ -196,6 +220,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 1},
+    {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
+    {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},

@@ -5,6 +5,23 @@ get_headersC <- function(x) {
     .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
 }
 
+#' @rdname check_gaps
+#' @param missing_times vector of missing timestamps for which to identify a
+#'   latch index
+#' @param reference_times vector of reference timestamps for use in determining
+#'   the latch index
+#' @keywords internal
+get_latch_index <- function(missing_times, reference_times) {
+    .Call('_AGread_get_latch_index', PACKAGE = 'AGread', missing_times, reference_times)
+}
+
+#' @rdname check_gaps
+#' @param sleeps DataFrame containing idle sleep mode information
+#' @param RAW DataFrame containing raw acceleration data
+get_latch_values <- function(sleeps, RAW) {
+    .Call('_AGread_get_latch_values', PACKAGE = 'AGread', sleeps, RAW)
+}
+
 #' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
 #'
 #' @param x the bytes (RawVector) from which to extract the short

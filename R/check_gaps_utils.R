@@ -1,42 +1,13 @@
 #' @rdname check_gaps
-#' @param missing_times vector of missing timestamps for which to identify a
-#'   latch index
-#' @param reference_times vector of reference timestamps for use in determining
-#'   the latch index
 #' @keywords internal
-get_latch_index <- function(missing_times, reference_times, tz) {
-
-  mapply(
-    difftime,
-    time1 = missing_times,
-    MoreArgs = list(
-      time2 = reference_times,
-      tz = tz
-    ),
-    SIMPLIFY = FALSE
-  ) %>% lapply(
-    as.numeric
-  ) %>% sapply(
-    function(x) {
-      indices <- which(sign(x) < 0)
-      if (!length(indices)) return(
-        length(reference_times)
-      )
-      indices[1] - 1
-    }
-  )
-
-}
-
-#' @rdname check_gaps
-#' @param tz the timezone
-#' @keywords internal
-sleep_latch <- function(object, tz, info, events) {
+sleep_latch <- function(object, info, events) {
 
   events$idle_sleep_events$latch_index <- get_latch_index(
-    events$idle_sleep_events$sleep_ON,
-    object$Timestamp,
-    tz = tz
+    events$idle_sleep_events$sleep_ON, object$Timestamp
+  )
+
+  events$idle_sleep_events <- get_latch_values(
+    events$idle_sleep_events, RAW
   )
 
   sleep_entries <- lapply(
@@ -80,6 +51,7 @@ sleep_latch <- function(object, tz, info, events) {
 }
 
 #' @rdname check_gaps
+#' @param tz the timezone
 #' @keywords internal
 get_missing_times <- function(object, tz, info) {
 

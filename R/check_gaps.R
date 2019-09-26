@@ -27,6 +27,11 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
   ## First handle idle sleep mode, if necessary
 
     if (nrow(events$idle_sleep_events) != 0) {
+      stopifnot(all(
+        sign(as.numeric(diff(
+          events$idle_sleep_events$sleep_ON
+        )))==1
+      ))
       object <- sleep_latch(object, tz, info, events)
     }
 
