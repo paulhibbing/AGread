@@ -6,6 +6,7 @@
 \alias{get_latch_index}
 \alias{get_latch_values}
 \alias{get_latch_entries}
+\alias{latch_replicate}
 \alias{check_gaps}
 \alias{check_gaps.RAW}
 \alias{get_missing_times}
@@ -21,6 +22,8 @@ get_latch_values(sleeps, RAW)
 get_latch_entries(samp_rate, timestamps, accel_x, accel_y, accel_z,
   return_empty = FALSE)
 
+latch_replicate(start_time, stop_time, x_val, y_val, z_val)
+
 check_gaps(object, ...)
 
 \method{check_gaps}{RAW}(object, set, info, events, ...)
@@ -35,6 +38,8 @@ sleep_latch(object, info, events, tz)
 \item{accel_input}{NumericVector. The acceleromter values to reference for
 latching}
 
+\item{samp_rate}{int. The sampling rate}
+
 \item{missing_times}{vector of missing timestamps for which to identify a
 latch index}
 
@@ -44,6 +49,16 @@ the latch index}
 \item{sleeps}{DataFrame containing idle sleep mode information}
 
 \item{RAW}{DataFrame containing raw acceleration data}
+
+\item{timestamps}{vetor of timestamps on which to perform latching}
+
+\item{accel_x}{vector of x-axis accelerations on which to perform latching}
+
+\item{accel_y}{vector of y-axis accelerations on which to perform latching}
+
+\item{accel_z}{vector of z-axis accelerations on which to perform latching}
+
+\item{return_empty}{bool. Return an empty data frame?}
 
 \item{object}{the packet stream}
 

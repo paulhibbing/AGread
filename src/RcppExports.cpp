@@ -69,6 +69,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// latch_replicate
+DataFrame latch_replicate(Datetime start_time, Datetime stop_time, double x_val, double y_val, double z_val);
+RcppExport SEXP _AGread_latch_replicate(SEXP start_timeSEXP, SEXP stop_timeSEXP, SEXP x_valSEXP, SEXP y_valSEXP, SEXP z_valSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Datetime >::type start_time(start_timeSEXP);
+    Rcpp::traits::input_parameter< Datetime >::type stop_time(stop_timeSEXP);
+    Rcpp::traits::input_parameter< double >::type x_val(x_valSEXP);
+    Rcpp::traits::input_parameter< double >::type y_val(y_valSEXP);
+    Rcpp::traits::input_parameter< double >::type z_val(z_valSEXP);
+    rcpp_result_gen = Rcpp::wrap(latch_replicate(start_time, stop_time, x_val, y_val, z_val));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_short
 int get_short(RawVector x, int i1, int i2, bool is_signed);
 RcppExport SEXP _AGread_get_short(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP is_signedSEXP) {
@@ -253,6 +268,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
+    {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},

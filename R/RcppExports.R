@@ -9,6 +9,7 @@ get_headersC <- function(x) {
 #' @param vector_size int. The size of the final vector
 #' @param accel_input NumericVector. The acceleromter values to reference for
 #'   latching
+#' @param samp_rate int. The sampling rate
 #' @keywords internal
 latch_accel <- function(vector_size, accel_input, samp_rate) {
     .Call('_AGread_latch_accel', PACKAGE = 'AGread', vector_size, accel_input, samp_rate)
@@ -33,9 +34,20 @@ get_latch_values <- function(sleeps, RAW) {
 }
 
 #' @rdname check_gaps
+#' @param timestamps vetor of timestamps on which to perform latching
+#' @param accel_x vector of x-axis accelerations on which to perform latching
+#' @param accel_y vector of y-axis accelerations on which to perform latching
+#' @param accel_z vector of z-axis accelerations on which to perform latching
+#' @param return_empty bool. Return an empty data frame?
 #' @keywords internal
 get_latch_entries <- function(samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty = FALSE) {
     .Call('_AGread_get_latch_entries', PACKAGE = 'AGread', samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty)
+}
+
+#' @rdname check_gaps
+#' @keywords internal
+latch_replicate <- function(start_time, stop_time, x_val, y_val, z_val) {
+    .Call('_AGread_latch_replicate', PACKAGE = 'AGread', start_time, stop_time, x_val, y_val, z_val)
 }
 
 #' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short

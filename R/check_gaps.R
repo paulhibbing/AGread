@@ -32,7 +32,7 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
           events$idle_sleep_events$sleep_ON
         )))==1
       ))
-      object <- sleep_latch(object, tz, info, events)
+      object <- sleep_latch(object, info, events, tz)
     }
 
   ## Fill in latched values for any leftover cases
@@ -46,6 +46,19 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
     )
 
     runs <- cumsum(c(1, diff(missing_times)!=1))
+
+    missing_entries <- data.frame(
+      Timestamp = missing_times,
+      run = runs
+    )
+
+    missing_entries$latch_index <- get_latch_index(
+      missing_entries$Timestamp, object$Timestamp
+    )
+
+    missing_entries <- get_latch_values(
+      missing_entries, object
+    )
 
     missing_entries <- lapply(
       split(missing_times, runs),

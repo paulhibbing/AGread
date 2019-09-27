@@ -5,6 +5,7 @@ using namespace Rcpp;
 //' @param vector_size int. The size of the final vector
 //' @param accel_input NumericVector. The acceleromter values to reference for
 //'   latching
+//' @param samp_rate int. The sampling rate
 //' @keywords internal
 // [[Rcpp::export]]
 NumericVector latch_accel(
@@ -87,6 +88,11 @@ DataFrame get_latch_values(
 }
 
 //' @rdname check_gaps
+//' @param timestamps vetor of timestamps on which to perform latching
+//' @param accel_x vector of x-axis accelerations on which to perform latching
+//' @param accel_y vector of y-axis accelerations on which to perform latching
+//' @param accel_z vector of z-axis accelerations on which to perform latching
+//' @param return_empty bool. Return an empty data frame?
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame get_latch_entries(
@@ -142,5 +148,35 @@ DataFrame get_latch_entries(
   );
 
   return frame_result;
+
+}
+
+//' @rdname check_gaps
+//' @keywords internal
+// [[Rcpp::export]]
+DataFrame latch_replicate(
+    Datetime start_time, Datetime stop_time,
+    double x_val, double y_val, double z_val
+) {
+
+  int n = stop_time - start_time;
+
+  DatetimeVector timestamps(n);
+  for (int i = 0; i < n; ++i) {
+    timestamps[i] = start_time + i;
+  }
+
+  NumericVector accel_x(n, x_val);
+  NumericVector accel_y(n, y_val);
+  NumericVector accel_z(n, z_val);
+
+  DataFrame result = DataFrame::create(
+    Named("Timestamp") = timestamps,
+    Named("Accelerometer_X") = accel_x,
+    Named("Accelerometer_Y") = accel_y,
+    Named("Accelerometer_Z") = accel_z
+  );
+
+  return result;
 
 }

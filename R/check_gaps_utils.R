@@ -39,16 +39,27 @@ sleep_latch <- function(object, info, events, tz) {
     events$idle_sleep_events$sleep_ON, object$Timestamp
   )
 
-  events$idle_sleep_events <- get_latch_values(
+  sleeps <- get_latch_values(
     events$idle_sleep_events, RAW
   )
 
+  sleeps <- lapply(
+    split(sleeps, seq(nrow(sleeps))),
+    function(x) {
+      latch_replicate(
+        x$sleep_ON, x$sleep_OFF,
+        x$Accelerometer_X, x$Accelerometer_Y,
+        x$Accelerometer_Z
+      )
+    }
+  ) %>% do.call(rbind, .)
+
   sleep_entries <- get_latch_entries(
     info$Sample_Rate,
-    events$idle_sleep_events$sleep_ON,
-    events$idle_sleep_events$Accelerometer_X,
-    events$idle_sleep_events$Accelerometer_Y,
-    events$idle_sleep_events$Accelerometer_Z
+    sleeps$Timestamp,
+    sleeps$Accelerometer_X,
+    sleeps$Accelerometer_Y,
+    sleeps$Accelerometer_Z
   )
 
   sleep_entries$Timestamp <- lubridate::with_tz(

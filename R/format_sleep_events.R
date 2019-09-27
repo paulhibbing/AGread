@@ -34,8 +34,9 @@ format_sleep_events <- function(sleeps, tz, verbose) {
   sleeps$sleep_ON <- as.POSIXct(sleeps$sleep_ON, tz)
   sleeps$sleep_OFF <- as.POSIXct(sleeps$sleep_OFF, tz)
 
-  sleeps$interval_inclusive <- lubridate::interval(
-    sleeps$sleep_ON, sleeps$sleep_OFF - 1, tz
+  sleeps$sleep_OFF <- dplyr::if_else(
+    sleeps$sleep_OFF == sleeps$sleep_ON,
+    sleeps$sleep_OFF, sleeps$sleep_OFF - 1
   )
 
   sleeps
