@@ -1,56 +1,4 @@
 #' @rdname check_gaps
-#' @keywords internal
-sleep_latch <- function(object, info, events) {
-
-  events$idle_sleep_events$latch_index <- get_latch_index(
-    events$idle_sleep_events$sleep_ON, object$Timestamp
-  )
-
-  events$idle_sleep_events <- get_latch_values(
-    events$idle_sleep_events, RAW
-  )
-
-  sleep_entries <- lapply(
-    seq(nrow(events$idle_sleep_events)),
-    function(i) {
-
-      latch_index <- events$idle_sleep_events[
-        i, "latch_index"
-      ]
-      latch_value <- object[latch_index, .accel_names]
-      latch_times <- seq(
-        events$idle_sleep_events$sleep_ON[i],
-        events$idle_sleep_events$sleep_OFF[i],
-        "1 sec"
-      ) %>% {.[!.%in%object$Timestamp]}
-
-      empty_raw(
-        latch_times,
-        info = info,
-        empty_frame = latch_value
-      )
-
-    }
-  ) %>% data.table::rbindlist(
-    .
-  ) %>% data.frame(
-    ., row.names = NULL
-  )
-
-  object <- data.table::rbindlist(
-    list(object, sleep_entries)
-    ) %>% data.frame(
-      .
-    ) %>%
-    {.[order(.$Timestamp), ]}
-
-  row.names(object) <- NULL
-
-  object
-
-}
-
-#' @rdname check_gaps
 #' @param tz the timezone
 #' @keywords internal
 get_missing_times <- function(object, tz, info) {
@@ -80,5 +28,42 @@ get_missing_times <- function(object, tz, info) {
   )
 
   as.POSIXct(missing_times, tz)
+
+}
+
+#' @rdname check_gaps
+#' @keywords internal
+sleep_latch <- function(object, info, events, tz) {
+
+  events$idle_sleep_events$latch_index <- get_latch_index(
+    events$idle_sleep_events$sleep_ON, object$Timestamp
+  )
+
+  events$idle_sleep_events <- get_latch_values(
+    events$idle_sleep_events, RAW
+  )
+
+  sleep_entries <- get_latch_entries(
+    info$Sample_Rate,
+    events$idle_sleep_events$sleep_ON,
+    events$idle_sleep_events$Accelerometer_X,
+    events$idle_sleep_events$Accelerometer_Y,
+    events$idle_sleep_events$Accelerometer_Z
+  )
+
+  sleep_entries$Timestamp <- lubridate::with_tz(
+    sleep_entries$Timestamp, tz
+  )
+
+  object <- data.table::rbindlist(
+    list(object, sleep_entries)
+    ) %>% data.frame(
+      .
+    ) %>%
+    {.[order(.$Timestamp), ]}
+
+  row.names(object) <- NULL
+
+  object
 
 }

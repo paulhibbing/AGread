@@ -2,6 +2,27 @@
 using namespace Rcpp;
 
 //' @rdname check_gaps
+//' @param vector_size int. The size of the final vector
+//' @param accel_input NumericVector. The acceleromter values to reference for
+//'   latching
+//' @keywords internal
+// [[Rcpp::export]]
+NumericVector latch_accel(
+    int vector_size,
+    NumericVector accel_input,
+    int samp_rate
+) {
+  NumericVector result(vector_size);
+  for (int i = 0; i < accel_input.size(); ++i) {
+    for (int j = 0; j < samp_rate; j++) {
+      int new_index = (i * samp_rate) + j;
+      result[new_index] = accel_input[i];
+    }
+  }
+  return result;
+}
+
+//' @rdname check_gaps
 //' @param missing_times vector of missing timestamps for which to identify a
 //'   latch index
 //' @param reference_times vector of reference timestamps for use in determining
@@ -33,6 +54,7 @@ IntegerVector get_latch_index(
 //' @rdname check_gaps
 //' @param sleeps DataFrame containing idle sleep mode information
 //' @param RAW DataFrame containing raw acceleration data
+//' @keywords internal
 // [[Rcpp::export]]
 DataFrame get_latch_values(
     DataFrame sleeps, DataFrame RAW
@@ -61,5 +83,64 @@ DataFrame get_latch_values(
   }
 
   return sleeps;
+
+}
+
+//' @rdname check_gaps
+//' @keywords internal
+// [[Rcpp::export]]
+DataFrame get_latch_entries(
+    int samp_rate,
+    DatetimeVector timestamps,
+    NumericVector accel_x,
+    NumericVector accel_y,
+    NumericVector accel_z,
+    bool return_empty = false
+) {
+
+  if (return_empty) {
+    DatetimeVector empty_times(0);
+    NumericVector x_vals(0);
+    NumericVector y_vals(0);
+    NumericVector z_vals(0);
+    DataFrame frame_result = DataFrame::create(
+      Named("Timestamp") = empty_times,
+      Named("Accelerometer_X") = x_vals,
+      Named("Accelerometer_Y") = y_vals,
+      Named("Accelerometer_Z") = z_vals
+    );
+    return frame_result;
+  }
+
+  int final_size = timestamps.size() * samp_rate;
+
+  DatetimeVector all_times(final_size);
+  for (int i = 0; i < timestamps.size(); ++i) {
+    for (int j = 0; j < samp_rate; j++) {
+      double frac = double(j)/double(samp_rate);
+      Datetime new_time = timestamps[i] + frac;
+      int new_index = (i * samp_rate) + j;
+      all_times[new_index] = new_time;
+    }
+  }
+
+  NumericVector all_x = latch_accel(
+    final_size, accel_x, samp_rate
+  );
+  NumericVector all_y = latch_accel(
+    final_size, accel_y, samp_rate
+  );
+  NumericVector all_z = latch_accel(
+    final_size, accel_z, samp_rate
+  );
+
+  DataFrame frame_result = DataFrame::create(
+    Named("Timestamp") = all_times,
+    Named("Accelerometer_X") = all_x,
+    Named("Accelerometer_Y") = all_y,
+    Named("Accelerometer_Z") = all_z
+  );
+
+  return frame_result;
 
 }

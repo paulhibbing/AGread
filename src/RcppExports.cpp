@@ -16,6 +16,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// latch_accel
+NumericVector latch_accel(int vector_size, NumericVector accel_input, int samp_rate);
+RcppExport SEXP _AGread_latch_accel(SEXP vector_sizeSEXP, SEXP accel_inputSEXP, SEXP samp_rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type vector_size(vector_sizeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type accel_input(accel_inputSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(latch_accel(vector_size, accel_input, samp_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_latch_index
 IntegerVector get_latch_index(DatetimeVector missing_times, DatetimeVector reference_times);
 RcppExport SEXP _AGread_get_latch_index(SEXP missing_timesSEXP, SEXP reference_timesSEXP) {
@@ -37,6 +50,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DataFrame >::type sleeps(sleepsSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type RAW(RAWSEXP);
     rcpp_result_gen = Rcpp::wrap(get_latch_values(sleeps, RAW));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_latch_entries
+DataFrame get_latch_entries(int samp_rate, DatetimeVector timestamps, NumericVector accel_x, NumericVector accel_y, NumericVector accel_z, bool return_empty);
+RcppExport SEXP _AGread_get_latch_entries(SEXP samp_rateSEXP, SEXP timestampsSEXP, SEXP accel_xSEXP, SEXP accel_ySEXP, SEXP accel_zSEXP, SEXP return_emptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< DatetimeVector >::type timestamps(timestampsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type accel_x(accel_xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type accel_y(accel_ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type accel_z(accel_zSEXP);
+    Rcpp::traits::input_parameter< bool >::type return_empty(return_emptySEXP);
+    rcpp_result_gen = Rcpp::wrap(get_latch_entries(samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -220,8 +249,10 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 1},
+    {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
+    {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},

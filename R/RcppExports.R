@@ -6,6 +6,15 @@ get_headersC <- function(x) {
 }
 
 #' @rdname check_gaps
+#' @param vector_size int. The size of the final vector
+#' @param accel_input NumericVector. The acceleromter values to reference for
+#'   latching
+#' @keywords internal
+latch_accel <- function(vector_size, accel_input, samp_rate) {
+    .Call('_AGread_latch_accel', PACKAGE = 'AGread', vector_size, accel_input, samp_rate)
+}
+
+#' @rdname check_gaps
 #' @param missing_times vector of missing timestamps for which to identify a
 #'   latch index
 #' @param reference_times vector of reference timestamps for use in determining
@@ -18,8 +27,15 @@ get_latch_index <- function(missing_times, reference_times) {
 #' @rdname check_gaps
 #' @param sleeps DataFrame containing idle sleep mode information
 #' @param RAW DataFrame containing raw acceleration data
+#' @keywords internal
 get_latch_values <- function(sleeps, RAW) {
     .Call('_AGread_get_latch_values', PACKAGE = 'AGread', sleeps, RAW)
+}
+
+#' @rdname check_gaps
+#' @keywords internal
+get_latch_entries <- function(samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty = FALSE) {
+    .Call('_AGread_get_latch_entries', PACKAGE = 'AGread', samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty)
 }
 
 #' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
