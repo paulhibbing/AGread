@@ -1,26 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' Combine numeric vectors
-//'
-//' @param a the vector to be appended
-//' @param b the vector with which to append \code{a}
-//'
-//' @keywords internal
-// [[Rcpp::export]]
-NumericVector num_pb(NumericVector a, NumericVector b) {
-  int total_size = a.size() + b.size();
-  NumericVector result(total_size);
-  for (int i = 0; i < a.size(); ++i) {
-    result[i] = a[i];
-  }
-  for (int j = a.size(); j < total_size; ++j) {
-    int b_index = j - a.size();
-    result[j] = b[b_index];
-  }
-  return result;
-}
-
 //' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
 //'
 //' @param x the bytes (RawVector) from which to extract the short
