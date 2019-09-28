@@ -10,14 +10,14 @@
 \alias{check_gaps}
 \alias{check_gaps.RAW}
 \alias{get_missing_times}
-\alias{sleep_latch}
+\alias{RAW_latch}
 \title{Examine a packet stream for gaps}
 \usage{
 latch_accel(vector_size, accel_input, samp_rate)
 
 get_latch_index(missing_times, reference_times)
 
-get_latch_values(sleeps, RAW)
+get_latch_values(indices, RAW)
 
 get_latch_entries(samp_rate, timestamps, accel_x, accel_y, accel_z,
   return_empty = FALSE)
@@ -30,7 +30,7 @@ check_gaps(object, ...)
 
 get_missing_times(object, tz, info)
 
-sleep_latch(object, info, events, tz)
+RAW_latch(object, run_starts, run_stops, info, tz)
 }
 \arguments{
 \item{vector_size}{int. The size of the final vector}
@@ -46,7 +46,7 @@ latch index}
 \item{reference_times}{vector of reference timestamps for use in determining
 the latch index}
 
-\item{sleeps}{DataFrame containing idle sleep mode information}
+\item{indices}{IntegerVector containing latch indices}
 
 \item{RAW}{DataFrame containing raw acceleration data}
 
