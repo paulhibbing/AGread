@@ -33,45 +33,47 @@ get_missing_times <- function(object, tz, info) {
 
 #' @rdname check_gaps
 #' @keywords internal
-sleep_latch <- function(object, info, events, tz) {
+RAW_latch <- function(object, run_starts, run_stops, info, tz) {
 
-  events$idle_sleep_events$latch_index <- get_latch_index(
-    events$idle_sleep_events$sleep_ON, object$Timestamp
-  )
+  latches <- get_latch_index(
+    run_starts, object$Timestamp
+  ) %>% get_latch_values(
+    object
+  ) %>% {data.frame(
+    run_start = run_starts,
+    run_stop = run_stops,
+    .
+  )}
 
-  sleeps <- get_latch_values(
-    events$idle_sleep_events, RAW
-  )
-
-  sleeps <- lapply(
-    split(sleeps, seq(nrow(sleeps))),
+  latches <- lapply(
+    split(latches, seq(nrow(latches))),
     function(x) {
       latch_replicate(
-        x$sleep_ON, x$sleep_OFF,
+        x$run_start, x$run_stop,
         x$Accelerometer_X, x$Accelerometer_Y,
         x$Accelerometer_Z
       )
     }
   ) %>% do.call(rbind, .)
 
-  sleep_entries <- get_latch_entries(
+  latch_entries <- get_latch_entries(
     info$Sample_Rate,
-    sleeps$Timestamp,
-    sleeps$Accelerometer_X,
-    sleeps$Accelerometer_Y,
-    sleeps$Accelerometer_Z
+    latches$Timestamp,
+    latches$Accelerometer_X,
+    latches$Accelerometer_Y,
+    latches$Accelerometer_Z
   )
 
-  sleep_entries$Timestamp <- lubridate::with_tz(
-    sleep_entries$Timestamp, tz
+  latch_entries$Timestamp <- lubridate::with_tz(
+    latch_entries$Timestamp, tz
   )
 
   object <- data.table::rbindlist(
-    list(object, sleep_entries)
-    ) %>% data.frame(
-      .
-    ) %>%
-    {.[order(.$Timestamp), ]}
+    list(object, latch_entries)
+  ) %>% data.frame(
+    .
+  ) %>%
+  {.[order(.$Timestamp), ]}
 
   row.names(object) <- NULL
 

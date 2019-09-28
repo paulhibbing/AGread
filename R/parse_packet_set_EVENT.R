@@ -50,7 +50,7 @@ parse_packet_set.EVENT <- function(
 
   }
 
-  if (verbose) packet_print("cleanup", class(set)[1])
+  if (verbose) packet_print("cleanup", set_class[1])
 
   structure(set, class = "EVENT")
 

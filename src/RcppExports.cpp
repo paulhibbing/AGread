@@ -42,14 +42,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_latch_values
-DataFrame get_latch_values(DataFrame sleeps, DataFrame RAW);
-RcppExport SEXP _AGread_get_latch_values(SEXP sleepsSEXP, SEXP RAWSEXP) {
+DataFrame get_latch_values(IntegerVector indices, DataFrame RAW);
+RcppExport SEXP _AGread_get_latch_values(SEXP indicesSEXP, SEXP RAWSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type sleeps(sleepsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type indices(indicesSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type RAW(RAWSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_latch_values(sleeps, RAW));
+    rcpp_result_gen = Rcpp::wrap(get_latch_values(indices, RAW));
     return rcpp_result_gen;
 END_RCPP
 }

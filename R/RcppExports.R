@@ -26,11 +26,11 @@ get_latch_index <- function(missing_times, reference_times) {
 }
 
 #' @rdname check_gaps
-#' @param sleeps DataFrame containing idle sleep mode information
+#' @param indices IntegerVector containing latch indices
 #' @param RAW DataFrame containing raw acceleration data
 #' @keywords internal
-get_latch_values <- function(sleeps, RAW) {
-    .Call('_AGread_get_latch_values', PACKAGE = 'AGread', sleeps, RAW)
+get_latch_values <- function(indices, RAW) {
+    .Call('_AGread_get_latch_values', PACKAGE = 'AGread', indices, RAW)
 }
 
 #' @rdname check_gaps

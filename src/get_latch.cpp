@@ -53,15 +53,14 @@ IntegerVector get_latch_index(
 }
 
 //' @rdname check_gaps
-//' @param sleeps DataFrame containing idle sleep mode information
+//' @param indices IntegerVector containing latch indices
 //' @param RAW DataFrame containing raw acceleration data
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame get_latch_values(
-    DataFrame sleeps, DataFrame RAW
+    IntegerVector indices,
+    DataFrame RAW
 ) {
-
-  IntegerVector indices = sleeps["latch_index"];
 
   CharacterVector variables = CharacterVector::create(
     "Accelerometer_X",
@@ -69,21 +68,28 @@ DataFrame get_latch_values(
     "Accelerometer_Z"
   );
 
+  DataFrame result = DataFrame::create(
+    Named("latch_index") = indices,
+    Named("Accelerometer_X") = NumericVector(indices.size()),
+    Named("Accelerometer_Y") = NumericVector(indices.size()),
+    Named("Accelerometer_Z") = NumericVector(indices.size())
+  );
+
   for (int i = 0; i < variables.size(); ++i) {
 
-    NumericVector new_vals(0);
+    NumericVector new_vals(indices.size());
     String var_name(variables[i]);
     NumericVector ref_vals = RAW[var_name];
 
     for (int j = 0; j < indices.size(); ++j) {
-      new_vals.push_back(ref_vals[indices[j]]);
+      new_vals[j] = ref_vals[indices[j] - 1];
     }
 
-    sleeps.push_back(new_vals, var_name);
+    result[var_name] = new_vals;
 
   }
 
-  return sleeps;
+  return result;
 
 }
 
@@ -159,7 +165,7 @@ DataFrame latch_replicate(
     double x_val, double y_val, double z_val
 ) {
 
-  int n = stop_time - start_time;
+  int n = stop_time - start_time + 1;
 
   DatetimeVector timestamps(n);
   for (int i = 0; i < n; ++i) {

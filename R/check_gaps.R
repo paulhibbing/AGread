@@ -32,7 +32,13 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
           events$idle_sleep_events$sleep_ON
         )))==1
       ))
-      object <- sleep_latch(object, info, events, tz)
+      object <- RAW_latch(
+        object,
+        events$idle_sleep_events$sleep_ON,
+        events$idle_sleep_events$sleep_OFF,
+        info,
+        tz
+      )
     }
 
   ## Fill in latched values for any leftover cases
@@ -45,48 +51,25 @@ check_gaps.RAW <- function(object, set, info, events, ...) {
       )
     )
 
-    runs <- cumsum(c(1, diff(missing_times)!=1))
+    runs <- cumsum(
+      c(1, diff(missing_times)!=1)
+    ) %>% {do.call(
+      data.frame, rle(.)
+    )} %>%{cbind(
+      ., stop_index = cumsum(.$lengths)
+    )} %>% {cbind(.,
+      start_time = missing_times[
+        .$stop_index - .$lengths + 1
+      ],
+      stop_time = missing_times[
+        .$stop_index
+      ]
+    )}
 
-    missing_entries <- data.frame(
-      Timestamp = missing_times,
-      run = runs
+    object <- RAW_latch(
+      object, runs$start_time,
+      runs$stop_time, info, tz
     )
-
-    missing_entries$latch_index <- get_latch_index(
-      missing_entries$Timestamp, object$Timestamp
-    )
-
-    missing_entries <- get_latch_values(
-      missing_entries, object
-    )
-
-    missing_entries <- lapply(
-      split(missing_times, runs),
-      function(x) {
-
-        latch_index <- get_latch_index(
-          x[1], object$Timestamp, tz
-        )
-
-        empty_raw(
-          x,
-          info = info,
-          empty_frame = object[
-            latch_index, .accel_names
-          ]
-        )
-
-      }
-    ) %>% data.table::rbindlist(
-      .
-    ) %>% data.frame(.)
-
-    object <- data.table::rbindlist(
-      list(object, missing_entries)
-      ) %>% data.frame(
-        ., row.names = NULL
-      ) %>%
-      {.[order(.$Timestamp), ]}
 
     row.names(object) <- NULL
 
