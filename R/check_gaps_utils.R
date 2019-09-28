@@ -68,6 +68,15 @@ RAW_latch <- function(object, run_starts, run_stops, info, tz) {
     latch_entries$Timestamp, tz
   )
 
+  latch_entries <- ifelse(
+    latch_entries$Timestamp %in%
+      object$Timestamp,
+    FALSE,
+    TRUE
+  ) %>% {
+    latch_entries[., ]
+  }
+
   object <- data.table::rbindlist(
     list(object, latch_entries)
   ) %>% data.frame(
