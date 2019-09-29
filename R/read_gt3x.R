@@ -66,7 +66,7 @@ read_gt3x <- function(
   #5) Parse and save the sample rate from the info.txt file (it's stored in Hz)
   #6) Parse and save the start date from the info.txt file (it's stored in .NET
   #Ticks)
-  info <- parse_info_txt(info_con, verbose)
+  info <- parse_info_txt(info_con, tz, verbose)
   close(info_con)
 
   #7) Extract log.bin

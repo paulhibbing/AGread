@@ -1,12 +1,13 @@
 #' Parse the info component of a gt3x file
 #'
 #' @param info connection to the info.txt file
+#' @param tz character. The timezone
 #' @param verbose logical. Print updates to console?
 #' @param ... further arguments/methods. Currently unused.
 #'
 #' @keywords internal
 #'
-parse_info_txt <- function(info, verbose, ...) {
+parse_info_txt <- function(info, tz = "UTC", verbose, ...) {
 
   if (verbose) cat("\n  Parsing info.txt")
 
@@ -48,7 +49,7 @@ parse_info_txt <- function(info, verbose, ...) {
 
   for (j in tick_vars) {
     meta[ ,j] <- tick_to_posix(
-      meta[ ,j]
+      meta[ ,j], tz
     )
   }
 
