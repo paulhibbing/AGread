@@ -23,7 +23,7 @@ impute_primary <- function(object, verbose) {
     .[.$values, ]
   }
 
-  if (!lengths(any_gaps)) return(object)
+  if (!length(any_gaps)) return(object)
 
   impute_C(any_gaps, object)
 
