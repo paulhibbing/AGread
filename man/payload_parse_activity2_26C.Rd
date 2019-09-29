@@ -4,7 +4,8 @@
 \alias{payload_parse_activity2_26C}
 \title{Parse a packet of primary accelerometer data in C++}
 \usage{
-payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet)
+payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet,
+  timestamp)
 }
 \arguments{
 \item{payload}{RawVector containing the payload bytes}
@@ -14,6 +15,8 @@ payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet)
 \item{scale_factor}{integer reflecting the scale factor}
 
 \item{is_last_packet}{logical. Is this the last packet in the file?}
+
+\item{timestamp}{Datetime. The packet timestamp}
 }
 \description{
 Parse a packet of primary accelerometer data in C++

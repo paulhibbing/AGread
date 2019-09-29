@@ -5,7 +5,7 @@
 Rcpp::DataFrame payload_parse_activity2_26C(
     Rcpp::RawVector payload, int samp_rate,
     int scale_factor, bool is_last_packet,
-    const char* timestamp
+    Rcpp::Datetime timestamp
 );
 
 #endif

@@ -8,17 +8,21 @@ using namespace Rcpp;
 //' @param is_last_packet logical. Is this the last packet in the file?
 //' @param samp_rate integer reflecting the sampling rate
 //' @param scale_factor integer reflecting the scale factor
-//' @param timestamp character. The packet timestamp
+//' @param timestamp Datetime. The packet timestamp
 //'
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame payload_parse_activity2_26C(
     RawVector payload, int samp_rate,
     int scale_factor, bool is_last_packet,
-    const char* timestamp
+    Datetime timestamp
 ) {
 
-  CharacterVector times(samp_rate, timestamp);
+  DatetimeVector times(samp_rate);
+  for (int ts = 0; ts < samp_rate; ++ts) {
+    double ts_frac = ts / double(samp_rate);
+    times[ts] = timestamp + ts_frac;
+  }
 
   //Test for last packet
   bool length_2 = (payload.size() % 2 == 0);

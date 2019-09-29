@@ -20,7 +20,7 @@ List parse_primary_accelerometerC(
   int n_records = primary_records.nrow();
   IntegerVector indices = primary_records["index"];
   IntegerVector sizes = primary_records["payload_size"];
-  CharacterVector timestamps = primary_records["timestamp"];
+  DatetimeVector timestamps = primary_records["timestamp"];
 
   List result(n_records); //initialize
 
@@ -48,7 +48,6 @@ List parse_primary_accelerometerC(
 
     //Process the packet
     bool is_last_packet = i == (n_records - 1);
-    String timestamp(timestamps[i]);
     DataFrame new_result = payload_parse_activity2_26C(
       payload, samp_rate, scale_factor,
       is_last_packet, timestamps[i]
