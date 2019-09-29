@@ -84,6 +84,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_times
+DatetimeVector get_times(Datetime start, Datetime end, int samp_rate);
+RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Datetime >::type start(startSEXP);
+    Rcpp::traits::input_parameter< Datetime >::type end(endSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_short
 int get_short(RawVector x, int i1, int i2, bool is_signed);
 RcppExport SEXP _AGread_get_short(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP is_signedSEXP) {
@@ -131,6 +144,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type end_index(end_indexSEXP);
     checksumC(log, start_index, end_index);
     return R_NilValue;
+END_RCPP
+}
+// impute_C
+DataFrame impute_C(DataFrame gaps, DataFrame object);
+RcppExport SEXP _AGread_impute_C(SEXP gapsSEXP, SEXP objectSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type gaps(gapsSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type object(objectSEXP);
+    rcpp_result_gen = Rcpp::wrap(impute_C(gaps, object));
+    return rcpp_result_gen;
 END_RCPP
 }
 // parse_IMU_C
@@ -233,7 +258,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // payload_parse_activity2_26C
-DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, const char* timestamp);
+DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, Datetime timestamp);
 RcppExport SEXP _AGread_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP, SEXP timestampSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -242,7 +267,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
     Rcpp::traits::input_parameter< bool >::type is_last_packet(is_last_packetSEXP);
-    Rcpp::traits::input_parameter< const char* >::type timestamp(timestampSEXP);
+    Rcpp::traits::input_parameter< Datetime >::type timestamp(timestampSEXP);
     rcpp_result_gen = Rcpp::wrap(payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet, timestamp));
     return rcpp_result_gen;
 END_RCPP
@@ -270,10 +295,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
+    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 3},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
+    {"_AGread_impute_C", (DL_FUNC) &_AGread_impute_C, 2},
     {"_AGread_parse_IMU_C", (DL_FUNC) &_AGread_parse_IMU_C, 6},
     {"_AGread_zero2one", (DL_FUNC) &_AGread_zero2one, 1},
     {"_AGread_interval_match", (DL_FUNC) &_AGread_interval_match, 2},

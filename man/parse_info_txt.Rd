@@ -4,10 +4,12 @@
 \alias{parse_info_txt}
 \title{Parse the info component of a gt3x file}
 \usage{
-parse_info_txt(info, verbose, ...)
+parse_info_txt(info, tz = "UTC", verbose, ...)
 }
 \arguments{
 \item{info}{connection to the info.txt file}
+
+\item{tz}{character. The timezone}
 
 \item{verbose}{logical. Print updates to console?}
 

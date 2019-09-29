@@ -5,7 +5,7 @@ get_headersC <- function(x) {
     .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
 }
 
-#' @rdname check_gaps
+#' @rdname impute_primary
 #' @param vector_size int. The size of the final vector
 #' @param accel_input NumericVector. The acceleromter values to reference for
 #'   latching
@@ -15,7 +15,7 @@ latch_accel <- function(vector_size, accel_input, samp_rate) {
     .Call('_AGread_latch_accel', PACKAGE = 'AGread', vector_size, accel_input, samp_rate)
 }
 
-#' @rdname check_gaps
+#' @rdname impute_primary
 #' @param missing_times vector of missing timestamps for which to identify a
 #'   latch index
 #' @param reference_times vector of reference timestamps for use in determining
@@ -25,7 +25,7 @@ get_latch_index <- function(missing_times, reference_times) {
     .Call('_AGread_get_latch_index', PACKAGE = 'AGread', missing_times, reference_times)
 }
 
-#' @rdname check_gaps
+#' @rdname impute_primary
 #' @param indices IntegerVector containing latch indices
 #' @param RAW DataFrame containing raw acceleration data
 #' @keywords internal
@@ -33,7 +33,7 @@ get_latch_values <- function(indices, RAW) {
     .Call('_AGread_get_latch_values', PACKAGE = 'AGread', indices, RAW)
 }
 
-#' @rdname check_gaps
+#' @rdname impute_primary
 #' @param timestamps vetor of timestamps on which to perform latching
 #' @param accel_x vector of x-axis accelerations on which to perform latching
 #' @param accel_y vector of y-axis accelerations on which to perform latching
@@ -44,10 +44,19 @@ get_latch_entries <- function(samp_rate, timestamps, accel_x, accel_y, accel_z, 
     .Call('_AGread_get_latch_entries', PACKAGE = 'AGread', samp_rate, timestamps, accel_x, accel_y, accel_z, return_empty)
 }
 
-#' @rdname check_gaps
+#' @rdname impute_primary
 #' @keywords internal
 latch_replicate <- function(start_time, stop_time, x_val, y_val, z_val) {
     .Call('_AGread_latch_replicate', PACKAGE = 'AGread', start_time, stop_time, x_val, y_val, z_val)
+}
+
+#' Determine the expected timestamps for primary accelerometer output
+#' @param start The file start time
+#' @param end The file end time
+#' @param samp_rate int. The sampling rate
+#' @keywords internal
+get_times <- function(start, end, samp_rate) {
+    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate)
 }
 
 #' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
@@ -94,6 +103,13 @@ print_progC <- function(n, label) {
 #' @keywords internal
 checksumC <- function(log, start_index, end_index) {
     invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
+}
+
+#' @rdname impute_primary
+#' @param gaps DataFrame with gap information
+#' @keywords internal
+impute_C <- function(gaps, object) {
+    .Call('_AGread_impute_C', PACKAGE = 'AGread', gaps, object)
 }
 
 #' Parse all IMU packets in a file
@@ -184,7 +200,7 @@ payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
 #' @param is_last_packet logical. Is this the last packet in the file?
 #' @param samp_rate integer reflecting the sampling rate
 #' @param scale_factor integer reflecting the scale factor
-#' @param timestamp character. The packet timestamp
+#' @param timestamp Datetime. The packet timestamp
 #'
 #' @keywords internal
 payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet, timestamp) {

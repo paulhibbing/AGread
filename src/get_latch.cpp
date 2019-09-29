@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' @rdname check_gaps
+//' @rdname impute_primary
 //' @param vector_size int. The size of the final vector
 //' @param accel_input NumericVector. The acceleromter values to reference for
 //'   latching
@@ -23,7 +23,7 @@ NumericVector latch_accel(
   return result;
 }
 
-//' @rdname check_gaps
+//' @rdname impute_primary
 //' @param missing_times vector of missing timestamps for which to identify a
 //'   latch index
 //' @param reference_times vector of reference timestamps for use in determining
@@ -52,7 +52,7 @@ IntegerVector get_latch_index(
 
 }
 
-//' @rdname check_gaps
+//' @rdname impute_primary
 //' @param indices IntegerVector containing latch indices
 //' @param RAW DataFrame containing raw acceleration data
 //' @keywords internal
@@ -93,7 +93,7 @@ DataFrame get_latch_values(
 
 }
 
-//' @rdname check_gaps
+//' @rdname impute_primary
 //' @param timestamps vetor of timestamps on which to perform latching
 //' @param accel_x vector of x-axis accelerations on which to perform latching
 //' @param accel_y vector of y-axis accelerations on which to perform latching
@@ -157,7 +157,7 @@ DataFrame get_latch_entries(
 
 }
 
-//' @rdname check_gaps
+//' @rdname impute_primary
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame latch_replicate(

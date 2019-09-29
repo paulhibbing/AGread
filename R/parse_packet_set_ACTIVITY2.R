@@ -7,57 +7,40 @@ parse_packet_set.ACTIVITY2 <- function(
   info, events, ...
 ) {
 
-  n_rows <- as.numeric(difftime(
-    info$Last_Sample_Time, info$Start_Date,
-    tz = tz, units = "sec"
-  )) * info$Sample_Rate
+  init <- get_times(
+    info$Start_Date,
+    info$Last_Sample_Time,
+    info$Sample_Rate
+  ) %>% {data.frame(
+   Timestamp = lubridate::with_tz(
+     ., tz
+   )
+  )}
 
-  scale_factor <- get_primary_accel_scale(info)
-  set$timestamp <- as.character(set$timestamp)
+  RAW <- get_primary_accel_scale(
+    info
+  ) %>% parse_primary_accelerometerC(
+    set, log, ., info$Sample_Rate, verbose
+  ) %>% {data.frame(
+    data.table::rbindlist(.)
+  )}
 
-  RAW <- parse_primary_accelerometerC(
-    set, log, scale_factor,
-    info$Sample_Rate, verbose
+  RAW$Timestamp <- lubridate::with_tz(
+    RAW$Timestamp, tz
   )
 
-  if (verbose) cat(
-    "\r  Calculating timestamps",
-    "                         "
-  )
-
-    RAW <- lapply(RAW, function(x) {
-      if (length(x) == 0) return(x)
-      value <- as.POSIXct(x$Timestamp, tz)
-      increments <- seq_along(value) - 1
-      x$Timestamp <- value + (increments / length(value))
-      x
-    })
-
-  if (verbose) cat(
-    "\r  Merging packets       ",
-    "                         "
-  )
-
-    RAW <- data.frame(
-      data.table::rbindlist(RAW),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-
-    class(RAW) <- append(class(RAW), "RAW", 0)
-
-  if (verbose) cat(
-    "\r  Checking for gaps in the",
-    "time series. Fixing if found."
-  )
-
-    RAW <- check_gaps(
-      RAW, info = info,
-      events = events, set = set
-    )
+  RAW <- idle_sleep_impute(
+    RAW, events, info, tz, verbose
+  ) %>% merge(
+    init, ., "Timestamp", all.x = TRUE
+  ) %>% impute_primary(
+    verbose
+  ) %>% {structure(
+    ., class = append(class(.), "RAW", 0)
+  )}
 
   if (verbose) packet_print("cleanup", class(set)[1])
 
-    RAW
+  RAW
 
 }
