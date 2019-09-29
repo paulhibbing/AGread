@@ -184,10 +184,11 @@ payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
 #' @param is_last_packet logical. Is this the last packet in the file?
 #' @param samp_rate integer reflecting the sampling rate
 #' @param scale_factor integer reflecting the scale factor
+#' @param timestamp character. The packet timestamp
 #'
 #' @keywords internal
-payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet) {
-    .Call('_AGread_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet)
+payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet, timestamp) {
+    .Call('_AGread_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet, timestamp)
 }
 
 #' Parse all primary accelerometer packets in a file

@@ -7,6 +7,11 @@ parse_packet_set.ACTIVITY2 <- function(
   info, events, ...
 ) {
 
+  n_rows <- as.numeric(difftime(
+    info$Last_Sample_Time, info$Start_Date,
+    tz = tz, units = "sec"
+  )) * info$Sample_Rate
+
   scale_factor <- get_primary_accel_scale(info)
   set$timestamp <- as.character(set$timestamp)
 

@@ -233,8 +233,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // payload_parse_activity2_26C
-DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet);
-RcppExport SEXP _AGread_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP) {
+DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, const char* timestamp);
+RcppExport SEXP _AGread_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP, SEXP timestampSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -242,7 +242,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
     Rcpp::traits::input_parameter< bool >::type is_last_packet(is_last_packetSEXP);
-    rcpp_result_gen = Rcpp::wrap(payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet));
+    Rcpp::traits::input_parameter< const char* >::type timestamp(timestampSEXP);
+    rcpp_result_gen = Rcpp::wrap(payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet, timestamp));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -281,7 +282,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
     {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 4},
-    {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 4},
+    {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 5},
     {"_AGread_parse_primary_accelerometerC", (DL_FUNC) &_AGread_parse_primary_accelerometerC, 5},
     {NULL, NULL, 0}
 };
