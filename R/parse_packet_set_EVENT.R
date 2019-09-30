@@ -7,6 +7,19 @@ parse_packet_set.EVENT <- function(
 
   set_class <- class(set)
 
+  if (!length(set)) {
+
+    set <- list(
+      other_events = data.frame(),
+      idle_sleep_events = data.frame()
+    )
+
+    if (verbose) packet_print("cleanup", set_class[1])
+
+    return(structure(set, class = "EVENT"))
+
+  }
+
   event_types <- lapply(
     split(set, seq(nrow(set))),
     setup_payload,

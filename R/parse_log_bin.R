@@ -54,15 +54,18 @@ parse_log_bin <- function(
     }
 
   ## Get events (if applicable)
-    if ("EVENT" %in% names(record_headers)) {
+    if (!"EVENT" %in% names(record_headers)) {
       events <- parse_packet_set(
-        record_headers$EVENT, log,
-        tz, verbose
+        structure(list(), class = "EVENT"),
+        log, tz, verbose
       )
-      record_headers$EVENT <- NULL
     } else {
-      events <- NULL
+      events <- parse_packet_set(
+        record_headers$EVENT,
+        log, tz, verbose
+      )
     }
+    record_headers$EVENT <- NULL
 
   ## Now process the remaining packets
 
