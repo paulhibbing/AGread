@@ -1,6 +1,10 @@
 #' Calculate vector magnitude
 #'
-#' @param triaxial a dataframe of triaxial data on which to calculate vector magnitude
+#' @param triaxial a dataframe of triaxial data on which to calculate vector
+#'   magnitude
+#' @param method which method to use, either \code{legacy} (default, for
+#'   backwards compatibility) or \code{Rcpp} (gives the same results, faster but
+#'   more particular)
 #' @param verbose print information about variable search criteria?
 #'
 #' @examples
@@ -19,7 +23,18 @@
 #'
 #' @return a vector of vector magnitude values
 #' @export
-get_VM <- function(triaxial, verbose = FALSE) {
+get_VM <- function(
+  triaxial, method = c("legacy", "Rcpp"),
+  verbose = FALSE
+) {
+
+  method <- match.arg(method)
+  if (method == "Rcpp") return(get_VM_C(
+    triaxial[ ,1],
+    triaxial[ ,2],
+    triaxial[ ,3])
+  )
+
   if (verbose) {
     vm_variables <-
       gsub("\"", "", substring(deparse(substitute(triaxial)), unlist(gregexpr(

@@ -11,11 +11,11 @@ collapse_gt3x(AG, filename = "gt3x file", output_window_secs = 1,
 
 \method{collapse_gt3x}{RAW}(AG, filename = "gt3x file",
   output_window_secs = 1, filter = TRUE, filter_hz = 35,
-  verbose = FALSE, ...)
+  verbose = FALSE, method = c("legacy", "expanded"), ...)
 
 \method{collapse_gt3x}{IMU}(AG, filename = "gt3x file",
   output_window_secs = 1, filter = TRUE, filter_hz = 35,
-  verbose = FALSE, ...)
+  verbose = FALSE, method = c("legacy", "expanded"), ...)
 }
 \arguments{
 \item{AG}{The object to collapse, inheriting from class "RAW" or "IMU"}
@@ -31,6 +31,8 @@ collapse_gt3x(AG, filename = "gt3x file", output_window_secs = 1,
 \item{verbose}{A logical scalar: Print processing updates?}
 
 \item{...}{Additional arguments. Currently unused.}
+
+\item{method}{the collapsing method to use}
 }
 \value{
 A data frame of collapsed data

@@ -1,4 +1,6 @@
 .accel_names <- c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
+.gyro_names <- c("Gyroscope_X", "Gyroscope_Y", "Gyroscope_Z")
+.mag_names <- c("Magnetometer_X", "Magnetometer_Y", "Magnetometer_Z")
 
 #' Construct missing packet entries for ACTIVITY2 (RAW) data
 #'

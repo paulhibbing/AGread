@@ -5,7 +5,7 @@
 \title{Convert magnetometer signal to cardinal direction}
 \usage{
 classify_magnetometer(x = "Magnetometer X", y = "Magnetometer Y",
-  z = "Magnetometer Z", orientation = "vertical")
+  z = "Magnetometer Z", orientation = c("vertical", "horizontal"))
 }
 \arguments{
 \item{x}{x-axis magnetometer data}

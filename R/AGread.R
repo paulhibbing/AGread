@@ -53,7 +53,7 @@
 #' }
 #'
 #' @importFrom magrittr %>%
-#' @importFrom rlang :=
+#' @importFrom rlang := .data
 #' @import Rcpp
 #' @docType package
 #' @useDynLib AGread

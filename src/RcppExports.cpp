@@ -5,6 +5,19 @@
 
 using namespace Rcpp;
 
+// get_VM_C
+NumericVector get_VM_C(NumericVector x, NumericVector y, NumericVector z);
+RcppExport SEXP _AGread_get_VM_C(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_VM_C(x, y, z));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_headersC
 DataFrame get_headersC(RawVector x);
 RcppExport SEXP _AGread_get_headersC(SEXP xSEXP) {
@@ -289,6 +302,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 1},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
