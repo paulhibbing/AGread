@@ -47,9 +47,15 @@ get_headers <- function(log, tz = "UTC", verbose = FALSE) {
 
   if (verbose) cat("\n  Getting record headers")
 
-  record_headers <- get_headersC(log)
+  record_headers <- get_headersC(log, verbose = as.integer(verbose > 1))
   record_headers$index <- record_headers$index + 1
+  if (verbose > 1) {
+    cat("\n Creating Header Type")
+  }
   record_headers$type  <- as.character(record_headers$type)
+  if (verbose > 1) {
+    cat("\n Creating Time Stamp")
+  }
   record_headers$timestamp <- anytime::anytime(
     record_headers$timestamp, tz
   )
