@@ -52,6 +52,7 @@ get_headers <- function(log, tz = "UTC", verbose = FALSE) {
   if (verbose > 1) {
     cat("\n Creating Header Type")
   }
+
   record_headers$type  <- as.character(record_headers$type)
   if (verbose > 1) {
     cat("\n Creating Time Stamp")
@@ -200,8 +201,12 @@ setup_payload <- function(record_header, log) {
   payload <- record[9:(length(record) - 1)]
   stopifnot(length(payload) == record_header$payload_size)
 
+  # checksumC(
+  #   log, log_indices[1], log_indices[length(log_indices)]
+  # )
   checksumC(
-    log, log_indices[1], log_indices[length(log_indices)]
+    # 0 indexing c++ change
+    log, log_indices[1] - 1, log_indices[length(log_indices)] - 1
   )
 
   payload
