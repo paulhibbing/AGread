@@ -1,8 +1,4 @@
 #include <Rcpp.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
 using namespace Rcpp;
 using namespace std;
 
