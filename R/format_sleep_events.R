@@ -4,7 +4,7 @@
 #' @inheritParams read_gt3x
 #'
 #' @keywords internal
-format_sleep_events <- function(sleeps, tz, verbose) {
+format_sleep_events <- function(sleeps, info, tz, verbose) {
 
   if (verbose) cat("\r Formatting idle sleep mode information")
 
@@ -12,10 +12,26 @@ format_sleep_events <- function(sleeps, tz, verbose) {
 
   stopifnot(
     all(sleeps$event_type %in% event_types),
+    sleeps$event_type[1] == "sleep_ON"
+  )
+
+  if (sleeps$event_type[nrow(sleeps)] == "sleep_ON") {
+    stopifnot(lubridate::tz(info$Last_Sample_Time) == tz)
+    sleeps <- rbind(
+      sleeps,
+      data.frame(
+        index = NA, type = 3,
+        timestamp = info$Last_Sample_Time - 1,
+        payload_size = 1, event_type = "sleep_OFF"
+      )
+    )
+  }
+
+  stopifnot(
     length(unique(
       table(droplevels(sleeps$event_type))
     )) == 1,
-    sleeps$event_type[1] == "sleep_ON"
+    sleeps$event_type[nrow(sleeps)] == "sleep_OFF"
   )
 
   sleeps$pair_num <- cumsum(

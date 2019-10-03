@@ -4,7 +4,7 @@
 \alias{format_sleep_events}
 \title{Format idle sleep information from EVENT records}
 \usage{
-format_sleep_events(sleeps, tz, verbose)
+format_sleep_events(sleeps, info, tz, verbose)
 }
 \arguments{
 \item{sleeps}{data frame with idle sleep mode information}

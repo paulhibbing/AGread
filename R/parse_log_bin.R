@@ -19,19 +19,23 @@ parse_log_bin <- function(
 ) {
 
   ## Validate the input to `include`
+
     include <- validate_include(include, verbose)
 
   ## Read the bin file
+
     if (verbose) cat("\n  Reading log.bin")
-      log <- readBin(log_file, "raw", file_3x_len)
+    log <- readBin(log_file, "raw", file_3x_len)
     if (verbose) cat("  ............. COMPLETE")
 
   ## Get headers
+
     record_headers <- get_headers(log, tz, verbose)
     record_headers <- sort_records(record_headers)
     record_headers <- select_records(record_headers, include)
 
   ## Get parameters (if applicable)
+
     if ("PARAMETERS" %in% names(record_headers)) {
       parameters <- parse_packet_set(
         record_headers$PARAMETERS, log,
@@ -43,6 +47,7 @@ parse_log_bin <- function(
     }
 
   ## Get schema (if applicable)
+
     if ("SENSOR_SCHEMA" %in% names(record_headers)) {
       schema <- parse_packet_set(
         record_headers$SENSOR_SCHEMA, log,
@@ -54,6 +59,7 @@ parse_log_bin <- function(
     }
 
   ## Get events (if applicable)
+
     if (!"EVENT" %in% names(record_headers)) {
       events <- parse_packet_set(
         structure(list(), class = "EVENT"),
@@ -62,7 +68,7 @@ parse_log_bin <- function(
     } else {
       events <- parse_packet_set(
         record_headers$EVENT,
-        log, tz, verbose
+        log, tz, verbose, info = info
       )
     }
     record_headers$EVENT <- NULL

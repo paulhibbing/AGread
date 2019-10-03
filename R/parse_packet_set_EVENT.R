@@ -2,7 +2,7 @@
 #' @export
 parse_packet_set.EVENT <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  ...
+  info, ...
 ) {
 
   set_class <- class(set)
@@ -47,7 +47,7 @@ parse_packet_set.EVENT <- function(
     ) %>% gsub("^FALSE$", "other_events", .)
 
     set$idle_sleep_events <- format_sleep_events(
-      set$idle_sleep_events, tz, verbose
+      set$idle_sleep_events, info, tz, verbose
     )
 
     if (!"other_events" %in% names(set)) {
