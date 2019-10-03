@@ -7,7 +7,7 @@ using namespace std;
 // [[Rcpp::export]]
 DataFrame get_headersC(RawVector x, bool verbose) {
   //Retrieve information for first record
-  int max_samples = round(x.size()/1.5);
+  int max_samples = round(x.size()*1.5);
   IntegerVector index (max_samples, NA_INTEGER);
   IntegerVector type (max_samples, NA_INTEGER);
   IntegerVector timestamp (max_samples, NA_INTEGER);
