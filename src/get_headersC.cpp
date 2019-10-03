@@ -29,16 +29,6 @@ DataFrame get_headersC(RawVector x, bool verbose) {
   //Run the loop
   while ( next_index < x_len ) {
 
-    // index.push_back(next_index);
-    // type.push_back((unsigned int)(x[next_index + 1]));
-    // timestamp.push_back((unsigned int)(
-    //   (unsigned int)(x[next_index + 5]) << 24 |
-    //   (unsigned int)(x[next_index + 4]) << 16 |
-    //   (unsigned int)(x[next_index + 3]) << 8 |
-    //   (unsigned int)(x[next_index + 2])));
-    // payload_size.push_back((unsigned int)(
-    //   (unsigned int)(x[next_index + 7]) << 8 |
-    //   (unsigned int)(x[next_index + 6])));
     index[this_row] = next_index;
     type[this_row] = x[next_index + 1];
     timestamp[this_row] = (unsigned int)(
@@ -55,13 +45,7 @@ DataFrame get_headersC(RawVector x, bool verbose) {
       payload_size[this_row];
     this_row += 1;
   }
-  // if (verbose) {
-  // if ( (x_len - next_index) < 10000) {
-  // Rcout << "\n " << this_row ;
-  // Rcout << "\n " << next_index ;
-  // Rcout << "\n " << max_samples ;
-  // }
-  // }
+
   LogicalVector l1 = !is_na(index);
   index = index[l1];
   type = type[l1];
