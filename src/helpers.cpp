@@ -94,7 +94,7 @@ void checksumC(RawVector log, int start_index, int end_index) {
 
   bool pass = checksum == log[end_index];
   if (!pass) {
-    stop("Cheksum calculation failed.");
+    stop("Checksum calculation failed.");
   }
 
 }

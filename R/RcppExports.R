@@ -10,8 +10,8 @@ get_VM_C <- function(x, y, z) {
     .Call('_AGread_get_VM_C', PACKAGE = 'AGread', x, y, z)
 }
 
-get_headersC <- function(x) {
-    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
+get_headersC <- function(x, verbose) {
+    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x, verbose)
 }
 
 #' @rdname impute_primary
