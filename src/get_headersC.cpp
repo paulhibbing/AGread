@@ -2,10 +2,30 @@
 using namespace Rcpp;
 using namespace std;
 
-// DataFrame get_headersC(CharacterVector filename, bool verbose, IntegerVector max_samples) {
-
+//' Find the next record separator
+//'
+//' @param log RawVector. The contents of log.bin
+//' @param index int. The starting index from which to search for a record
+//'   separator
+//' @keywords internal
 // [[Rcpp::export]]
-DataFrame get_headersC(RawVector x, bool verbose) {
+int next_separator(RawVector log, int index) {
+  unsigned char sep_value = 0x1E;
+  bool is_separator = (log[index] == sep_value);
+  while (!is_separator) {
+    index++;
+    is_separator = (log[index] == sep_value);
+  }
+  return index;
+}
+
+//' Collect informtion about the packets stored in log.bin
+//'
+//' @param x RawVector. The contents of log.bin
+//' @keywords internal
+// [[Rcpp::export]]
+DataFrame get_headersC(RawVector x) {
+
   //Retrieve information for first record
   int max_samples = round(x.size()*1.5);
   IntegerVector index (max_samples, NA_INTEGER);
@@ -16,15 +36,11 @@ DataFrame get_headersC(RawVector x, bool verbose) {
   //Setup for the loop
   int next_index = 0;
   int this_row = 0;
-  int x_len = x.size();
 
-  //Set up printing
-  if (verbose) {
-    Rcout << "\n x_len " << x_len;
-  }
   //Run the loop
-  while ( next_index < x_len ) {
+  while ( next_index < x.size() ) {
 
+    next_index = next_separator(x, next_index);
     index[this_row] = next_index;
     type[this_row] = x[next_index + 1];
     timestamp[this_row] = (unsigned int)(
@@ -49,8 +65,11 @@ DataFrame get_headersC(RawVector x, bool verbose) {
   payload_size = payload_size[l1];
 
   //Wrapup
-  return DataFrame::create( Named("index") = index ,
-                            Named("type") = type ,
-                            Named("timestamp") = timestamp ,
-                            Named("payload_size") = payload_size);
+  return DataFrame::create(
+    Named("index") = index ,
+    Named("type") = type ,
+    Named("timestamp") = timestamp ,
+    Named("payload_size") = payload_size
+  );
+
 }

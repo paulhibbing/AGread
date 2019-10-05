@@ -18,15 +18,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// next_separator
+int next_separator(RawVector log, int index);
+RcppExport SEXP _AGread_next_separator(SEXP logSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(next_separator(log, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_headersC
-DataFrame get_headersC(RawVector x, bool verbose);
-RcppExport SEXP _AGread_get_headersC(SEXP xSEXP, SEXP verboseSEXP) {
+DataFrame get_headersC(RawVector x);
+RcppExport SEXP _AGread_get_headersC(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_headersC(x, verbose));
+    rcpp_result_gen = Rcpp::wrap(get_headersC(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -304,7 +315,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
-    {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
+    {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
+    {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 1},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},

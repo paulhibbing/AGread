@@ -16,14 +16,14 @@
 \alias{parse_packet_set.BATTERY}
 \title{Parse all packets of a given type}
 \usage{
-\method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC",
-  verbose = FALSE, info, events, ...)
+\method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC", verbose = FALSE,
+  info, events, ...)
 
-\method{parse_packet_set}{CAPSENSE}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+\method{parse_packet_set}{CAPSENSE}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
 
-\method{parse_packet_set}{METADATA}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+\method{parse_packet_set}{METADATA}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
 
 \method{parse_packet_set}{EVENT}(set, log, tz = "UTC", verbose = FALSE,
   info, ...)
@@ -36,14 +36,14 @@
 
 parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
-\method{parse_packet_set}{default}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+\method{parse_packet_set}{default}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
 
-\method{parse_packet_set}{PARAMETERS}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+\method{parse_packet_set}{PARAMETERS}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
 
-\method{parse_packet_set}{BATTERY}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+\method{parse_packet_set}{BATTERY}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
 }
 \arguments{
 \item{set}{the set of record headers corresponding to each packet}

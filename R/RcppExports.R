@@ -10,8 +10,22 @@ get_VM_C <- function(x, y, z) {
     .Call('_AGread_get_VM_C', PACKAGE = 'AGread', x, y, z)
 }
 
-get_headersC <- function(x, verbose) {
-    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x, verbose)
+#' Find the next record separator
+#'
+#' @param log RawVector. The contents of log.bin
+#' @param index int. The starting index from which to search for a record
+#'   separator
+#' @keywords internal
+next_separator <- function(log, index) {
+    .Call('_AGread_next_separator', PACKAGE = 'AGread', log, index)
+}
+
+#' Collect informtion about the packets stored in log.bin
+#'
+#' @param x RawVector. The contents of log.bin
+#' @keywords internal
+get_headersC <- function(x) {
+    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
 }
 
 #' @rdname impute_primary
