@@ -270,8 +270,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // payload_parse_sensor_data_25C
-DataFrame payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id, int samp_rate);
-RcppExport SEXP _AGread_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP) {
+DataFrame payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id, int samp_rate, Datetime timestamp);
+RcppExport SEXP _AGread_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP timestampSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -279,7 +279,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< DataFrame >::type info(infoSEXP);
     Rcpp::traits::input_parameter< int >::type id(idSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(payload_parse_sensor_data_25C(payload, info, id, samp_rate));
+    Rcpp::traits::input_parameter< Datetime >::type timestamp(timestampSEXP);
+    rcpp_result_gen = Rcpp::wrap(payload_parse_sensor_data_25C(payload, info, id, samp_rate, timestamp));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -336,7 +337,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_interpolate_IMU", (DL_FUNC) &_AGread_interpolate_IMU, 2},
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
-    {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 4},
+    {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 5},
     {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 5},
     {"_AGread_parse_primary_accelerometerC", (DL_FUNC) &_AGread_parse_primary_accelerometerC, 5},
     {NULL, NULL, 0}

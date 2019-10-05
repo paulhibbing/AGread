@@ -36,8 +36,8 @@ List parse_primary_accelerometerC(
     }
 
     //Establish log position
-    int start_index = indices[i] - 1; //clone somehow?
-    int end_index = start_index + 8 + sizes[i]; //clone somehow?
+    int start_index = indices[i] - 1;
+    int end_index = start_index + 8 + sizes[i];
     checksumC(log, start_index, end_index);
     IntegerVector record_indices = seq(start_index, end_index);
     IntegerVector payload_indices = seq(start_index + 8, end_index - 1);

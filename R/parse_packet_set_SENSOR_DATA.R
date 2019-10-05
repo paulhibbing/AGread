@@ -41,43 +41,42 @@ parse_packet_set.SENSOR_DATA <- function(
 
   }
 
+  init <- get_times(
+    set$timestamp[1],
+    set$timestamp[nrow(set)] + 1,
+    schema$samples
+  ) %>% {data.frame(
+    Timestamp = lubridate::with_tz(
+      ., tz
+    )
+  )}
+
   IMU <- parse_IMU_C(
     set, log, schema$sensorColumns,
     schema$id, schema$samples, verbose
+  ) %>% {data.frame(
+    data.table::rbindlist(.)
+  )}
+
+  IMU$Timestamp <- lubridate::with_tz(
+    IMU$Timestamp, tz
   )
-
-  if (verbose) cat(
-    "\r  Calculating timestamps",
-    "                           "
-  )
-
-    IMU <- lapply(IMU, function(x) {
-      value <- as.POSIXct(x$Timestamp, tz)
-      increments <- seq_along(value) - 1
-      x$Timestamp <- value + (increments / length(value))
-      x
-    })
-
-  if (verbose) cat(
-    "\r  Merging packets       ",
-    "                         "
-  )
-
-    IMU <- data.frame(
-      data.table::rbindlist(IMU),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-
-    class(IMU) <- append(class(IMU), "IMU", 0)
 
   if ("Temperature" %in% names(IMU)) {
     if (verbose) cat(
       "\r  Calculating temperature",
-      "                         "
+      "                                  "
     )
     IMU$Temperature <- IMU$Temperature + temp_offset
   }
+
+  IMU <- merge(
+    init, IMU, "Timestamp", all.x = TRUE
+  ) %>% impute_IMU(
+    ., verbose
+  ) %>% {structure(
+    ., class = append(class(.), "IMU", 0)
+  )}
 
   if (verbose) packet_print("cleanup", class(set)[1])
 
