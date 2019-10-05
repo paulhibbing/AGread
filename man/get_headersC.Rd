@@ -4,10 +4,12 @@
 \alias{get_headersC}
 \title{Collect informtion about the packets stored in log.bin}
 \usage{
-get_headersC(x)
+get_headersC(x, verbose)
 }
 \arguments{
 \item{x}{RawVector. The contents of log.bin}
+
+\item{verbose}{bool. Print updates to console?}
 }
 \description{
 Collect informtion about the packets stored in log.bin

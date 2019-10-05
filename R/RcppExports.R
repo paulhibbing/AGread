@@ -212,10 +212,11 @@ imu_df <- function(input) {
 #' @param id integer. The \code{id} information from a \code{SENSOR_SCHEMA}
 #'   object
 #' @param samp_rate integer. The IMU sampling rate.
+#' @param timestamp Datetime. The packet timestamp
 #'
 #' @keywords internal
-payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
-    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate)
+payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate, timestamp) {
+    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate, timestamp)
 }
 
 #' Parse a packet of primary accelerometer data in C++

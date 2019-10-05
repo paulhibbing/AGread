@@ -24,9 +24,9 @@ List parse_IMU_C(
   int n_records = imu_records.nrow();
   IntegerVector indices = imu_records["index"];
   IntegerVector sizes = imu_records["payload_size"];
-  CharacterVector timestamps = imu_records["timestamp"];
+  DatetimeVector timestamps = imu_records["timestamp"];
 
-  List result(0); //initialize
+  List result(n_records); //initialize
 
   for (int i = 0; i < n_records; ++i) {
 
@@ -52,15 +52,10 @@ List parse_IMU_C(
 
     //Process the packet
       DataFrame new_result = payload_parse_sensor_data_25C(
-        payload, info, id, samp_rate
+        payload, info, id, samp_rate, timestamps[i]
       );
 
-      CharacterVector new_timestamp(0);
-      for (int j = 0; j < new_result.nrows(); ++j) {
-        new_timestamp.push_back(timestamps[i]);
-      }
-      new_result.push_front(new_timestamp, "Timestamp");
-      result.push_back(new_result);
+      result[i] = new_result;
 
   }
 
