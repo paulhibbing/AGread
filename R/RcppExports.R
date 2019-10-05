@@ -23,9 +23,10 @@ next_separator <- function(log, index) {
 #' Collect informtion about the packets stored in log.bin
 #'
 #' @param x RawVector. The contents of log.bin
+#' @param verbose bool. Print updates to console?
 #' @keywords internal
-get_headersC <- function(x) {
-    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x)
+get_headersC <- function(x, verbose) {
+    .Call('_AGread_get_headersC', PACKAGE = 'AGread', x, verbose)
 }
 
 #' @rdname impute_primary

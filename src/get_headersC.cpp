@@ -22,9 +22,10 @@ int next_separator(RawVector log, int index) {
 //' Collect informtion about the packets stored in log.bin
 //'
 //' @param x RawVector. The contents of log.bin
+//' @param verbose bool. Print updates to console?
 //' @keywords internal
 // [[Rcpp::export]]
-DataFrame get_headersC(RawVector x) {
+DataFrame get_headersC(RawVector x, bool verbose) {
 
   //Retrieve information for first record
   int max_samples = round(x.size()*1.5);
@@ -39,6 +40,16 @@ DataFrame get_headersC(RawVector x) {
 
   //Run the loop
   while ( next_index < x.size() ) {
+
+    //Set up printing
+    if (verbose) {
+      double prop = double(next_index) /
+        double(x.size());
+      int perc = floor(prop * 100);
+      Rcout << "\r  Getting record headers " <<
+        " ............. " <<
+          perc << "%";
+    }
 
     next_index = next_separator(x, next_index);
     index[this_row] = next_index;
