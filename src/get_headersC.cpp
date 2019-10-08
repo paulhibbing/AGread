@@ -14,6 +14,10 @@ int next_separator(RawVector log, int index) {
   bool is_separator = (log[index] == sep_value);
   while (!is_separator) {
     index++;
+    if (index >= log.size()) {
+      index = NA_INTEGER;
+      break;
+    }
     is_separator = (log[index] == sep_value);
   }
   return index;
@@ -52,6 +56,10 @@ DataFrame get_headersC(RawVector x, bool verbose) {
     }
 
     next_index = next_separator(x, next_index);
+    if (next_index == NA_INTEGER) {
+      break;
+    }
+
     index[this_row] = next_index;
     type[this_row] = x[next_index + 1];
     timestamp[this_row] = (unsigned int)(
