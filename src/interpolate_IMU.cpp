@@ -8,20 +8,35 @@ using namespace Rcpp;
 NumericVector interpolate_IMU(
     NumericVector original_samples, int target_frequency
 ) {
-  NumericVector new_values(0);
-  double interval = original_samples.size() / double(target_frequency);
+
+  double step_size = (
+    original_samples.size() /
+    double(target_frequency)
+  );
+
+  NumericVector new_values(target_frequency);
+
   for (int i = 0; i < target_frequency; ++i) {
-    int index = floor(i * interval);
-    double p = original_samples[index];
-    double n;
+
+    double position = i * step_size;
+    int index = floor(position);
+    double step_fraction = position - index;
+
+    double previous = original_samples[index];
+
+    double next;
     if (index + 1 < original_samples.size()) {
-      n = original_samples[index + 1];
+      next = original_samples[index + 1];
     } else {
-      n = p;
+      next = previous;
     }
-    double a = (i * interval) - index;
-    double new_value = ((1 - a) * p) + (a * n);
-    new_values.push_back(new_value);
+
+    new_values[i] = (
+      (1 - step_fraction) * previous
+    ) + (step_fraction * next);
+
   }
+
   return new_values;
+
 }
