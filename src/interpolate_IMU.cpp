@@ -14,6 +14,10 @@ NumericVector interpolate_IMU(
     double(target_frequency)
   );
 
+  if (step_size == 1) {
+    return original_samples;
+  }
+
   NumericVector new_values(target_frequency);
 
   for (int i = 0; i < target_frequency; ++i) {
