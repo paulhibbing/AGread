@@ -5,7 +5,7 @@
 \title{Reintegrate a data stream}
 \usage{
 reintegrate(ag, to, time_var = "Timestamp", direction = c("forwards",
-  "backwards"))
+  "backwards"), verbose = FALSE)
 }
 \arguments{
 \item{ag}{A data frame to reintegrate}
@@ -19,6 +19,8 @@ information}
 \item{direction}{The direction of reintegration, i.e. whether a timestamp
 refers to the timespan after the previous data point ("backwards"), or
 before the next data point ("forwards").}
+
+\item{verbose}{logical. Print updates to console?}
 }
 \description{
 Reintegrate a data stream

@@ -8,6 +8,7 @@
 #' @param direction The direction of reintegration, i.e. whether a timestamp
 #'   refers to the timespan after the previous data point ("backwards"), or
 #'   before the next data point ("forwards").
+#' @param verbose logical. Print updates to console?
 #'
 #' @export
 #'
@@ -49,7 +50,7 @@
 #' }
 #'
 reintegrate <- function(ag, to, time_var = "Timestamp",
-  direction = c("forwards", "backwards")) {
+  direction = c("forwards", "backwards"), verbose = FALSE) {
   # to <- 60
   # time_var <- "Timestamp"
   # direction <- "backwards"
@@ -65,6 +66,14 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
   }
 
   start_epoch <- unique(diff.POSIXt(ag[ ,time_var]))
+  if (start_epoch == to) {
+    if (verbose) cat(
+      "\nReturning original data --",
+      "already in desired epoch length"
+    )
+    return(ag)
+  }
+
   stopifnot(length(start_epoch) == 1, (to / start_epoch) %% 1 == 0)
 
   block_size <- to / start_epoch
