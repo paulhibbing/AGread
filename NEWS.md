@@ -1,6 +1,23 @@
+# AGread 1.1.0
+
+## Summary
+  
+## Changes
+
+  * Revised interpolation schemes where necessary to ensure
+    matching output with exported csv files.
+  * Resolved type mismatch in declaration/definition for
+    IMU sensor parsing.
+  * Incorporated idle sleep mode assessment
+  * Updated unit test cache
+  * Utilized pre-allocation to speed up code (#15, @muschellij2)
+  * Accounted for trailing zeroes in packets
+  * Fixed column name detection in `read_AG_counts`
+
 # AGread 1.0.0
 
 ## Summary
+
   Version 1.0.0 features speedup via Rcpp in the `read_gt3x`
     function. There is also increased reliance on S3 OOP
     in the background code. The output is now successfully
@@ -109,6 +126,3 @@
 ## Summary
 
   * This is the initial version of `AGread`.
-
-
-

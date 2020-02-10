@@ -1,7 +1,9 @@
 ## Resubmission:
-This is a major version increment reflecting incorporation of
-  Rcpp and increased reliance on S3 methods for handling
-  internal processes and function outputs.
+This is an update incorporating various changes broadly
+    related to data interpolation, reduced time complexities,
+    robustness of file reading functions, and a bug fix for
+    mismatched types in declaration/definition for one
+    particular internal function.
 
 ## Test environments
 * local Windows 10 installs, interchanging R 3.5.0 and R 3.5.2

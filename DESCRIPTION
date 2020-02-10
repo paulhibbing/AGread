@@ -1,11 +1,12 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 1.1.0.9000
+Version: 1.1.0
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
 		  role = c("aut","cre")),
     person(c("Vincent", "T."), "van Hees", role = "ctb"),
     person(c("Samuel", "R."), "LaMunion", role = "ctb"),
+    person(c("John"), "Muschelli", role = "ctb"),
     person("Daniel", "Judge", role = "ctb"),
     person("Judge", "Maygarden", role = "ctb"),
     person(c("ActiGraph", "LLC"), role = "cph")

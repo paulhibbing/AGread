@@ -165,32 +165,13 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
 
     } else {
 
-      if (verbose) message_update(6)
-
-      AG <- test_times(AG, verbose = verbose)
-
-      if (all(c("Axis1", "Axis2", "Axis3") %in% variables)) {
-        AG <- test_VM(AG, verbose = verbose)
-      }
-
-      variables <- variables[!variables %in% names(AG)]
-      missing_names <- names(AG)[grepl("^V[0-9]*$", names(AG))]
-
-      if (length(variables) == length(missing_names)) {
-        if (verbose) message_update(12)
-        names(AG)[grepl("^V[0-9]*$", names(AG))] <- variables
-      }
-
-      if (any(grepl("inclinometer", names(AG), ignore.case = TRUE))) {
-        AG <- check_inc(AG, verbose = verbose)
-      }
-
-      AG <- AG_time(AG, meta)
-
-      if (verbose) message_update(
-        16, dur = PAutilities::get_duration(timer)
+      stop(
+        "File reading failed for ",
+        basename(file), ".",
+        " \n  Consider submitting a bug report",
+        " (see `packageDescription(\"AGread\")`).",
+        call. = FALSE
       )
-      return(AG)
 
     }
 
