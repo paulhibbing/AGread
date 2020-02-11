@@ -5,9 +5,9 @@
 ## Changes
 
   * Revised interpolation schemes where necessary to ensure
-    matching output with exported csv files.
+    matching output between `read_gt3x` and exported csv files
   * Resolved type mismatch in declaration/definition for
-    IMU sensor parsing.
+    IMU sensor parsing
   * Incorporated idle sleep mode assessment
   * Updated unit test cache
   * Utilized pre-allocation to speed up code (#15, @muschellij2)
@@ -27,7 +27,7 @@
 ## Changes
 
   * Revised the flow of `parse_log_bin` to handle packet sets
-    via S3.
+    via S3
   * Accounted for USB connections in `gt3x` files
   * Corrected the interpolation of over- or under-sampled
     IMU packets
