@@ -20,7 +20,7 @@ next_separator <- function(log, index) {
     .Call('_AGread_next_separator', PACKAGE = 'AGread', log, index)
 }
 
-#' Collect informtion about the packets stored in log.bin
+#' Collect information about the packets stored in log.bin
 #'
 #' @param x RawVector. The contents of log.bin
 #' @param verbose bool. Print updates to console?
@@ -31,7 +31,7 @@ get_headersC <- function(x, verbose) {
 
 #' @rdname impute_primary
 #' @param vector_size int. The size of the final vector
-#' @param accel_input NumericVector. The acceleromter values to reference for
+#' @param accel_input NumericVector. The accelerometer values to reference for
 #'   latching
 #' @param samp_rate int. The sampling rate
 #' @keywords internal
@@ -58,7 +58,7 @@ get_latch_values <- function(indices, RAW) {
 }
 
 #' @rdname impute_primary
-#' @param timestamps vetor of timestamps on which to perform latching
+#' @param timestamps vector of timestamps on which to perform latching
 #' @param accel_x vector of x-axis accelerations on which to perform latching
 #' @param accel_y vector of y-axis accelerations on which to perform latching
 #' @param accel_z vector of z-axis accelerations on which to perform latching

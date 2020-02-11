@@ -23,7 +23,7 @@ int next_separator(RawVector log, int index) {
   return index;
 }
 
-//' Collect informtion about the packets stored in log.bin
+//' Collect information about the packets stored in log.bin
 //'
 //' @param x RawVector. The contents of log.bin
 //' @param verbose bool. Print updates to console?

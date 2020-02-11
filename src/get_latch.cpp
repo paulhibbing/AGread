@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 //' @rdname impute_primary
 //' @param vector_size int. The size of the final vector
-//' @param accel_input NumericVector. The acceleromter values to reference for
+//' @param accel_input NumericVector. The accelerometer values to reference for
 //'   latching
 //' @param samp_rate int. The sampling rate
 //' @keywords internal
@@ -94,7 +94,7 @@ DataFrame get_latch_values(
 }
 
 //' @rdname impute_primary
-//' @param timestamps vetor of timestamps on which to perform latching
+//' @param timestamps vector of timestamps on which to perform latching
 //' @param accel_x vector of x-axis accelerations on which to perform latching
 //' @param accel_y vector of y-axis accelerations on which to perform latching
 //' @param accel_z vector of z-axis accelerations on which to perform latching

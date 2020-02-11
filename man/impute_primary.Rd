@@ -31,7 +31,7 @@ idle_sleep_impute(object, events, info, tz, verbose)
 \arguments{
 \item{vector_size}{int. The size of the final vector}
 
-\item{accel_input}{NumericVector. The acceleromter values to reference for
+\item{accel_input}{NumericVector. The accelerometer values to reference for
 latching}
 
 \item{samp_rate}{int. The sampling rate}
@@ -46,7 +46,7 @@ the latch index}
 
 \item{RAW}{DataFrame containing raw acceleration data}
 
-\item{timestamps}{vetor of timestamps on which to perform latching}
+\item{timestamps}{vector of timestamps on which to perform latching}
 
 \item{accel_x}{vector of x-axis accelerations on which to perform latching}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{get_headersC}
 \alias{get_headersC}
-\title{Collect informtion about the packets stored in log.bin}
+\title{Collect information about the packets stored in log.bin}
 \usage{
 get_headersC(x, verbose)
 }
@@ -12,6 +12,6 @@ get_headersC(x, verbose)
 \item{verbose}{bool. Print updates to console?}
 }
 \description{
-Collect informtion about the packets stored in log.bin
+Collect information about the packets stored in log.bin
 }
 \keyword{internal}
