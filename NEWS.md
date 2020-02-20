@@ -1,3 +1,9 @@
+# AGread 1.1.1
+
+## Changes
+
+  * Fixed bugs related to overload and argument classes
+  
 # AGread 1.1.0
 
 ## Summary

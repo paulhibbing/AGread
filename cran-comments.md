@@ -1,13 +1,15 @@
 ## Resubmission:
-This is an update incorporating various changes broadly
-    related to data interpolation, reduced time complexities,
-    robustness of file reading functions, and a bug fix for
-    mismatched types in declaration/definition for one
-    particular internal function.
+This update is being submitted in response to an email from
+    Prof Brian Ridley, related to correcting an error that
+    occurred for the Solaris build.
+    
+* The ambiguous call to overloaded `pow` function has been
+    corrected, along with the call to `abs` using a non-integer.
 
 ## Test environments
 * local Windows 10 installs, interchanging R 3.5.0 and R 3.5.2
 * ubuntu 16.04.6 (on travis-ci), R 3.6.1 and R Under Development
+* x86_64-pc-linux-gnu (64-bit) on Rhub (R 3.6.2)
 * win-builder (devel and release)
 
 ## R CMD check results
