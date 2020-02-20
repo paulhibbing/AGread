@@ -36,9 +36,9 @@ double mid_round(double input, int digits) {
 
   if (input == 0) return 0;
 
-  int power = pow(10, digits + 1);
+  double power = pow(double(10), digits + 1);
   double high_number = input * power;
-  double remainder = int(high_number) % 10;
+  int remainder = int(high_number) % 10;
 
   bool mid_test = abs(remainder) < 5;
 
