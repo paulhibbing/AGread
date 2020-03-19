@@ -10,12 +10,7 @@
 #'
 parse_log_bin <- function(
   log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
-  include = c(
-    "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-    "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
-    "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-    "SENSOR_DATA"
-  )
+  include = gt3x_packets()
 ) {
 
   ## Validate the input to `include`

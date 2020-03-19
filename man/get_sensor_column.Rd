@@ -4,8 +4,15 @@
 \alias{get_sensor_column}
 \title{Parse a column of sensor data}
 \usage{
-get_sensor_column(payload, indices, bytesInValue, is_signed, endianness,
-  scale_factor, label)
+get_sensor_column(
+  payload,
+  indices,
+  bytesInValue,
+  is_signed,
+  endianness,
+  scale_factor,
+  label
+)
 }
 \arguments{
 \item{payload}{raw. The payload to parse}

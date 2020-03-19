@@ -10,14 +10,7 @@
 validate_include <- function(
   include,
   verbose = FALSE,
-  choices = c(
-    "METADATA", "PARAMETERS", "SENSOR_SCHEMA",
-    "BATTERY", "EVENT", "TAG", "ACTIVITY",
-    "HEART_RATE_BPM", "HEART_RATE_ANT",
-    "HEART_RATE_BLE", "LUX", "CAPSENSE",
-    "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4",
-    "ACTIVITY2", "SENSOR_DATA"
-  )
+  choices = gt3x_packets()
 ) {
 
   stopifnot(all(include %in% choices))

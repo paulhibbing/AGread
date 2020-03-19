@@ -4,8 +4,14 @@
 \alias{AG_merge}
 \title{Merge primary accelerometer data with IMU data}
 \usage{
-AG_merge(AG, primary_args = list(), IMU_args = list(),
-  common_args = list(), verbose = FALSE, ...)
+AG_merge(
+  AG,
+  primary_args = list(),
+  IMU_args = list(),
+  common_args = list(),
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{AG}{object obtained from \code{\link{read_gt3x}}}

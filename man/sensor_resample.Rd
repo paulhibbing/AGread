@@ -5,22 +5,19 @@
 \alias{Resample}
 \alias{Interpolate}
 \alias{interpolate_IMU}
-\alias{Resample}
-\alias{Interpolate}
 \alias{sensor_resample}
-\alias{Resample}
-\alias{Interpolate}
 \alias{interpolate_R}
-\alias{Resample}
-\alias{Interpolate}
 \title{Resample a sensor data stream}
 \usage{
 interpolate_C(original_samples, target_frequency)
 
 interpolate_IMU(original_samples, target_frequency)
 
-sensor_resample(original_samples, target_frequency, method = c("linear_C",
-  "linear_R", "IMU"))
+sensor_resample(
+  original_samples,
+  target_frequency,
+  method = c("linear_C", "linear_R", "IMU")
+)
 
 interpolate_R(original_samples, target_frequency)
 }

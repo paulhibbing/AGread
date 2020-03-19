@@ -4,8 +4,13 @@
 \alias{payload_parse_activity2_26C}
 \title{Parse a packet of primary accelerometer data in C++}
 \usage{
-payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet,
-  timestamp)
+payload_parse_activity2_26C(
+  payload,
+  samp_rate,
+  scale_factor,
+  is_last_packet,
+  timestamp
+)
 }
 \arguments{
 \item{payload}{RawVector containing the payload bytes}

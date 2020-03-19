@@ -4,8 +4,13 @@
 \alias{AG_collapse}
 \title{Collapse primary accelerometer data}
 \usage{
-AG_collapse(AG, output_window_secs = 1, samp_freq, method = "default",
-  ENMO2 = NULL)
+AG_collapse(
+  AG,
+  output_window_secs = 1,
+  samp_freq,
+  method = "default",
+  ENMO2 = NULL
+)
 }
 \arguments{
 \item{AG}{a dataframe of raw primary accelerometer data}

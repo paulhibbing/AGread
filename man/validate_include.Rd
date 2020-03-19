@@ -5,10 +5,7 @@
 \title{Validate the values provided for the \code{input} argument in
 \code{\link{read_gt3x}}}
 \usage{
-validate_include(include, verbose = FALSE, choices = c("METADATA",
-  "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG", "ACTIVITY",
-  "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
-  "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"))
+validate_include(include, verbose = FALSE, choices = gt3x_packets())
 }
 \arguments{
 \item{include}{character. The PACKET types to parse}
