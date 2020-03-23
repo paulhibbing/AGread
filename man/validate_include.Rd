@@ -5,14 +5,12 @@
 \title{Validate the values provided for the \code{input} argument in
 \code{\link{read_gt3x}}}
 \usage{
-validate_include(include, verbose = FALSE, choices = gt3x_packets())
+validate_include(include, verbose = FALSE)
 }
 \arguments{
 \item{include}{character. The PACKET types to parse}
 
 \item{verbose}{logical. Print updates to console?}
-
-\item{choices}{character. The packet types to choose from.}
 }
 \description{
 Validate the values provided for the \code{input} argument in

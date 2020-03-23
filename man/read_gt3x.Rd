@@ -2,12 +2,16 @@
 % Please edit documentation in R/read_gt3x.R
 \name{read_gt3x}
 \alias{read_gt3x}
-\alias{gt3x_packets}
 \title{Read data from a gt3x file}
 \usage{
-read_gt3x(file, tz = "UTC", verbose = FALSE, include = gt3x_packets())
-
-gt3x_packets()
+read_gt3x(
+  file,
+  tz = "UTC",
+  verbose = FALSE,
+  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG",
+    "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
+    "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA")
+)
 }
 \arguments{
 \item{file}{character. Path to the file}

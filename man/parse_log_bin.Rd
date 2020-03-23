@@ -10,7 +10,7 @@ parse_log_bin(
   info,
   tz = "UTC",
   verbose = FALSE,
-  include = gt3x_packets()
+  include = .packets
 )
 }
 \arguments{

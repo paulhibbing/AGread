@@ -1,6 +1,12 @@
 .accel_names <- c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
 .gyro_names <- c("Gyroscope_X", "Gyroscope_Y", "Gyroscope_Z")
 .mag_names <- c("Magnetometer_X", "Magnetometer_Y", "Magnetometer_Z")
+.packets <- c(
+  "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
+  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
+  "SENSOR_DATA"
+)
 
 #' Construct missing packet entries for ACTIVITY2 (RAW) data
 #'

@@ -10,7 +10,7 @@
 #'
 parse_log_bin <- function(
   log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
-  include = gt3x_packets()
+  include = .packets
 ) {
 
   ## Validate the input to `include`
