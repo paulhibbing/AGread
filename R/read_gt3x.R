@@ -40,6 +40,8 @@ read_gt3x <- function(
 
   #1) Verify .gt3x file is a zip file
 
+  file <- unzip_zipped_gt3x(file)
+
     file_3x <- try(
       utils::unzip(file, list = TRUE),
       TRUE

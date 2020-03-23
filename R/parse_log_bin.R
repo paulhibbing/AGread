@@ -95,6 +95,7 @@ parse_log_bin <- function(
     )
 
     if (verbose) cat("\n")
-    stats::setNames(results, new_names)
-
+    results = stats::setNames(results, new_names)
+    results$info = info
+    results
 }
