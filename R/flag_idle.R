@@ -1,5 +1,11 @@
-#' @importFrom lubridate %within%
-flag_sleep <- function(RAW, EVENT) {
+
+#' Flag Idle Sleep Times
+#'
+#' @param RAW packet from \code{\link{parse_log_bin}}
+#' @param EVENT packet from \code{\link{parse_log_bin}}
+#'
+#' @keywords internal
+flag_idle <- function(RAW, EVENT) {
   Timestamp = NULL
   rm(list = "Timestamp")
   if (is.null(RAW)) {
