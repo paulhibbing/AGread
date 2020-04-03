@@ -4,6 +4,7 @@
 #' @param tz character. The timezone to use
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
+#' @param flag_idle_sleep should recorded idle sleep times be tagged?
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -30,10 +31,11 @@
 #'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
-  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
-  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-  "SENSOR_DATA")
+  flag_idle_sleep = FALSE,
+  include =   c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+                "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
+                "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
+                "SENSOR_DATA")
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -42,6 +44,8 @@ read_gt3x <- function(
   )
 
   #1) Verify .gt3x file is a zip file
+
+  file <- unzip_zipped_gt3x(file)
 
     file_3x <- try(
       utils::unzip(file, list = TRUE),
@@ -82,6 +86,14 @@ read_gt3x <- function(
       verbose, include
     )
 
+    if (flag_idle_sleep) {
+      # if (!all(c("RAW", "EVENT") %in% names(log))) {
+      #   warning(paste0("flag_idle_sleep = TRUE, but RAW and EVENT",
+      #                  " were not included in choices or were NULL, ",
+      #                  "skipping"))
+      # }
+      log$RAW = flag_idle(log$RAW, log$EVENT)
+    }
   PAutilities::manage_procedure(
     "End", "\n\nProcessing complete. Elapsed time",
     PAutilities::get_duration(timer),
@@ -91,3 +103,4 @@ read_gt3x <- function(
   return(log)
 
 }
+
