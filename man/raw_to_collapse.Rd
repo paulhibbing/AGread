@@ -4,12 +4,14 @@
 \name{raw_to_collapse}
 \alias{raw_to_collapse}
 \title{Primary accelerometer data to collapse}
-\format{A data frame with 24000 rows and 3 variables:
+\format{
+A data frame with 24000 rows and 3 variables:
 \describe{
   \item{Accelerometer X}{Primary accelerometer x-axis data, in G}
   \item{Accelerometer Y}{Primary accelerometer y-axis data, in G}
   \item{Accelerometer Z}{Primary accelerometer z-axis data, in G}
-}}
+}
+}
 \usage{
 raw_to_collapse
 }

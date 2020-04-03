@@ -11,7 +11,8 @@ read_gt3x(
   flag_idle_sleep = FALSE,
   include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG",
     "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
-    "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA")
+    "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"),
+  cleanup = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ read_gt3x(
 \item{flag_idle_sleep}{should recorded idle sleep times be tagged?}
 
 \item{include}{character. The PACKET types to parse}
+
+\item{cleanup}{should any unzipped files be deleted?}
 }
 \value{
 A list of processed data, with one element for each of the relevant

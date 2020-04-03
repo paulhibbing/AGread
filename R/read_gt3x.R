@@ -5,6 +5,7 @@
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
 #' @param flag_idle_sleep should recorded idle sleep times be tagged?
+#' @param cleanup should any unzipped files be deleted?
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -35,7 +36,8 @@ read_gt3x <- function(
   include =   c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-                "SENSOR_DATA")
+                "SENSOR_DATA"),
+  cleanup = FALSE
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -45,7 +47,8 @@ read_gt3x <- function(
 
   #1) Verify .gt3x file is a zip file
 
-  file <- unzip_zipped_gt3x(file)
+  file <- unzip_zipped_gt3x(file, cleanup = cleanup)
+  remove_file = attr(file, "remove")
 
     file_3x <- try(
       utils::unzip(file, list = TRUE),
@@ -99,6 +102,12 @@ read_gt3x <- function(
     PAutilities::get_duration(timer),
     "minutes.\n", verbose = verbose
   )
+  if (cleanup) {
+    if (remove_file) {
+      file.remove(file)
+    }
+    file.remove(file.path(tempdir(), "log.bin"))
+  }
 
   return(log)
 
