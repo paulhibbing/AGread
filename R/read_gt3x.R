@@ -43,48 +43,19 @@ read_gt3x <- function(
     verbose = verbose
   )
 
-  #1) Verify .gt3x file is a zip file
-
-  file <- unzip_zipped_gt3x(file)
-
-    file_3x <- try(
-      utils::unzip(file, list = TRUE),
-      TRUE
-    )
-
-    if ("try-error" %in% class(file_3x)) {
-      stop(paste(
-        deparse(substitute(file)),
-        "is not a valid gt3x file."
-      ))
-    } else {
-      row.names(file_3x) <- file_3x$Name
-    }
-
-  #2) Verify .gt3x file has log.bin file
-  #3) Verify .gt3x file has info.txt file
-
-    stopifnot(all(c("info.txt", "log.bin") %in% file_3x$Name))
-
-  #4) Extract info.txt
-
-    info_con <- unz(file, "info.txt")
-
-  #5) Parse and save the sample rate from the info.txt file (it's stored in Hz)
-  #6) Parse and save the start date from the info.txt file (it's stored in .NET
-  #Ticks)
-
-    info <- parse_info_txt(info_con, tz, verbose)
-    close(info_con)
+  file <- read_gt3x_setup(file, verbose)
+  info <- read_gt3x_info(file, tz, verbose)
 
   #7) Extract log.bin
   #8) Parse log.bin
 
-    log_file  <- utils::unzip(file, "log.bin", exdir = tempdir())
-    log  <- parse_log_bin(
-      log_file, file_3x["log.bin", "Length"], info, tz,
-      verbose, include
-    )
+    log  <-
+      file$path %>%
+      utils::unzip("log.bin", exdir = tempdir()) %>%
+      parse_log_bin(
+        file$result["log.bin", "Length"],
+        info, tz, verbose, include
+      )
 
     if (flag_idle_sleep) {
       # if (!all(c("RAW", "EVENT") %in% names(log))) {
@@ -94,6 +65,7 @@ read_gt3x <- function(
       # }
       log$RAW = flag_idle(log$RAW, log$EVENT)
     }
+
   PAutilities::manage_procedure(
     "End", "\n\nProcessing complete. Elapsed time",
     PAutilities::get_duration(timer),
@@ -103,4 +75,3 @@ read_gt3x <- function(
   return(log)
 
 }
-
