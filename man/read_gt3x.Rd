@@ -4,11 +4,11 @@
 \alias{read_gt3x}
 \title{Read data from a gt3x file}
 \usage{
-read_gt3x(file, tz = "UTC", verbose = FALSE, flag_idle_sleep = FALSE,
-  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
-  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-  "SENSOR_DATA"))
+read_gt3x(file, tz = "UTC", verbose = FALSE, include = c("METADATA",
+  "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG", "ACTIVITY",
+  "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
+  "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"),
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev"))
 }
 \arguments{
 \item{file}{character. Path to the file}
@@ -17,9 +17,16 @@ read_gt3x(file, tz = "UTC", verbose = FALSE, flag_idle_sleep = FALSE,
 
 \item{verbose}{logical. Print updates to console?}
 
+\item{include}{character. The PACKET types to parse}
+
 \item{flag_idle_sleep}{should recorded idle sleep times be tagged?}
 
-\item{include}{character. The PACKET types to parse}
+\item{parser}{the parsing scheme to use, either \code{legacy} or \code{dev}.
+The former runs slower but includes more extensive checks to ensure
+alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
+faster and has also been checked for alignment with \code{RAW.csv} and
+\code{IMU.csv} files, but not as strictly. For example, rounding is not
+performed by \code{parser="dev"}.}
 }
 \value{
 A list of processed data, with one element for each of the relevant
