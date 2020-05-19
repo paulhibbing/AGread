@@ -5,6 +5,12 @@
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
 #' @param flag_idle_sleep should recorded idle sleep times be tagged?
+#' @param parser the parsing scheme to use, either \code{legacy} or \code{dev}.
+#'   The former runs slower but includes more extensive checks to ensure
+#'   alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
+#'   faster and has also been checked for alignment with \code{RAW.csv} and
+#'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
+#'   performed by \code{parser="dev"}.
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -31,11 +37,11 @@
 #'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
-  flag_idle_sleep = FALSE,
   include =   c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-                "SENSOR_DATA")
+                "SENSOR_DATA"),
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev")
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -46,25 +52,19 @@ read_gt3x <- function(
   file <- read_gt3x_setup(file, verbose)
   info <- read_gt3x_info(file, tz, verbose)
 
-  #7) Extract log.bin
-  #8) Parse log.bin
+  log  <-
+    file$path %>%
+    utils::unzip("log.bin", exdir = tempdir()) %>%
+    parse_log_bin(info, tz, verbose, include, parser, file)
 
-    log  <-
-      file$path %>%
-      utils::unzip("log.bin", exdir = tempdir()) %>%
-      parse_log_bin(
-        file$result["log.bin", "Length"],
-        info, tz, verbose, include
-      )
-
-    if (flag_idle_sleep) {
-      # if (!all(c("RAW", "EVENT") %in% names(log))) {
-      #   warning(paste0("flag_idle_sleep = TRUE, but RAW and EVENT",
-      #                  " were not included in choices or were NULL, ",
-      #                  "skipping"))
-      # }
-      log$RAW = flag_idle(log$RAW, log$EVENT)
-    }
+  if (flag_idle_sleep) {
+    # if (!all(c("RAW", "EVENT") %in% names(log))) {
+    #   warning(paste0("flag_idle_sleep = TRUE, but RAW and EVENT",
+    #                  " were not included in choices or were NULL, ",
+    #                  "skipping"))
+    # }
+    log$RAW = flag_idle(log$RAW, log$EVENT)
+  }
 
   PAutilities::manage_procedure(
     "End", "\n\nProcessing complete. Elapsed time",

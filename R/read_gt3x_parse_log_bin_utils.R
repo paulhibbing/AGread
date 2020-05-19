@@ -25,6 +25,22 @@ validate_include <- function(
 
 }
 
+#' @rdname parse_log_bin
+#' @keywords internal
+validate_parser <- function(parser) {
+
+  if (identical(
+    parser, c("legacy", "dev")
+  )) return("legacy")
+
+  parser %T>%
+  {stopifnot(
+    . %in% c("legacy", "dev"),
+    length(.) == 1
+  )}
+
+}
+
 # Record header retrieval & formatting ------------------------------------
 
 #' Retrieve record headers from .gt3x binary data

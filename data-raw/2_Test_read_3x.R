@@ -27,8 +27,8 @@ include <- c(
   "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
   "SENSOR_DATA"
 )
-
-# file_3x_len <- file_3x["log.bin", "Length"]
+flag_idle_sleep <- FALSE
+parser <- "legacy"
 
 # record_set <- record_headers[[6]]
 # record_header <- record_set[20, ]
