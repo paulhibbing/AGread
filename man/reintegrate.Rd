@@ -4,13 +4,8 @@
 \alias{reintegrate}
 \title{Reintegrate a data stream}
 \usage{
-reintegrate(
-  ag,
-  to,
-  time_var = "Timestamp",
-  direction = c("forwards", "backwards"),
-  verbose = FALSE
-)
+reintegrate(ag, to, time_var = "Timestamp", direction = c("forwards",
+  "backwards"), verbose = FALSE)
 }
 \arguments{
 \item{ag}{A data frame to reintegrate}

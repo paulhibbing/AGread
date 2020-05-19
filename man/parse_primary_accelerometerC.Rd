@@ -4,13 +4,8 @@
 \alias{parse_primary_accelerometerC}
 \title{Parse all primary accelerometer packets in a file}
 \usage{
-parse_primary_accelerometerC(
-  primary_records,
-  log,
-  scale_factor,
-  samp_rate,
-  verbose
-)
+parse_primary_accelerometerC(primary_records, log, scale_factor, samp_rate,
+  verbose)
 }
 \arguments{
 \item{primary_records}{DataFrame with information about each packet}

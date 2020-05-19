@@ -4,15 +4,11 @@
 \alias{read_gt3x}
 \title{Read data from a gt3x file}
 \usage{
-read_gt3x(
-  file,
-  tz = "UTC",
-  verbose = FALSE,
-  flag_idle_sleep = FALSE,
-  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT", "TAG",
-    "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
-    "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA")
-)
+read_gt3x(file, tz = "UTC", verbose = FALSE, flag_idle_sleep = FALSE,
+  include = c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
+  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
+  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
+  "SENSOR_DATA"))
 }
 \arguments{
 \item{file}{character. Path to the file}

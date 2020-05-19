@@ -17,14 +17,8 @@ get_latch_index(missing_times, reference_times)
 
 get_latch_values(indices, RAW)
 
-get_latch_entries(
-  samp_rate,
-  timestamps,
-  accel_x,
-  accel_y,
-  accel_z,
-  return_empty = FALSE
-)
+get_latch_entries(samp_rate, timestamps, accel_x, accel_y, accel_z,
+  return_empty = FALSE)
 
 latch_replicate(start_time, stop_time, x_val, y_val, z_val)
 

@@ -4,14 +4,8 @@
 \alias{read_AG_counts}
 \title{Read data table files containing count values}
 \usage{
-read_AG_counts(
-  file,
-  verbose = FALSE,
-  skip = 10,
-  nrows = 10,
-  header = FALSE,
-  ...
-)
+read_AG_counts(file, verbose = FALSE, skip = 10, nrows = 10,
+  header = FALSE, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to an automatically-generated csv

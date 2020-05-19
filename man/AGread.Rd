@@ -3,6 +3,7 @@
 \docType{package}
 \name{AGread}
 \alias{AGread}
+\alias{AGread-package}
 \title{Read Data Files from ActiGraph Monitors}
 \description{
 This provides support for reading ActiGraph files of various modes into R.
