@@ -7,6 +7,11 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
 
+  // Console update
+    if (verbose) {
+      Rcout << "\r  Parsing log.bin ";
+    }
+
   // Set up preallocated null list
     double max_packets = log.size()/double(10);
     Rcpp::List packets(ceil(max_packets));
@@ -21,13 +26,6 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
     int current_index = 0;
 
   while(current_index < log.size()) {
-
-    //Set up printing
-    if (verbose) {
-      Rcout << "\r  Parsing log.bin " <<
-      " ............. " <<
-      floor(double(current_index)/log.size()*100) << "%";
-    }
 
     type = log[current_index + 1];
 
@@ -55,10 +53,11 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
 
   }
 
-  if (verbose) {
-    Rcout << "\r  Getting record headers " <<
-    " ............. COMPLETE";
-  }
+  // Console update
+    if (verbose) {
+      Rcout << "\r  Parsing log.bin " <<
+      " ............. COMPLETE";
+    }
 
   return packets;
 

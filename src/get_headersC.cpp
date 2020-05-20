@@ -11,6 +11,11 @@ using namespace std;
 // [[Rcpp::export]]
 DataFrame get_headersC(RawVector x, bool verbose) {
 
+  //Console update
+  if (verbose) {
+    Rcout << "\r  Getting record headers ";
+  }
+
   //Retrieve information for first record
   int max_samples = round(x.size()*1.5);
   IntegerVector index (max_samples, NA_INTEGER);
@@ -24,16 +29,6 @@ DataFrame get_headersC(RawVector x, bool verbose) {
 
   //Run the loop
   while ( next_index < x.size() ) {
-
-    //Set up printing
-    if (verbose) {
-      double prop = double(next_index) /
-        double(x.size());
-      int perc = floor(prop * 100);
-      Rcout << "\r  Getting record headers " <<
-        " ............. " <<
-          perc << "%";
-    }
 
     next_index = next_separator(x, next_index);
     if (next_index == NA_INTEGER) {
@@ -64,6 +59,12 @@ DataFrame get_headersC(RawVector x, bool verbose) {
   payload_size = payload_size[l1];
 
   //Wrapup
+
+  if (verbose) {
+    Rcout << "\r  Getting record headers " <<
+      " ............. COMPLETE";
+  }
+
   return DataFrame::create(
     Named("index") = index ,
     Named("type") = type ,
