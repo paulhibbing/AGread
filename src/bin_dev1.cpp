@@ -2,7 +2,7 @@
 #include "helpers.h"
 using namespace Rcpp;
 
-//' @rdname dev_bin_type1
+//' @rdname parse_log_bin
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
@@ -20,6 +20,8 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
     int type;
     int timestamp;
     int size;
+    int payload_end;
+    RawVector payload;
 
   // Define counter variables
     int packet_number = 0;
@@ -41,8 +43,14 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
       (unsigned int)(log[current_index + 6])
     );
 
+    payload_end = current_index + 8 + size;
+    payload = log[seq(current_index, payload_end)];
+    checksumC(log, current_index, payload_end);
+
     packets[packet_number] = List::create(
-      Named("type") = type, Named("timestamp") = timestamp
+      Named("type") = type,
+      Named("timestamp") = timestamp,
+      Named("payload") = payload
     );
     ++packet_number;
 
@@ -53,6 +61,8 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
 
   }
 
+  IntegerVector keep = seq_len(packet_number);
+  packets = packets[keep - 1];
   // Console update
     if (verbose) {
       Rcout << "\r  Parsing log.bin " <<

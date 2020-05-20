@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// bin_dev1_initialize
+Rcpp::List bin_dev1_initialize(RawVector log, bool verbose);
+RcppExport SEXP _AGread_bin_dev1_initialize(SEXP logSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(bin_dev1_initialize(log, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_VM_C
 NumericVector get_VM_C(NumericVector x, NumericVector y, NumericVector z);
 RcppExport SEXP _AGread_get_VM_C(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP) {
@@ -15,18 +27,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
     Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
     rcpp_result_gen = Rcpp::wrap(get_VM_C(x, y, z));
-    return rcpp_result_gen;
-END_RCPP
-}
-// next_separator
-int next_separator(RawVector log, int index);
-RcppExport SEXP _AGread_next_separator(SEXP logSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
-    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(next_separator(log, index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -120,6 +120,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Datetime >::type end(endSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// next_separator
+int next_separator(RawVector log, int index);
+RcppExport SEXP _AGread_next_separator(SEXP logSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(next_separator(log, index));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -316,8 +328,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_AGread_bin_dev1_initialize", (DL_FUNC) &_AGread_bin_dev1_initialize, 2},
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
-    {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},
@@ -325,6 +337,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
     {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 3},
+    {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
