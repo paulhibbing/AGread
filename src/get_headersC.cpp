@@ -1,27 +1,7 @@
 #include <Rcpp.h>
+#include "helpers.h"
 using namespace Rcpp;
 using namespace std;
-
-//' Find the next record separator
-//'
-//' @param log RawVector. The contents of log.bin
-//' @param index int. The starting index from which to search for a record
-//'   separator
-//' @keywords internal
-// [[Rcpp::export]]
-int next_separator(RawVector log, int index) {
-  unsigned char sep_value = 0x1E;
-  bool is_separator = (log[index] == sep_value);
-  while (!is_separator) {
-    index++;
-    if (index >= log.size()) {
-      index = NA_INTEGER;
-      break;
-    }
-    is_separator = (log[index] == sep_value);
-  }
-  return index;
-}
 
 //' Collect information about the packets stored in log.bin
 //'

@@ -49,7 +49,8 @@ read_gt3x <- function(
     verbose = verbose
   )
 
-  file <- read_gt3x_setup(file, verbose)
+  file %<>% read_gt3x_setup(verbose)
+
   info <- read_gt3x_info(file, tz, verbose)
 
   log  <-
