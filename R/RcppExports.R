@@ -3,8 +3,8 @@
 
 #' @rdname parse_log_bin
 #' @keywords internal
-bin_dev1_initialize <- function(log, verbose) {
-    .Call('_AGread_bin_dev1_initialize', PACKAGE = 'AGread', log, verbose)
+bin_dev1_initialize <- function(log, verbose, include) {
+    .Call('_AGread_bin_dev1_initialize', PACKAGE = 'AGread', log, verbose, include)
 }
 
 #' @rdname get_VM

@@ -6,14 +6,15 @@
 using namespace Rcpp;
 
 // bin_dev1_initialize
-Rcpp::List bin_dev1_initialize(RawVector log, bool verbose);
-RcppExport SEXP _AGread_bin_dev1_initialize(SEXP logSEXP, SEXP verboseSEXP) {
+List bin_dev1_initialize(RawVector log, bool verbose, IntegerVector include);
+RcppExport SEXP _AGread_bin_dev1_initialize(SEXP logSEXP, SEXP verboseSEXP, SEXP includeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(bin_dev1_initialize(log, verbose));
+    Rcpp::traits::input_parameter< IntegerVector >::type include(includeSEXP);
+    rcpp_result_gen = Rcpp::wrap(bin_dev1_initialize(log, verbose, include));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -328,7 +329,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_AGread_bin_dev1_initialize", (DL_FUNC) &_AGread_bin_dev1_initialize, 2},
+    {"_AGread_bin_dev1_initialize", (DL_FUNC) &_AGread_bin_dev1_initialize, 3},
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},

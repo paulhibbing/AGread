@@ -5,16 +5,18 @@ using namespace Rcpp;
 //' @rdname parse_log_bin
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
+List bin_dev1_initialize(
+    RawVector log, bool verbose, IntegerVector include
+) {
 
   // Console update
     if (verbose) {
       Rcout << "\r  Parsing log.bin ";
     }
 
-  // Set up preallocated null list
+  // Set up preallocated list (10 bytes should be minimum packet size)
     double max_packets = log.size()/double(10);
-    Rcpp::List packets(ceil(max_packets));
+    List packets(ceil(max_packets));
 
   // Declare loop variables
     int type;
@@ -27,42 +29,53 @@ Rcpp::List bin_dev1_initialize(RawVector log, bool verbose) {
     int packet_number = 0;
     int current_index = 0;
 
-  while(current_index < log.size()) {
+  // Run the loop
+    while(current_index < log.size()) {
 
-    type = log[current_index + 1];
+      type = log[current_index + 1];
 
-    timestamp = (unsigned int)(
-      (unsigned int)(log[current_index + 5]) << 24 |
-      (unsigned int)(log[current_index + 4]) << 16 |
-      (unsigned int)(log[current_index + 3]) << 8 |
-      (unsigned int)(log[current_index + 2])
-    );
+      size = (unsigned int)(
+        (unsigned int)(log[current_index + 7]) << 8 |
+        (unsigned int)(log[current_index + 6])
+      );
 
-    size = (unsigned int)(
-      (unsigned int)(log[current_index + 7]) << 8 |
-      (unsigned int)(log[current_index + 6])
-    );
+      if (
+          setdiff(IntegerVector(1,type), include).size() == 0
+      ) {
 
-    payload_end = current_index + 8 + size;
-    payload = log[seq(current_index, payload_end)];
-    checksumC(log, current_index, payload_end);
+        timestamp = (unsigned int)(
+          (unsigned int)(log[current_index + 5]) << 24 |
+          (unsigned int)(log[current_index + 4]) << 16 |
+          (unsigned int)(log[current_index + 3]) << 8 |
+          (unsigned int)(log[current_index + 2])
+        );
 
-    packets[packet_number] = List::create(
-      Named("type") = type,
-      Named("timestamp") = timestamp,
-      Named("payload") = payload
-    );
-    ++packet_number;
+        payload_end = current_index + 8 + size;
+        payload = log[seq(current_index, payload_end)];
+        checksumC(log, current_index, payload_end);
 
-    current_index = next_separator(log, current_index + 9 + size);
-    if (current_index == NA_INTEGER) {
-      break;
+        packets[packet_number] = List::create(
+          Named("type") = type,
+          Named("timestamp") = timestamp,
+          Named("payload") = payload
+        );
+        ++packet_number;
+
+      }
+
+      current_index = next_separator(
+        log, current_index + 9 + size
+      );
+      if (current_index == NA_INTEGER) {
+        break;
+      }
+
     }
 
-  }
+  // Resize the output list
+    IntegerVector keep = seq_len(packet_number);
+    packets = packets[keep - 1];
 
-  IntegerVector keep = seq_len(packet_number);
-  packets = packets[keep - 1];
   // Console update
     if (verbose) {
       Rcout << "\r  Parsing log.bin " <<

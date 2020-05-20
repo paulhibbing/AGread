@@ -7,6 +7,20 @@
   "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
   "SENSOR_DATA"
 )
+.numbers <- as.integer(
+  c(0, 2:7, 9, 11:16, 21, 24:26)
+)
+
+#' Switch character packet inclusion vector to an integer vector for Rcpp dev
+#' parser
+#'
+#' @inheritParams read_gt3x
+#'
+#' @keywords internal
+cpp_include <- function(include) {
+  match(include, .packets) %>%
+  .numbers[.]
+}
 
 #' Construct missing packet entries for ACTIVITY2 (RAW) data
 #'

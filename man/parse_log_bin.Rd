@@ -12,9 +12,9 @@
 \alias{validate_parser}
 \title{Parse the log component of a gt3x file}
 \usage{
-bin_dev1_initialize(log, verbose)
+bin_dev1_initialize(log, verbose, include)
 
-dev_bin_type1(log, verbose)
+dev_bin_type1(log, tz, verbose, include, info)
 
 legacy_bin_type1(log, tz, verbose = FALSE, include, info)
 
@@ -32,9 +32,9 @@ validate_parser(parser)
 
 \item{verbose}{logical. Print updates to console?}
 
-\item{tz}{character. The timezone to use}
-
 \item{include}{character. The PACKET types to parse}
+
+\item{tz}{character. The timezone to use}
 
 \item{info}{result of \code{\link{parse_info_txt}}}
 

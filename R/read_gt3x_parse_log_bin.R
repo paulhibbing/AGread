@@ -59,7 +59,8 @@ parse_log_bin <- function(
       ),
 
       "dev" = dev_parse(
-        file
+        file, log = log, tz = tz, verbose = verbose,
+        include = include, info = info
       )
 
     )
