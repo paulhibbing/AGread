@@ -22,6 +22,7 @@ List bin_dev1_initialize(
     int type;
     int timestamp;
     int size;
+    int payload_start;
     int payload_end;
     RawVector payload;
 
@@ -50,8 +51,9 @@ List bin_dev1_initialize(
           (unsigned int)(log[current_index + 2])
         );
 
-        payload_end = current_index + 8 + size;
-        payload = log[seq(current_index, payload_end)];
+        payload_start = current_index + 8;
+        payload_end = payload_start + size;
+        payload = log[seq(payload_start, payload_end - 1)];
         checksumC(log, current_index, payload_end);
 
         packets[packet_number] = List::create(
