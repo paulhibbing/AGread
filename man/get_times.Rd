@@ -4,7 +4,7 @@
 \alias{get_times}
 \title{Determine the expected timestamps for primary accelerometer output}
 \usage{
-get_times(start, end, samp_rate)
+get_times(start, end, samp_rate, extra_packet = FALSE)
 }
 \arguments{
 \item{start}{The file start time}
@@ -12,6 +12,8 @@ get_times(start, end, samp_rate)
 \item{end}{The file end time}
 
 \item{samp_rate}{int. The sampling rate}
+
+\item{extra_packet}{bool. Add an extra packet at the end?}
 }
 \description{
 Determine the expected timestamps for primary accelerometer output

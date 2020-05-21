@@ -17,7 +17,7 @@
 \title{Parse all packets of a given type}
 \usage{
 \method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC", verbose = FALSE,
-  info, events, ...)
+  info, events, raw_method, ...)
 
 \method{parse_packet_set}{CAPSENSE}(set, log, tz = "UTC", verbose = FALSE,
   ...)
@@ -32,7 +32,7 @@
   verbose = FALSE, parameters, schema, ...)
 
 \method{parse_packet_set}{SENSOR_SCHEMA}(set, log, tz = "UTC",
-  verbose = FALSE, ...)
+  verbose = FALSE, payload = NULL, ...)
 
 parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
@@ -57,6 +57,9 @@ parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 \item{info}{the result of \code{\link{parse_info_txt}}}
 
 \item{events}{the result of parsing EVENTS packets}
+
+\item{raw_method}{the method to use for formatting the ACTIVITY2 packets
+(internal use)}
 
 \item{...}{further arguments passed to methods}
 

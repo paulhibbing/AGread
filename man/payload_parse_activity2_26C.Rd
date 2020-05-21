@@ -2,10 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{payload_parse_activity2_26C}
 \alias{payload_parse_activity2_26C}
+\alias{dev_activity2_payload}
 \title{Parse a packet of primary accelerometer data in C++}
 \usage{
 payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet,
   timestamp)
+
+dev_activity2_payload(payload, samp_rate, scale_factor, is_last_packet)
 }
 \arguments{
 \item{payload}{RawVector containing the payload bytes}

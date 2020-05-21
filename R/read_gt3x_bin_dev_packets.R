@@ -1,3 +1,4 @@
+#' Parse gt3x packets using the dev scheme
 #' @rdname dev_bin_packets
 #' @param packets list object containing data packets
 #' @inheritParams read_gt3x
