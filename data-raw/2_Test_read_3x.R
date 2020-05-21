@@ -17,7 +17,7 @@ devtools::load_all()
 
 # Interactive -------------------------------------------------------------
 
-file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
+file <- "data-raw/internal_tests/test11.gt3x"
 verbose <- TRUE
 tz <- "UTC"
 give_timestamp <- TRUE
