@@ -25,12 +25,12 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
   ## Get parameters (if applicable)
 
-    parameters <- get_parameters(packets, verbose)
+    parameters <- get_parameters(packets, tz, verbose)
     packets$PARAMETERS <- NULL
 
   ## Get schema (if applicable)
 
-    schema <- get_schema(packets, verbose)
+    schema <- get_schema(packets, tz, verbose)
     packets$SENSOR_SCHEMA <- NULL
 
   ## Get events (if applicable)

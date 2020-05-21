@@ -17,7 +17,7 @@
 \usage{
 dev1_bin_initialize(log, verbose, include)
 
-init_RAW(info)
+init_RAW(info, tz)
 
 get_RAW1(info, set, log, verbose)
 

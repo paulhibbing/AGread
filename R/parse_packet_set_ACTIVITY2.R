@@ -10,7 +10,7 @@ parse_packet_set.ACTIVITY2 <- function(
 ) {
 
   stopifnot(raw_method %in% 1:2)
-  init <- init_RAW(info)
+  init <- init_RAW(info, tz)
 
   RAW <- switch(
     raw_method,
@@ -36,7 +36,7 @@ parse_packet_set.ACTIVITY2 <- function(
 
 #' @rdname parse_log_bin
 #' @keywords internal
-init_RAW <- function(info) {
+init_RAW <- function(info, tz) {
   get_times(
     info$Start_Date,
     info$Last_Sample_Time,

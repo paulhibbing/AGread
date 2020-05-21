@@ -3,7 +3,7 @@
 #' @param packets list object containing data packets
 #' @inheritParams read_gt3x
 #' @keywords internal
-get_parameters <- function(packets, verbose) {
+get_parameters <- function(packets, tz, verbose) {
 
   if (!"PARAMETERS" %in% names(packets)) {
     if (verbose) cat(
@@ -31,7 +31,7 @@ get_parameters <- function(packets, verbose) {
 #' @param packets list object containing data packets
 #' @inheritParams read_gt3x
 #' @keywords internal
-get_schema <- function(packets, verbose) {
+get_schema <- function(packets, tz, verbose) {
 
   if (!"SENSOR_SCHEMA" %in% names(packets)) {
     if (verbose) cat(

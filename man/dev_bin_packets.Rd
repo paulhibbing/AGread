@@ -7,9 +7,9 @@
 \alias{get_activity2}
 \title{Parse gt3x packets using the dev scheme}
 \usage{
-get_parameters(packets, verbose)
+get_parameters(packets, tz, verbose)
 
-get_schema(packets, verbose)
+get_schema(packets, tz, verbose)
 
 get_events(packets, tz, info, verbose)
 
@@ -18,9 +18,9 @@ get_activity2(packets, all_times, tz, info, verbose)
 \arguments{
 \item{packets}{list object containing data packets}
 
-\item{verbose}{logical. Print updates to console?}
-
 \item{tz}{character. The timezone to use}
+
+\item{verbose}{logical. Print updates to console?}
 
 \item{all_times}{vector of all expected timestamps}
 
