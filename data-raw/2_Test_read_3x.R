@@ -28,7 +28,8 @@ include <- c(
   "SENSOR_DATA"
 )
 flag_idle_sleep <- FALSE
-parser <- "legacy"
+parser <- "dev"
+raw_method <- 2
 
 # record_set <- record_headers[[6]]
 # record_header <- record_set[20, ]

@@ -15,22 +15,18 @@ parse_packet_set.ACTIVITY2 <- function(
   RAW <- switch(
     raw_method,
     get_RAW1(info, set, log, verbose),
-    get_RAW2()
+    get_RAW2(info, set, verbose)
   )
 
-  RAW$Timestamp <- lubridate::with_tz(
-    RAW$Timestamp, tz
-  )
+  RAW$Timestamp %<>% lubridate::with_tz(tz)
 
-  RAW <- idle_sleep_impute(
-    RAW, events, info, tz, verbose
-  ) %>% merge(
-    init, ., "Timestamp", all.x = TRUE
-  ) %>% impute_primary(
-    verbose
-  ) %>% {structure(
-    ., class = append(class(.), "RAW", 0)
-  )}
+  RAW %<>%
+    idle_sleep_impute(events, info, tz, verbose) %>%
+    merge(init, ., "Timestamp", all.x = TRUE) %>%
+    impute_primary(verbose) %>%
+    {structure(
+      ., class = append(class(.), "RAW", 0)
+    )}
 
   if (verbose) packet_print("cleanup", class(set)[1])
 
@@ -56,7 +52,7 @@ init_RAW <- function(info) {
 get_RAW1 <- function(info, set, log, verbose) {
 
   get_primary_accel_scale(info) %>%
-  parse_primary_accelerometerC(
+  legacy_parse_primary_accelerometerC(
     set, log, ., info$Sample_Rate, verbose
   ) %>%
   {data.frame(
@@ -67,6 +63,14 @@ get_RAW1 <- function(info, set, log, verbose) {
 
 #' @rdname parse_log_bin
 #' @keywords internal
-get_RAW2 <- function(info, set, log, verbose) {
-  NULL
+get_RAW2 <- function(info, set, verbose) {
+
+  get_primary_accel_scale(info) %>%
+  dev_parse_primary_accelerometerC(
+    set, ., info$Sample_Rate, verbose
+  ) %>%
+  {data.frame(
+    data.table::rbindlist(.)
+  )}
+
 }

@@ -5,13 +5,13 @@ using namespace Rcpp;
 //' @rdname parse_log_bin
 //' @keywords internal
 // [[Rcpp::export]]
-List bin_dev1_initialize(
+List dev1_bin_initialize(
     RawVector log, bool verbose, IntegerVector include
 ) {
 
   // Console update
     if (verbose) {
-      Rcout << "\r  Parsing log.bin ";
+      Rcout << "\r  Pre-parsing log.bin ";
     }
 
   // Set up preallocated list (10 bytes should be minimum packet size)

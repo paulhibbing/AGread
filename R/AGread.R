@@ -52,7 +52,7 @@
 #' head(lapply(AG_3x, head))
 #' }
 #'
-#' @importFrom magrittr %>% %T>% %<>%
+#' @importFrom magrittr %>% %T>% %<>% %$%
 #' @importFrom rlang := .data
 #' @import Rcpp
 #' @docType package

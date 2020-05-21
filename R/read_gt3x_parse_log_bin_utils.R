@@ -160,7 +160,7 @@ packet_print <- function(
     match.arg(type),
 
     "startup" = cat(
-      "\n  Formatting", label, "packet(s)"
+      "\n  Parsing", label, "packet(s)"
     ),
 
     "progress" =   cat(
