@@ -55,7 +55,7 @@ legacy_bin_type1 <- function(log, tz, verbose = FALSE, include, info) {
       log = log, tz = tz,
       verbose = verbose, info = info,
       parameters = parameters, schema = schema,
-      events = events
+      events = events, raw_method = 1
     )
 
     if(all("PARAMETERS" %in% include, exists("parameters"))) {

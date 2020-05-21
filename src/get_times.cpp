@@ -10,8 +10,10 @@ using namespace Rcpp;
 DatetimeVector get_times(Datetime start, Datetime end, int samp_rate) {
   int n_rows = (end - start) * samp_rate;
   DatetimeVector times(n_rows);
+  double add_frac;
+  double sr = double(samp_rate);
   for (int i = 0; i < n_rows; ++i) {
-    double add_frac = i / double(samp_rate);
+    add_frac = i / sr;
     times[i] = start + add_frac;
   }
   return times;

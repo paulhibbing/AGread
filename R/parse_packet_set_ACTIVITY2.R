@@ -1,29 +1,22 @@
 #' @rdname parse_packet_set
 #' @param info the result of \code{\link{parse_info_txt}}
 #' @param events the result of parsing EVENTS packets
+#' @param raw_method the method to use for formatting the ACTIVITY2 packets
+#'   (internal use)
 #' @export
 parse_packet_set.ACTIVITY2 <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  info, events, ...
+  info, events, raw_method, ...
 ) {
 
-  init <- get_times(
-    info$Start_Date,
-    info$Last_Sample_Time,
-    info$Sample_Rate
-  ) %>% {data.frame(
-   Timestamp = lubridate::with_tz(
-     ., tz
-   )
-  )}
+  stopifnot(raw_method %in% 1:2)
+  init <- init_RAW(info)
 
-  RAW <- get_primary_accel_scale(
-    info
-  ) %>% parse_primary_accelerometerC(
-    set, log, ., info$Sample_Rate, verbose
-  ) %>% {data.frame(
-    data.table::rbindlist(.)
-  )}
+  RAW <- switch(
+    raw_method,
+    get_RAW1(info, set, log, verbose),
+    get_RAW2()
+  )
 
   RAW$Timestamp <- lubridate::with_tz(
     RAW$Timestamp, tz
@@ -43,4 +36,37 @@ parse_packet_set.ACTIVITY2 <- function(
 
   RAW
 
+}
+
+#' @rdname parse_log_bin
+#' @keywords internal
+init_RAW <- function(info) {
+  get_times(
+    info$Start_Date,
+    info$Last_Sample_Time,
+    info$Sample_Rate
+  ) %>%
+  {data.frame(
+    Timestamp = lubridate::with_tz(., tz)
+  )}
+}
+
+#' @rdname parse_log_bin
+#' @keywords internal
+get_RAW1 <- function(info, set, log, verbose) {
+
+  get_primary_accel_scale(info) %>%
+  parse_primary_accelerometerC(
+    set, log, ., info$Sample_Rate, verbose
+  ) %>%
+  {data.frame(
+    data.table::rbindlist(.)
+  )}
+
+}
+
+#' @rdname parse_log_bin
+#' @keywords internal
+get_RAW2 <- function(info, set, log, verbose) {
+  NULL
 }
