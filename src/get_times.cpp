@@ -5,10 +5,15 @@ using namespace Rcpp;
 //' @param start The file start time
 //' @param end The file end time
 //' @param samp_rate int. The sampling rate
+//' @param extra_packet bool. Add an extra packet at the end?
 //' @keywords internal
 // [[Rcpp::export]]
-DatetimeVector get_times(Datetime start, Datetime end, int samp_rate) {
+DatetimeVector get_times(
+    Datetime start, Datetime end, int samp_rate,
+    bool extra_packet = false
+) {
   int n_rows = (end - start) * samp_rate;
+  if (extra_packet) n_rows += samp_rate;
   DatetimeVector times(n_rows);
   double add_frac;
   double sr = double(samp_rate);

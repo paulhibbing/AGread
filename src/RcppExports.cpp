@@ -5,16 +5,16 @@
 
 using namespace Rcpp;
 
-// bin_dev1_initialize
-List bin_dev1_initialize(RawVector log, bool verbose, IntegerVector include);
-RcppExport SEXP _AGread_bin_dev1_initialize(SEXP logSEXP, SEXP verboseSEXP, SEXP includeSEXP) {
+// dev1_bin_initialize
+List dev1_bin_initialize(RawVector log, bool verbose, IntegerVector include);
+RcppExport SEXP _AGread_dev1_bin_initialize(SEXP logSEXP, SEXP verboseSEXP, SEXP includeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type include(includeSEXP);
-    rcpp_result_gen = Rcpp::wrap(bin_dev1_initialize(log, verbose, include));
+    rcpp_result_gen = Rcpp::wrap(dev1_bin_initialize(log, verbose, include));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -112,15 +112,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_times
-DatetimeVector get_times(Datetime start, Datetime end, int samp_rate);
-RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP) {
+DatetimeVector get_times(Datetime start, Datetime end, int samp_rate, bool extra_packet);
+RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP, SEXP extra_packetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Datetime >::type start(startSEXP);
     Rcpp::traits::input_parameter< Datetime >::type end(endSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate));
+    Rcpp::traits::input_parameter< bool >::type extra_packet(extra_packetSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate, extra_packet));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -312,9 +313,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// parse_primary_accelerometerC
-List parse_primary_accelerometerC(DataFrame primary_records, RawVector log, int scale_factor, int samp_rate, bool verbose);
-RcppExport SEXP _AGread_parse_primary_accelerometerC(SEXP primary_recordsSEXP, SEXP logSEXP, SEXP scale_factorSEXP, SEXP samp_rateSEXP, SEXP verboseSEXP) {
+// dev_activity2_payload
+DataFrame dev_activity2_payload(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet);
+RcppExport SEXP _AGread_dev_activity2_payload(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type payload(payloadSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
+    Rcpp::traits::input_parameter< bool >::type is_last_packet(is_last_packetSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_activity2_payload(payload, samp_rate, scale_factor, is_last_packet));
+    return rcpp_result_gen;
+END_RCPP
+}
+// legacy_parse_primary_accelerometerC
+List legacy_parse_primary_accelerometerC(DataFrame primary_records, RawVector log, int scale_factor, int samp_rate, bool verbose);
+RcppExport SEXP _AGread_legacy_parse_primary_accelerometerC(SEXP primary_recordsSEXP, SEXP logSEXP, SEXP scale_factorSEXP, SEXP samp_rateSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -323,13 +338,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(parse_primary_accelerometerC(primary_records, log, scale_factor, samp_rate, verbose));
+    rcpp_result_gen = Rcpp::wrap(legacy_parse_primary_accelerometerC(primary_records, log, scale_factor, samp_rate, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dev_parse_primary_accelerometerC
+List dev_parse_primary_accelerometerC(List packets, IntegerVector packet_no, List zero_packet, int samp_rate, int scale_factor);
+RcppExport SEXP _AGread_dev_parse_primary_accelerometerC(SEXP packetsSEXP, SEXP packet_noSEXP, SEXP zero_packetSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type packets(packetsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type packet_no(packet_noSEXP);
+    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_parse_primary_accelerometerC(packets, packet_no, zero_packet, samp_rate, scale_factor));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_AGread_bin_dev1_initialize", (DL_FUNC) &_AGread_bin_dev1_initialize, 3},
+    {"_AGread_dev1_bin_initialize", (DL_FUNC) &_AGread_dev1_bin_initialize, 3},
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
@@ -337,7 +367,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
-    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 3},
+    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 4},
     {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
@@ -353,7 +383,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
     {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 5},
     {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 5},
-    {"_AGread_parse_primary_accelerometerC", (DL_FUNC) &_AGread_parse_primary_accelerometerC, 5},
+    {"_AGread_dev_activity2_payload", (DL_FUNC) &_AGread_dev_activity2_payload, 4},
+    {"_AGread_legacy_parse_primary_accelerometerC", (DL_FUNC) &_AGread_legacy_parse_primary_accelerometerC, 5},
+    {"_AGread_dev_parse_primary_accelerometerC", (DL_FUNC) &_AGread_dev_parse_primary_accelerometerC, 5},
     {NULL, NULL, 0}
 };
 

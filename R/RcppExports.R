@@ -3,8 +3,8 @@
 
 #' @rdname parse_log_bin
 #' @keywords internal
-bin_dev1_initialize <- function(log, verbose, include) {
-    .Call('_AGread_bin_dev1_initialize', PACKAGE = 'AGread', log, verbose, include)
+dev1_bin_initialize <- function(log, verbose, include) {
+    .Call('_AGread_dev1_bin_initialize', PACKAGE = 'AGread', log, verbose, include)
 }
 
 #' @rdname get_VM
@@ -74,9 +74,10 @@ latch_replicate <- function(start_time, stop_time, x_val, y_val, z_val) {
 #' @param start The file start time
 #' @param end The file end time
 #' @param samp_rate int. The sampling rate
+#' @param extra_packet bool. Add an extra packet at the end?
 #' @keywords internal
-get_times <- function(start, end, samp_rate) {
-    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate)
+get_times <- function(start, end, samp_rate, extra_packet = FALSE) {
+    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate, extra_packet)
 }
 
 #' Find the next record separator
@@ -238,6 +239,12 @@ payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_las
     .Call('_AGread_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet, timestamp)
 }
 
+#' @rdname payload_parse_activity2_26C
+#' @keywords internal
+dev_activity2_payload <- function(payload, samp_rate, scale_factor, is_last_packet) {
+    .Call('_AGread_dev_activity2_payload', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet)
+}
+
 #' Parse all primary accelerometer packets in a file
 #'
 #' @param primary_records DataFrame with information about each packet
@@ -246,7 +253,20 @@ payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_las
 #' @param scale_factor the accelerometer scale factor
 #' @param verbose logical. Print updates to console?
 #' @keywords internal
-parse_primary_accelerometerC <- function(primary_records, log, scale_factor, samp_rate, verbose) {
-    .Call('_AGread_parse_primary_accelerometerC', PACKAGE = 'AGread', primary_records, log, scale_factor, samp_rate, verbose)
+#' @rdname parse_primary_accelerometerC
+legacy_parse_primary_accelerometerC <- function(primary_records, log, scale_factor, samp_rate, verbose) {
+    .Call('_AGread_legacy_parse_primary_accelerometerC', PACKAGE = 'AGread', primary_records, log, scale_factor, samp_rate, verbose)
+}
+
+#' @rdname parse_primary_accelerometerC
+#' @param packets list of packets
+#' @param packet_no IntegerVector indicating which index of \code{packets} to
+#'   use for each second of expected output. Values of -1 indicate a latch to
+#'   the previous index
+#' @param zero_packet list containing a properly-formatted packet pre-filled
+#'   with values of zero (used for USB connection events)
+#' @keywords internal
+dev_parse_primary_accelerometerC <- function(packets, packet_no, zero_packet, samp_rate, scale_factor) {
+    .Call('_AGread_dev_parse_primary_accelerometerC', PACKAGE = 'AGread', packets, packet_no, zero_packet, samp_rate, scale_factor)
 }
 

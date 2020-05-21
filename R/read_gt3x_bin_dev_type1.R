@@ -6,7 +6,7 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
     packets <-
       cpp_include(include) %>%
-      bin_dev1_initialize(log, verbose, .)
+      dev1_bin_initialize(log, verbose, .)
 
     packets %<>%
       sapply(function(x) x$type) %>%
@@ -14,6 +14,14 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       stats::setNames(
         ., .packets[match(names(.), .numbers)]
       )
+
+  ## Define expected timestamps
+
+    all_times <- seq(
+      info$Start_Date,
+      info$Last_Sample_Time,
+      "1 sec"
+    )
 
   ## Get parameters (if applicable)
 
@@ -29,5 +37,11 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
     events <- get_events(packets, tz, info, verbose)
     packets$EVENT <- NULL
+
+  ## Get ACTIVITY2 (if applicable)
+
+    raw <- get_activity2(
+      packets, all_times, tz, info, verbose
+    )
 
 }

@@ -11,8 +11,9 @@ using namespace Rcpp;
 //' @param scale_factor the accelerometer scale factor
 //' @param verbose logical. Print updates to console?
 //' @keywords internal
+//' @rdname parse_primary_accelerometerC
 // [[Rcpp::export]]
-List parse_primary_accelerometerC(
+List legacy_parse_primary_accelerometerC(
     DataFrame primary_records, RawVector log,
     int scale_factor, int samp_rate, bool verbose
 ) {
@@ -39,7 +40,6 @@ List parse_primary_accelerometerC(
     int start_index = indices[i] - 1;
     int end_index = start_index + 8 + sizes[i];
     checksumC(log, start_index, end_index);
-    // IntegerVector record_indices = seq(start_index, end_index);
     IntegerVector payload_indices = seq(start_index + 8, end_index - 1);
     RawVector payload = log[payload_indices];
     if (payload_indices.size() != sizes[i]) {
@@ -63,5 +63,53 @@ List parse_primary_accelerometerC(
   }
 
   return result;
+
+}
+
+//' @rdname parse_primary_accelerometerC
+//' @param packets list of packets
+//' @param packet_no IntegerVector indicating which index of \code{packets} to
+//'   use for each second of expected output. Values of -1 indicate a latch to
+//'   the previous index
+//' @param zero_packet list containing a properly-formatted packet pre-filled
+//'   with values of zero (used for USB connection events)
+//' @keywords internal
+// [[Rcpp::export]]
+List dev_parse_primary_accelerometerC(
+    List packets, IntegerVector packet_no, List zero_packet,
+    int samp_rate, int scale_factor
+) {
+
+  // Initialize output and loop variables
+  List full_packets(packet_no.size());
+  int index = 0;
+  List packet = packets[0];
+  RawVector payload = packet["payload"];
+
+  // Populate output
+  for (int i = 0; i < packet_no.size(); ++i) {
+
+    if (packet_no[i] == -1)  {
+      full_packets[i] = full_packets[i - 1];
+      continue;
+    }
+
+    index = packet_no[i];
+    packet = packets[index];
+    payload = packet["payload"];
+
+    if (payload.size() == 1) {
+      full_packets[i] = zero_packet;
+      continue;
+    }
+
+    bool is_last_packet = index == (packets.size() - 1);
+    full_packets[i] = dev_activity2_payload(
+      payload, samp_rate, scale_factor, is_last_packet
+    );
+
+  }
+
+  return full_packets;
 
 }

@@ -123,3 +123,51 @@ get_events <- function(packets, tz, info, verbose) {
   {if (verbose) packet_print("cleanup", "EVENT")}
 
 }
+
+#' @rdname dev_bin_packets
+#' @param all_times vector of all expected timestamps
+#' @keywords internal
+get_activity2 <- function(packets, all_times, tz, info, verbose) {
+
+  if (!"ACTIVITY2" %in% names(packets)) return(NULL)
+
+  if (verbose) packet_print("startup", "ACTIVITY2")
+
+  packet_no <-
+    packets$ACTIVITY2 %>%
+    sapply(function(x) x$timestamp) %>%
+    anytime::anytime(tz) %>%
+    match(all_times, ., 0)
+
+  zero_packet <-
+    info$Sample_Rate %>%
+    matrix(0, ., 3) %>%
+    data.frame(stringsAsFactors = FALSE) %>%
+    stats::setNames(.accel_names) %>%
+    as.list(.)
+
+  raw <-
+    get_primary_accel_scale(info) %>%
+    dev_parse_primary_accelerometerC(
+      packets$ACTIVITY2, packet_no - 1, zero_packet,
+      info$Sample_Rate, .
+    ) %>%
+    data.table::rbindlist(.)
+
+  times <-
+    info %$%
+    get_times(
+      Start_Date, Last_Sample_Time, Sample_Rate, TRUE
+    ) %T>%
+    {stopifnot(length(.) == nrow(raw))}
+
+  data.frame(
+    Timestamp = times,
+    raw,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  ) %>%
+  structure(., class = c("RAW", class(.))) %T>%
+  {if (verbose) packet_print("cleanup", "ACTIVITY2")}
+
+}
