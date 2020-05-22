@@ -3,7 +3,7 @@
 #include "interpolate.h"
 using namespace Rcpp;
 
-//' @rdname payload_parse_sensor_data_25C
+//' @rdname legacy_payload_parse_sensor_data_25C
 //' @keywords internal
 // [[Rcpp::export]]
 List dev_payload_parse_sensor_data_25C(

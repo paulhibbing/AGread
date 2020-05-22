@@ -12,7 +12,7 @@ using namespace Rcpp;
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-DataFrame payload_parse_activity2_26C(
+DataFrame legacy_payload_parse_activity2_26C(
     RawVector payload, int samp_rate,
     int scale_factor, bool is_last_packet,
     Datetime timestamp
@@ -103,7 +103,7 @@ DataFrame payload_parse_activity2_26C(
 
 }
 
-//' @rdname payload_parse_activity2_26C
+//' @rdname legacy_payload_parse_activity2_26C
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame dev_activity2_payload(

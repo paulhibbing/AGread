@@ -3,7 +3,7 @@
 
 #include <Rcpp.h>
 
-Rcpp::DataFrame payload_parse_sensor_data_25C(
+Rcpp::DataFrame legacy_payload_parse_sensor_data_25C(
     Rcpp::RawVector payload, Rcpp::DataFrame info,
     int id, int samp_rate, Rcpp::Datetime timestamp
 );
