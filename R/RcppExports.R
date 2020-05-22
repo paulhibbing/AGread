@@ -136,6 +136,15 @@ checksumC <- function(log, start_index, end_index) {
     invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
 }
 
+#' Fill in a packet by latching to the end of the previous packet
+#' @param last_packet the previous packet
+#' @param zero_packet a zero_valued packet
+#' @param sample_rate the sampling rate
+#' @keywords internal
+latch_packet <- function(last_packet, zero_packet, sample_rate) {
+    .Call('_AGread_latch_packet', PACKAGE = 'AGread', last_packet, zero_packet, sample_rate)
+}
+
 #' @rdname impute_primary
 #' @param gaps DataFrame with gap information
 #' @keywords internal
@@ -228,11 +237,11 @@ imu_df <- function(input) {
 #' @param timestamp Datetime. The packet timestamp
 #'
 #' @keywords internal
-payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate, timestamp) {
-    .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate, timestamp)
+legacy_payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate, timestamp) {
+    .Call('_AGread_legacy_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate, timestamp)
 }
 
-#' @rdname payload_parse_sensor_data_25C
+#' @rdname legacy_payload_parse_sensor_data_25C
 #' @keywords internal
 dev_payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
     .Call('_AGread_dev_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate)
@@ -247,11 +256,11 @@ dev_payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
 #' @param timestamp Datetime. The packet timestamp
 #'
 #' @keywords internal
-payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet, timestamp) {
-    .Call('_AGread_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet, timestamp)
+legacy_payload_parse_activity2_26C <- function(payload, samp_rate, scale_factor, is_last_packet, timestamp) {
+    .Call('_AGread_legacy_payload_parse_activity2_26C', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet, timestamp)
 }
 
-#' @rdname payload_parse_activity2_26C
+#' @rdname legacy_payload_parse_activity2_26C
 #' @keywords internal
 dev_activity2_payload <- function(payload, samp_rate, scale_factor, is_last_packet) {
     .Call('_AGread_dev_activity2_payload', PACKAGE = 'AGread', payload, samp_rate, scale_factor, is_last_packet)

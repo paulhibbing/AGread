@@ -48,7 +48,7 @@ List legacy_parse_primary_accelerometerC(
 
     //Process the packet
     bool is_last_packet = i == (n_records - 1);
-    DataFrame new_result = payload_parse_activity2_26C(
+    DataFrame new_result = legacy_payload_parse_activity2_26C(
       payload, samp_rate, scale_factor,
       is_last_packet, timestamps[i]
     );
@@ -104,7 +104,9 @@ List dev_parse_primary_accelerometerC(
   for (int i = 1; i < packet_no.size(); ++i) {
 
     if (packet_no[i] == -1)  {
-      full_packets[i] = full_packets[i - 1];
+      full_packets[i] = latch_packet(
+        full_packets[i - 1], zero_packet, samp_rate
+      );
       continue;
     }
 

@@ -119,3 +119,25 @@ void checksumC(RawVector log, int start_index, int end_index) {
   }
 
 }
+
+//' Fill in a packet by latching to the end of the previous packet
+//' @param last_packet the previous packet
+//' @param zero_packet a zero_valued packet
+//' @param sample_rate the sampling rate
+//' @keywords internal
+// [[Rcpp::export]]
+List latch_packet(
+    List last_packet, List zero_packet, int sample_rate
+) {
+
+  NumericVector axis;
+  double latch_value;
+  for (int i = 0; i < zero_packet.size(); ++i) {
+    axis = last_packet[i];
+    latch_value = axis[axis.size() - 1];
+    zero_packet[i] = NumericVector(latch_value, sample_rate);
+  }
+
+  return zero_packet;
+
+}

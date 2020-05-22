@@ -51,7 +51,7 @@ List legacy_parse_IMU_C(
       }
 
     //Process the packet
-      DataFrame new_result = payload_parse_sensor_data_25C(
+      DataFrame new_result = legacy_payload_parse_sensor_data_25C(
         payload, info, id, samp_rate, timestamps[i]
       );
 
@@ -88,7 +88,9 @@ List dev_parse_IMU_C(
     for (int i = 0; i < packet_no.size(); ++i) {
 
       if (packet_no[i] == -1)  {
-        full_packets[i] = full_packets[i - 1];
+        full_packets[i] = latch_packet(
+          full_packets[i - 1], zero_packet, samp_rate
+        );
         continue;
       }
 

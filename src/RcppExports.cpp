@@ -186,6 +186,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// latch_packet
+List latch_packet(List last_packet, List zero_packet, int sample_rate);
+RcppExport SEXP _AGread_latch_packet(SEXP last_packetSEXP, SEXP zero_packetSEXP, SEXP sample_rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type last_packet(last_packetSEXP);
+    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    Rcpp::traits::input_parameter< int >::type sample_rate(sample_rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(latch_packet(last_packet, zero_packet, sample_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
 // impute_C
 DataFrame impute_C(DataFrame gaps, DataFrame object);
 RcppExport SEXP _AGread_impute_C(SEXP gapsSEXP, SEXP objectSEXP) {
@@ -299,9 +312,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// payload_parse_sensor_data_25C
-DataFrame payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id, int samp_rate, Datetime timestamp);
-RcppExport SEXP _AGread_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP timestampSEXP) {
+// legacy_payload_parse_sensor_data_25C
+DataFrame legacy_payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id, int samp_rate, Datetime timestamp);
+RcppExport SEXP _AGread_legacy_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP timestampSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -310,7 +323,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type id(idSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     Rcpp::traits::input_parameter< Datetime >::type timestamp(timestampSEXP);
-    rcpp_result_gen = Rcpp::wrap(payload_parse_sensor_data_25C(payload, info, id, samp_rate, timestamp));
+    rcpp_result_gen = Rcpp::wrap(legacy_payload_parse_sensor_data_25C(payload, info, id, samp_rate, timestamp));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -328,9 +341,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// payload_parse_activity2_26C
-DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, Datetime timestamp);
-RcppExport SEXP _AGread_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP, SEXP timestampSEXP) {
+// legacy_payload_parse_activity2_26C
+DataFrame legacy_payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, Datetime timestamp);
+RcppExport SEXP _AGread_legacy_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP, SEXP timestampSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -339,7 +352,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
     Rcpp::traits::input_parameter< bool >::type is_last_packet(is_last_packetSEXP);
     Rcpp::traits::input_parameter< Datetime >::type timestamp(timestampSEXP);
-    rcpp_result_gen = Rcpp::wrap(payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet, timestamp));
+    rcpp_result_gen = Rcpp::wrap(legacy_payload_parse_activity2_26C(payload, samp_rate, scale_factor, is_last_packet, timestamp));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -403,6 +416,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
+    {"_AGread_latch_packet", (DL_FUNC) &_AGread_latch_packet, 3},
     {"_AGread_impute_C", (DL_FUNC) &_AGread_impute_C, 2},
     {"_AGread_legacy_parse_IMU_C", (DL_FUNC) &_AGread_legacy_parse_IMU_C, 6},
     {"_AGread_dev_parse_IMU_C", (DL_FUNC) &_AGread_dev_parse_IMU_C, 6},
@@ -412,9 +426,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_interpolate_IMU", (DL_FUNC) &_AGread_interpolate_IMU, 2},
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
-    {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 5},
+    {"_AGread_legacy_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_legacy_payload_parse_sensor_data_25C, 5},
     {"_AGread_dev_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_dev_payload_parse_sensor_data_25C, 4},
-    {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 5},
+    {"_AGread_legacy_payload_parse_activity2_26C", (DL_FUNC) &_AGread_legacy_payload_parse_activity2_26C, 5},
     {"_AGread_dev_activity2_payload", (DL_FUNC) &_AGread_dev_activity2_payload, 4},
     {"_AGread_legacy_parse_primary_accelerometerC", (DL_FUNC) &_AGread_legacy_parse_primary_accelerometerC, 5},
     {"_AGread_dev_parse_primary_accelerometerC", (DL_FUNC) &_AGread_dev_parse_primary_accelerometerC, 5},
