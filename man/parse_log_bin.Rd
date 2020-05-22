@@ -37,7 +37,7 @@ validate_parser(parser)
 
 \item{include}{character. The PACKET types to parse}
 
-\item{info}{result of \code{\link{parse_info_txt}}}
+\item{info}{result of \code{\link{read_gt3x_info}}}
 
 \item{tz}{character. The timezone to use}
 
