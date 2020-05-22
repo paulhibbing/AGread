@@ -5,8 +5,6 @@
 \name{dev1_bin_initialize}
 \alias{dev1_bin_initialize}
 \alias{init_RAW}
-\alias{get_RAW1}
-\alias{get_RAW2}
 \alias{dev_bin_type1}
 \alias{legacy_bin_type1}
 \alias{legacy_parse}
@@ -18,10 +16,6 @@
 dev1_bin_initialize(log, verbose, include)
 
 init_RAW(info, tz)
-
-get_RAW1(info, set, log, verbose)
-
-get_RAW2(info, set, verbose)
 
 dev_bin_type1(log, tz, verbose, include, info)
 

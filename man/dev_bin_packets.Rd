@@ -5,6 +5,7 @@
 \alias{get_schema}
 \alias{get_events}
 \alias{get_activity2}
+\alias{get_sensor_data}
 \title{Parse gt3x packets using the dev scheme}
 \usage{
 get_parameters(packets, tz, verbose)
@@ -13,7 +14,9 @@ get_schema(packets, tz, verbose)
 
 get_events(packets, tz, info, verbose)
 
-get_activity2(packets, all_times, tz, info, verbose)
+get_activity2(packets, tz, info, verbose)
+
+get_sensor_data(packets, schema, tz, info, verbose)
 }
 \arguments{
 \item{packets}{list object containing data packets}
@@ -21,8 +24,6 @@ get_activity2(packets, all_times, tz, info, verbose)
 \item{tz}{character. The timezone to use}
 
 \item{verbose}{logical. Print updates to console?}
-
-\item{all_times}{vector of all expected timestamps}
 
 \item{packets}{list object containing data packets}
 

@@ -1,7 +1,6 @@
 #' @rdname parse_packet_set
 #' @param info the result of \code{\link{parse_info_txt}}
 #' @param events the result of parsing EVENTS packets
-#' @param raw_method the method to use for formatting the ACTIVITY2 packets
 #'   (internal use)
 #' @export
 parse_packet_set.ACTIVITY2 <- function(
@@ -9,7 +8,6 @@ parse_packet_set.ACTIVITY2 <- function(
   info, events, ...
 ) {
 
-  stopifnot(raw_method %in% 1:2)
   init <-
     info %$%
     get_times(Start_Date, Last_Sample_Time, Sample_Rate) %>%

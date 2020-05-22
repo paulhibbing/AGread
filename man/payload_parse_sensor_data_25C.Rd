@@ -2,9 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{payload_parse_sensor_data_25C}
 \alias{payload_parse_sensor_data_25C}
+\alias{dev_payload_parse_sensor_data_25C}
 \title{Parse SENSOR_DATA packet in c++}
 \usage{
 payload_parse_sensor_data_25C(payload, info, id, samp_rate, timestamp)
+
+dev_payload_parse_sensor_data_25C(payload, info, id, samp_rate)
 }
 \arguments{
 \item{payload}{raw vector of payload bytes}

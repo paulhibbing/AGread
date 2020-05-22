@@ -14,7 +14,7 @@ parse_packet_set.SENSOR_DATA <- function(
     " \"SENSOR_DATA\", \"PARAMETERS\")`", call. = FALSE
   )
 
-  temp_offset <- get_temp_offset(parameters$payload)
+  temp_offset <- get_temp_offset(parameters$Payload)
 
   init <-
     set %>%
