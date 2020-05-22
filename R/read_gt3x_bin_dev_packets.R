@@ -186,7 +186,7 @@ get_activity2 <- function(packets, tz, info, verbose) {
 }
 
 #' @rdname dev_bin_packets
-#' @schema parsed sensor schema information
+#' @param schema parsed sensor schema information
 #' @keywords internal
 get_sensor_data <- function(packets, schema, tz, info, verbose) {
 

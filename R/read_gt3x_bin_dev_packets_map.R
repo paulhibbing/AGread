@@ -1,5 +1,5 @@
 #' @rdname dev_bin_packets
-#' @type character. The packet type
+#' @param type character. The packet type
 #' @keywords internal
 get_default_packet <- function(type) {
 

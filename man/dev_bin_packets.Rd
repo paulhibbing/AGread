@@ -46,6 +46,10 @@ given type}
 \item{tz}{character. The timezone to use}
 
 \item{verbose}{logical. Print updates to console?}
+
+\item{schema}{parsed sensor schema information}
+
+\item{type}{character. The packet type}
 }
 \description{
 Parse gt3x packets using the dev scheme
