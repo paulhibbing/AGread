@@ -17,7 +17,7 @@ devtools::load_all()
 
 # Interactive -------------------------------------------------------------
 
-file <- "data-raw/internal_tests/test11.gt3x"
+file <- "data-raw/internal_tests/test16.gt3x"
 verbose <- TRUE
 tz <- "UTC"
 give_timestamp <- TRUE
@@ -29,7 +29,6 @@ include <- c(
 )
 flag_idle_sleep <- FALSE
 parser <- "dev"
-raw_method <- 2
 
 # record_set <- record_headers[[6]]
 # record_header <- record_set[20, ]

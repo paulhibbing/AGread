@@ -159,7 +159,8 @@ get_activity2 <- function(packets, all_times, tz, info, verbose) {
     info %$%
     get_times(
       Start_Date, Last_Sample_Time, Sample_Rate, TRUE
-    ) %T>%
+    ) %>%
+    lubridate::with_tz(tz) %T>%
     {stopifnot(length(.) == nrow(raw))}
 
   data.frame(
@@ -170,5 +171,18 @@ get_activity2 <- function(packets, all_times, tz, info, verbose) {
   ) %>%
   structure(., class = c("RAW", class(.))) %T>%
   {if (verbose) packet_print("cleanup", "ACTIVITY2")}
+
+}
+
+get_sensor_data <- function(
+  packets, schema, all_times, tz, info, verbose
+) {
+
+  if (base::missing(schema)) stop(
+    "Cannot parse IMU packets without a sensor schema.\n",
+    "  Make sure your call to read_gt3x has (minimally) ",
+    " the following:\n  `include = c(\"SENSOR_SCHEMA\",",
+    " \"SENSOR_DATA\", \"PARAMETERS\")`", call. = FALSE
+  )
 
 }

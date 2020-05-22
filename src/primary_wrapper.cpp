@@ -85,9 +85,23 @@ List dev_parse_primary_accelerometerC(
   int index = 0;
   List packet = packets[0];
   RawVector payload = packet["payload"];
+  bool is_last_packet = false;
+
+  // Manually process first packet
+  if (packet_no[0] == -1) {
+    full_packets[0] = zero_packet;
+  }
+  else if (payload.size() == 1) {
+    full_packets[0] = zero_packet;
+  }
+  else {
+    full_packets[0] = dev_activity2_payload(
+      payload, samp_rate, scale_factor, is_last_packet
+    );
+  }
 
   // Populate output
-  for (int i = 0; i < packet_no.size(); ++i) {
+  for (int i = 1; i < packet_no.size(); ++i) {
 
     if (packet_no[i] == -1)  {
       full_packets[i] = full_packets[i - 1];
@@ -103,7 +117,7 @@ List dev_parse_primary_accelerometerC(
       continue;
     }
 
-    bool is_last_packet = index == (packets.size() - 1);
+    is_last_packet = index == (packets.size() - 1);
     full_packets[i] = dev_activity2_payload(
       payload, samp_rate, scale_factor, is_last_packet
     );
