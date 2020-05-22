@@ -18,17 +18,32 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
   ## Get parameters (if applicable)
 
     parameters <- get_parameters(packets, tz, verbose)
-    packets$PARAMETERS <- NULL
+    if (all(
+      "PARAMETERS" %in% include,
+      !is.null(parameters)
+    )) {
+      packets$PARAMETERS <- parameters
+    }
 
   ## Get schema (if applicable)
 
     schema <- get_schema(packets, tz, verbose)
-    packets$SENSOR_SCHEMA <- NULL
+    if (all(
+      "SENSOR_SCHEMA" %in% include,
+      !is.null(schema)
+    )) {
+      packets$SENSOR_SCHEMA <- schema
+    }
 
   ## Get events (if applicable)
 
     events <- get_events(packets, tz, info, verbose)
-    packets$EVENT <- NULL
+    if (all(
+      "EVENT" %in% include,
+      !is.null(events)
+    )) {
+      packets$EVENT <- events
+    }
 
   ## Get ACTIVITY2 (if applicable)
 
@@ -46,5 +61,35 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       list(IMU = .) %>%
       c(packets, .) %>%
       .[names(.) != "SENSOR_DATA"]
+
+  ## Get remaining packets (if applicable)
+
+    packets <-
+      c(
+        "PARAMETERS", "SENSOR_SCHEMA", "EVENT",
+        "RAW", "IMU"
+      ) %>%
+      setdiff(.packets, .) %>%
+      intersect(names(packets)) %>%
+      sapply(
+        dev_bin1_map_packets,
+        packets = packets,
+        tz = tz,
+        verbose = verbose,
+        simplify = FALSE
+      ) %>%
+      c(packets, .)
+
+  ## Clean up
+
+    new_names <- sapply(packets, function(x) class(x)[1])
+    new_names <- unname(
+      ifelse(new_names == "NULL", names(new_names), new_names)
+    )
+
+    if (verbose) cat("\n")
+    packets %<>% stats::setNames(new_names)
+    packets$info <- info
+    packets
 
 }

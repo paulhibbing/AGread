@@ -1,6 +1,18 @@
+#' @rdname dev_bin_packets
+#' @param label character. The desired class name for parsed packet data of a
+#'   given type
+#' @keywords internal
+set_packet_class <- function(packets, label) {
+  packets %>%
+  structure(
+    .,
+    class = append(class(.), label, 0)
+  )
+}
+
 #' Parse gt3x packets using the dev scheme
 #' @rdname dev_bin_packets
-#' @param packets list object containing data packets
+#' @param packets object containing data packets or subsequently parsed data
 #' @inheritParams read_gt3x
 #' @keywords internal
 get_parameters <- function(packets, tz, verbose) {
@@ -22,14 +34,12 @@ get_parameters <- function(packets, tz, verbose) {
   {do.call(rbind, lapply(., process_parameters, tz = tz))} %>%
   {.[.$Label != "UNUSED KEY", ]} %>%
   {stats::setNames(as.list(.$value), .$Label)} %>%
-  structure(class = "PARAMETERS") %T>%
+  set_packet_class("PARAMETERS") %T>%
   {if (verbose) packet_print("cleanup", "PARAMETERS")}
 
 }
 
 #' @rdname dev_bin_packets
-#' @param packets list object containing data packets
-#' @inheritParams read_gt3x
 #' @keywords internal
 get_schema <- function(packets, tz, verbose) {
 
@@ -46,22 +56,20 @@ get_schema <- function(packets, tz, verbose) {
   {.[[1]]$payload} %>%
   parse_packet_set(
     structure(list(), class = "SENSOR_SCHEMA"),
-    log, tz, verbose, .
+    NULL, tz, verbose, .
   ) %T>%
   {if (verbose) packet_print("cleanup", "SENSOR_SCHEMA")}
 
 }
 
 #' @rdname dev_bin_packets
-#' @param packets list object containing data packets
-#' @inheritParams read_gt3x
 #' @keywords internal
 get_events <- function(packets, tz, info, verbose) {
 
   if (!"EVENT" %in% names(packets)) {
     return(parse_packet_set(
       structure(list(), class = "EVENT"),
-      log, tz, verbose
+      NULL, tz, verbose
     ))
   }
 
@@ -120,7 +128,7 @@ get_events <- function(packets, tz, info, verbose) {
 
   if (verbose) packet_print("cleanup", "EVENT")
 
-  structure(set, class = "EVENT") %T>%
+  set_packet_class(set, "EVENT") %T>%
   {if (verbose) packet_print("cleanup", "EVENT")}
 
 }
@@ -172,7 +180,7 @@ get_activity2 <- function(packets, tz, info, verbose) {
     stringsAsFactors = FALSE,
     row.names = NULL
   ) %>%
-  structure(., class = c("RAW", class(.))) %T>%
+  set_packet_class("RAW") %T>%
   {if (verbose) packet_print("cleanup", "ACTIVITY2")}
 
 }
@@ -235,7 +243,65 @@ get_sensor_data <- function(packets, schema, tz, info, verbose) {
     stringsAsFactors = FALSE,
     row.names = NULL
   ) %>%
-  structure(., class = c("IMU", class(.))) %T>%
+  set_packet_class("IMU") %T>%
   {if (verbose) packet_print("cleanup", "SENSOR_DATA")}
+
+}
+
+#' @rdname dev_bin_packets
+#' @keywords internal
+get_battery <- function(packets, tz, verbose) {
+
+  if (verbose) packet_print("startup", "BATTERY")
+
+  packets$BATTERY %>%
+  lapply(function(x, tz) {
+    x$payload %>%
+    readBin("integer", 2, 2, FALSE) %>%
+    {. / 1000} %>%
+    data.frame(
+      Timestamp = anytime::anytime(x$timestamp, tz),
+      battery_voltage = .
+    )
+  }, tz = tz) %>%
+  c(make.row.names = FALSE) %>%
+  do.call(rbind, .) %>%
+  set_packet_class("BATTERY") %T>%
+  {if (verbose) packet_print("cleanup", "BATTERY")}
+
+}
+
+#' @rdname dev_bin_packets
+#' @keywords internal
+get_capsense <- function(packets, tz, verbose) {
+
+  if (verbose) packet_print("startup", "CAPSENSE")
+
+  packets$CAPSENSE %>%
+  lapply(function(x, tz) {
+    data.frame(
+      Timestamp = anytime::anytime(x$timestamp, tz),
+      capsense_payload(x$payload),
+      stringsAsFactors = FALSE
+    )
+  }, tz = tz) %>%
+  c(make.row.names = FALSE) %>%
+  do.call(rbind, .) %>%
+  set_packet_class("CAPSENSE") %T>%
+  {if (verbose) packet_print("cleanup", "CAPSENSE")}
+
+}
+
+#' @rdname dev_bin_packets
+#' @keywords internal
+get_metadata <- function(packets, tz, verbose) {
+
+  packets$METADATA %>%
+  lapply(function(x) x$payload) %>%
+  parse_packet_set(
+    structure(list(), class = "METADATA"),
+    NULL, tz, verbose, .
+  ) %T>%
+  {if (verbose) packet_print("cleanup", "METADATA")}
 
 }
