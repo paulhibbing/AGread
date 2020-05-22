@@ -12,7 +12,6 @@ info_type1 <- function(file, tz, verbose) {
 #' Retrieve information from the gt3x zip archive
 #'
 #' @inheritParams read_gt3x
-#'
 #' @keywords internal
 read_gt3x_info <- function(file, tz, verbose) {
 

@@ -82,7 +82,7 @@ List dev1_bin_initialize(
 
   // Console update
     if (verbose) {
-      Rcout << "\r  Parsing log.bin " <<
+      Rcout << "\r  Pre-parsing log.bin " <<
       " ............. COMPLETE";
     }
 

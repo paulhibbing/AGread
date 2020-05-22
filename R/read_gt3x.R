@@ -59,12 +59,7 @@ read_gt3x <- function(
     parse_log_bin(info, tz, verbose, include, parser, file)
 
   if (flag_idle_sleep) {
-    # if (!all(c("RAW", "EVENT") %in% names(log))) {
-    #   warning(paste0("flag_idle_sleep = TRUE, but RAW and EVENT",
-    #                  " were not included in choices or were NULL, ",
-    #                  "skipping"))
-    # }
-    log$RAW = flag_idle(log$RAW, log$EVENT)
+    log$RAW %<>% flag_idle(log$EVENT)
   }
 
   PAutilities::manage_procedure(

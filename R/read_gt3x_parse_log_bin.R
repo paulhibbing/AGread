@@ -23,7 +23,7 @@ dev_parse <- function(file, ...) {
 #' Parse the log component of a gt3x file
 #'
 #' @param log_file character. Path to the log.bin file
-#' @param info result of \code{\link{parse_info_txt}}
+#' @param info result of \code{\link{read_gt3x_info}}
 #' @inheritParams read_gt3x
 #' @param file internal list object containing information about the zip archive
 #' @param log RawVector for internal use; the contents of \code{log.bin}
