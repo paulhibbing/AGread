@@ -15,7 +15,7 @@ using namespace Rcpp;
 //' @param verbose logical. Print updates to console?
 //' @keywords internal
 // [[Rcpp::export]]
-List parse_IMU_C(
+List legacy_parse_IMU_C(
     DataFrame imu_records, RawVector log,
     DataFrame info, int id, int samp_rate,
     bool verbose
@@ -65,5 +65,32 @@ List parse_IMU_C(
   }
 
   return result;
+
+}
+
+// [[Rcpp::export]]
+List dev_parse_IMU_C(
+    List packets, IntegerVector packet_no, List zero_packet,
+    int id, int samp_rate, DataFrame info
+) {
+
+  // Initialize output and loop variables
+    List full_packets(packet_no.size());
+    int index = 0;
+    List packet = packets[0];
+    RawVector payload = packet["payload"];
+
+  for (int i = 0; i < packet_no.size(); ++i) {
+
+    //Process the packet
+    DataFrame new_result = dev_payload_parse_sensor_data_25C(
+      payload, info, id, samp_rate
+    );
+
+    full_packets[i] = new_result;
+
+  }
+
+  return full_packets;
 
 }

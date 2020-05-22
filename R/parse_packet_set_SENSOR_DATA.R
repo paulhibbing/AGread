@@ -29,7 +29,7 @@ parse_packet_set.SENSOR_DATA <- function(
 
   IMU <-
     set %>%
-    parse_IMU_C(
+    legacy_parse_IMU_C(
       log, schema$sensorColumns,
       schema$id, schema$samples,
       verbose
