@@ -126,13 +126,16 @@ get_events <- function(packets, tz, info, verbose) {
 }
 
 #' @rdname dev_bin_packets
-#' @param all_times vector of all expected timestamps
 #' @keywords internal
-get_activity2 <- function(packets, all_times, tz, info, verbose) {
+get_activity2 <- function(packets, tz, info, verbose) {
 
   if (!"ACTIVITY2" %in% names(packets)) return(NULL)
 
   if (verbose) packet_print("startup", "ACTIVITY2")
+
+  all_times <-
+    info %$%
+    seq(Start_Date, Last_Sample_Time, "1 sec")
 
   packet_no <-
     packets$ACTIVITY2 %>%
@@ -174,9 +177,12 @@ get_activity2 <- function(packets, all_times, tz, info, verbose) {
 
 }
 
-get_sensor_data <- function(
-  packets, schema, all_times, tz, info, verbose
-) {
+#' @rdname dev_bin_packets
+#' @schema parsed sensor schema information
+#' @keywords internal
+get_sensor_data <- function(packets, schema, tz, info, verbose) {
+
+  if (!"SENSOR_DATA" %in% names(packets)) return(NULL)
 
   if (base::missing(schema)) stop(
     "Cannot parse IMU packets without a sensor schema.\n",
@@ -184,5 +190,52 @@ get_sensor_data <- function(
     " the following:\n  `include = c(\"SENSOR_SCHEMA\",",
     " \"SENSOR_DATA\", \"PARAMETERS\")`", call. = FALSE
   )
+
+  if (verbose) packet_print("startup", "SENSOR_DATA")
+
+  packet_times <-
+    packets$SENSOR_DATA %>%
+    sapply(function(x) x$timestamp) %>%
+    anytime::anytime(tz)
+
+  all_times <-
+    length(packet_times) %>%
+    packet_times[.] %>%
+    seq(packet_times[1], ., "1 sec")
+
+  packet_no <- match(all_times, packet_times, 0)
+
+  zero_packet <-
+    schema$samples %>%
+    matrix(0, ., schema$columns) %>%
+    data.frame(stringsAsFactors = FALSE) %>%
+    stats::setNames(schema$sensorColumns$label) %>%
+    as.list(.)
+
+  imu <-
+    packets$SENSOR_DATA %>%
+    dev_parse_IMU_C(
+      packet_no - 1, zero_packet, schema$id,
+      schema$samples, schema$sensorColumns
+    ) %>%
+    data.table::rbindlist(.)
+
+  times <-
+    length(packet_times) %>%
+    packet_times[.] %>%
+    get_times(
+      packet_times[1], ., schema$samples, TRUE
+    ) %>%
+    lubridate::with_tz(tz) %T>%
+    {stopifnot(length(.) == nrow(imu))}
+
+  data.frame(
+    Timestamp = times,
+    imu,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  ) %>%
+  structure(., class = c("IMU", class(.))) %T>%
+  {if (verbose) packet_print("cleanup", "SENSOR_DATA")}
 
 }

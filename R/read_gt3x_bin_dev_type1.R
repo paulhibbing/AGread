@@ -15,14 +15,6 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
         ., .packets[match(names(.), .numbers)]
       )
 
-  ## Define expected timestamps
-
-    all_times <- seq(
-      info$Start_Date,
-      info$Last_Sample_Time,
-      "1 sec"
-    )
-
   ## Get parameters (if applicable)
 
     parameters <- get_parameters(packets, tz, verbose)
@@ -40,8 +32,19 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
   ## Get ACTIVITY2 (if applicable)
 
-    raw <- get_activity2(
-      packets, all_times, tz, info, verbose
-    )
+    packets %<>%
+      get_activity2(tz, info, verbose) %>%
+      list(RAW = .) %>%
+      c(packets, .) %>%
+      .[names(.) != "ACTIVITY2"]
+
+  ## Get SENSOR_DATA (if applicable)
+
+    packets %<>%
+      get_sensor_data(schema, tz, info, verbose) %>%
+      .[ ,names(.) != "Discard"] %>%
+      list(IMU = .) %>%
+      c(packets, .) %>%
+      .[names(.) != "SENSOR_DATA"]
 
 }

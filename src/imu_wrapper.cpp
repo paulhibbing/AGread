@@ -68,6 +68,8 @@ List legacy_parse_IMU_C(
 
 }
 
+//' @rdname legacy_parse_IMU_C
+//' @inheritParams dev_parse_primary_accelerometerC
 // [[Rcpp::export]]
 List dev_parse_IMU_C(
     List packets, IntegerVector packet_no, List zero_packet,
@@ -75,22 +77,38 @@ List dev_parse_IMU_C(
 ) {
 
   // Initialize output and loop variables
+
     List full_packets(packet_no.size());
     int index = 0;
     List packet = packets[0];
     RawVector payload = packet["payload"];
 
-  for (int i = 0; i < packet_no.size(); ++i) {
+  // Run the loop
 
-    //Process the packet
-    DataFrame new_result = dev_payload_parse_sensor_data_25C(
-      payload, info, id, samp_rate
-    );
+    for (int i = 0; i < packet_no.size(); ++i) {
 
-    full_packets[i] = new_result;
+      if (packet_no[i] == -1)  {
+        full_packets[i] = full_packets[i - 1];
+        continue;
+      }
 
-  }
+      index = packet_no[i];
+      packet = packets[index];
+      payload = packet["payload"];
 
-  return full_packets;
+      if (payload.size() == 1) {
+        full_packets[i] = zero_packet;
+        continue;
+      }
+
+      full_packets[i] = dev_payload_parse_sensor_data_25C(
+        payload, info, id, samp_rate
+      );
+
+    }
+
+  // Clean up
+
+    return full_packets;
 
 }

@@ -198,9 +198,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// parse_IMU_C
-List parse_IMU_C(DataFrame imu_records, RawVector log, DataFrame info, int id, int samp_rate, bool verbose);
-RcppExport SEXP _AGread_parse_IMU_C(SEXP imu_recordsSEXP, SEXP logSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP verboseSEXP) {
+// legacy_parse_IMU_C
+List legacy_parse_IMU_C(DataFrame imu_records, RawVector log, DataFrame info, int id, int samp_rate, bool verbose);
+RcppExport SEXP _AGread_legacy_parse_IMU_C(SEXP imu_recordsSEXP, SEXP logSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -210,7 +210,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type id(idSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(parse_IMU_C(imu_records, log, info, id, samp_rate, verbose));
+    rcpp_result_gen = Rcpp::wrap(legacy_parse_IMU_C(imu_records, log, info, id, samp_rate, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dev_parse_IMU_C
+List dev_parse_IMU_C(List packets, IntegerVector packet_no, List zero_packet, int id, int samp_rate, DataFrame info);
+RcppExport SEXP _AGread_dev_parse_IMU_C(SEXP packetsSEXP, SEXP packet_noSEXP, SEXP zero_packetSEXP, SEXP idSEXP, SEXP samp_rateSEXP, SEXP infoSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type packets(packetsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type packet_no(packet_noSEXP);
+    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    Rcpp::traits::input_parameter< int >::type id(idSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type info(infoSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_parse_IMU_C(packets, packet_no, zero_packet, id, samp_rate, info));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -298,6 +314,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dev_payload_parse_sensor_data_25C
+List dev_payload_parse_sensor_data_25C(RawVector payload, DataFrame info, int id, int samp_rate);
+RcppExport SEXP _AGread_dev_payload_parse_sensor_data_25C(SEXP payloadSEXP, SEXP infoSEXP, SEXP idSEXP, SEXP samp_rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type payload(payloadSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type info(infoSEXP);
+    Rcpp::traits::input_parameter< int >::type id(idSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_payload_parse_sensor_data_25C(payload, info, id, samp_rate));
+    return rcpp_result_gen;
+END_RCPP
+}
 // payload_parse_activity2_26C
 DataFrame payload_parse_activity2_26C(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet, Datetime timestamp);
 RcppExport SEXP _AGread_payload_parse_activity2_26C(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP, SEXP timestampSEXP) {
@@ -374,7 +404,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
     {"_AGread_impute_C", (DL_FUNC) &_AGread_impute_C, 2},
-    {"_AGread_parse_IMU_C", (DL_FUNC) &_AGread_parse_IMU_C, 6},
+    {"_AGread_legacy_parse_IMU_C", (DL_FUNC) &_AGread_legacy_parse_IMU_C, 6},
+    {"_AGread_dev_parse_IMU_C", (DL_FUNC) &_AGread_dev_parse_IMU_C, 6},
     {"_AGread_zero2one", (DL_FUNC) &_AGread_zero2one, 1},
     {"_AGread_interval_match", (DL_FUNC) &_AGread_interval_match, 2},
     {"_AGread_interpolate_C", (DL_FUNC) &_AGread_interpolate_C, 2},
@@ -382,6 +413,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
     {"_AGread_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_payload_parse_sensor_data_25C, 5},
+    {"_AGread_dev_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_dev_payload_parse_sensor_data_25C, 4},
     {"_AGread_payload_parse_activity2_26C", (DL_FUNC) &_AGread_payload_parse_activity2_26C, 5},
     {"_AGread_dev_activity2_payload", (DL_FUNC) &_AGread_dev_activity2_payload, 4},
     {"_AGread_legacy_parse_primary_accelerometerC", (DL_FUNC) &_AGread_legacy_parse_primary_accelerometerC, 5},

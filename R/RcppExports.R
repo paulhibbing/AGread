@@ -154,8 +154,14 @@ impute_C <- function(gaps, object) {
 #' @param samp_rate integer. The IMU sampling rate.
 #' @param verbose logical. Print updates to console?
 #' @keywords internal
-parse_IMU_C <- function(imu_records, log, info, id, samp_rate, verbose) {
-    .Call('_AGread_parse_IMU_C', PACKAGE = 'AGread', imu_records, log, info, id, samp_rate, verbose)
+legacy_parse_IMU_C <- function(imu_records, log, info, id, samp_rate, verbose) {
+    .Call('_AGread_legacy_parse_IMU_C', PACKAGE = 'AGread', imu_records, log, info, id, samp_rate, verbose)
+}
+
+#' @rdname legacy_parse_IMU_C
+#' @inheritParams dev_parse_primary_accelerometerC
+dev_parse_IMU_C <- function(packets, packet_no, zero_packet, id, samp_rate, info) {
+    .Call('_AGread_dev_parse_IMU_C', PACKAGE = 'AGread', packets, packet_no, zero_packet, id, samp_rate, info)
 }
 
 #' Interpolation-specific sequencer
@@ -224,6 +230,12 @@ imu_df <- function(input) {
 #' @keywords internal
 payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate, timestamp) {
     .Call('_AGread_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate, timestamp)
+}
+
+#' @rdname payload_parse_sensor_data_25C
+#' @keywords internal
+dev_payload_parse_sensor_data_25C <- function(payload, info, id, samp_rate) {
+    .Call('_AGread_dev_payload_parse_sensor_data_25C', PACKAGE = 'AGread', payload, info, id, samp_rate)
 }
 
 #' Parse a packet of primary accelerometer data in C++
