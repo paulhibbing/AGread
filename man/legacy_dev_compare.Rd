@@ -5,15 +5,17 @@
 \title{Verify \code{\link{read_gt3x}} gives equivalent output using legacy and dev
 parsers}
 \usage{
-legacy_dev_compare(legacy, dev)
+legacy_dev_compare(file, time = FALSE)
 }
 \arguments{
-\item{legacy}{legacy output}
+\item{file}{path to the gt3x file for use in comparing the parsers}
 
-\item{dev}{dev output}
+\item{dev}{time logical. Should timing information be returned?}
 }
 \value{
-A logical scalar indicating whether the outputs matched
+If \code{time = FALSE} (default), a logical scalar is returned,
+  indicating whether the outputs matched. If \code{time = TRUE}, run times
+  are returned for both parsers.
 }
 \description{
 Verify \code{\link{read_gt3x}} gives equivalent output using legacy and dev
@@ -24,8 +26,6 @@ parsers
 file_3x <- system.file(
   "extdata", "example.gt3x", package = "AGread"
 )
-l <- read_gt3x(file_3x, parser = "legacy")
-d <- read_gt3x(file_3x, parser = "dev")
-legacy_dev_compare(l, d)
+legacy_dev_compare(file)
 }
 }
