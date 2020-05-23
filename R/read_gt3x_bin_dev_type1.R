@@ -51,7 +51,8 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       get_activity2(tz, info, verbose) %>%
       list(RAW = .) %>%
       c(packets, .) %>%
-      .[names(.) != "ACTIVITY2"]
+      .[names(.) != "ACTIVITY2"] %>%
+      {.[!sapply(., is.null)]}
 
   ## Get SENSOR_DATA (if applicable)
 
@@ -62,7 +63,8 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       .[ ,names(.) != "Discard"] %>%
       list(IMU = .) %>%
       c(packets, .) %>%
-      .[names(.) != "SENSOR_DATA"]
+      .[names(.) != "SENSOR_DATA"] %>%
+      {.[!sapply(., is.null)]}
 
   ## Get remaining packets (if applicable)
 
