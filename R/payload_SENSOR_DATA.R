@@ -1,6 +1,6 @@
 #' Parse SENSOR_DATA packet
 #'
-#' This is primarily a wrapper for \code{\link{payload_parse_sensor_data_25C}}
+#' This is primarily a wrapper for \code{\link{legacy_payload_parse_sensor_data_25C}}
 #'
 #' @param payload raw. The packet payload
 #' @param parameters a PARAMETERS object
@@ -12,7 +12,7 @@ payload_parse_sensor_data_25 <- function(
   payload, parameters, schema
 ) {
 
-  result <- payload_parse_sensor_data_25C(payload, schema)
+  result <- legacy_payload_parse_sensor_data_25C(payload, schema)
   result <- lapply(
     result,
     function(x) if(!length(x)) return(NULL) else return(x)

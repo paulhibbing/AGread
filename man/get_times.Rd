@@ -4,7 +4,7 @@
 \alias{get_times}
 \title{Determine the expected timestamps for primary accelerometer output}
 \usage{
-get_times(start, end, samp_rate, extra_packet = FALSE)
+get_times(start, end, samp_rate)
 }
 \arguments{
 \item{start}{The file start time}

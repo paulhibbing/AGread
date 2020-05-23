@@ -25,7 +25,7 @@ get_events(packets, tz, info, verbose)
 
 get_activity2(packets, tz, info, verbose)
 
-get_sensor_data(packets, schema, tz, info, verbose)
+get_sensor_data(packets, schema, parameters, tz, info, verbose)
 
 get_battery(packets, tz, verbose)
 
@@ -48,6 +48,8 @@ given type}
 \item{verbose}{logical. Print updates to console?}
 
 \item{schema}{parsed sensor schema information}
+
+\item{parameters}{parsed parameters information}
 
 \item{type}{character. The packet type}
 }
