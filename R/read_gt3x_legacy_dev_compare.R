@@ -3,6 +3,7 @@
 #'
 #' @param file path to the gt3x file for use in comparing the parsers
 #' @param dev time logical. Should timing information be returned?
+#' @param verbose logical. Print updates to console?
 #'
 #' @return If \code{time = FALSE} (default), a logical scalar is returned,
 #'   indicating whether the outputs matched. If \code{time = TRUE}, run times
@@ -16,10 +17,13 @@
 #' )
 #' legacy_dev_compare(file)
 #' }
-legacy_dev_compare <- function(file, time = FALSE) {
+legacy_dev_compare <- function(file, time = FALSE, verbose = FALSE) {
+
+  if (verbose) cat("\nComparing parsers for", basename(file))
 
   ## Run and time the parsers
 
+    if (verbose) cat("\n...Running with legacy parser")
     legacy_time <- proc.time()
     legacy <- read_gt3x(file, parser = "legacy")
     legacy_time %<>%
@@ -27,6 +31,7 @@ legacy_dev_compare <- function(file, time = FALSE) {
       {.[3]} %>%
       stats::setNames("legacy_runtime_s")
 
+    if (verbose) cat("\n...Running with dev parser")
     dev_time <- proc.time()
     dev <- read_gt3x(file, parser = "dev")
     dev_time %<>%
@@ -53,6 +58,7 @@ legacy_dev_compare <- function(file, time = FALSE) {
   ## EVENT
   if ("EVENT" %in% all_names) {
 
+    if (verbose) cat("\n...Checking EVENT format")
     legacy$EVENT$other_events$index <- NULL
     row.names(legacy$EVENT$other_events) <- NULL
     dev$EVENT$other_events$index <- NULL
@@ -69,6 +75,7 @@ legacy_dev_compare <- function(file, time = FALSE) {
   ## PARAMETERS
   if ("PARAMETERS" %in% all_names) {
 
+    if (verbose) cat("\n...Checking PARAMETERS format")
     legacy$PARAMETERS %<>% .$Payload
     class(dev$PARAMETERS) <- class(legacy$PARAMETERS)
 
@@ -80,7 +87,8 @@ legacy_dev_compare <- function(file, time = FALSE) {
 
   all.equal(legacy, dev, scale = 1, tolerance = 0.001) %>%
   rlang::is_true(.) %T>%
-  stopifnot(.) %>%
+  stopifnot(.) %T>%
+  {if (verbose) cat("\n...Success!")} %>%
   {if (time) times else .}
 
 }
