@@ -56,7 +56,9 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
   ## Get SENSOR_DATA (if applicable)
 
     packets %<>%
-      get_sensor_data(schema, tz, info, verbose) %>%
+      get_sensor_data(
+        schema, parameters, tz, info, verbose
+      ) %>%
       .[ ,names(.) != "Discard"] %>%
       list(IMU = .) %>%
       c(packets, .) %>%
@@ -64,32 +66,24 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
   ## Get remaining packets (if applicable)
 
-    packets <-
-      c(
-        "PARAMETERS", "SENSOR_SCHEMA", "EVENT",
-        "RAW", "IMU"
-      ) %>%
+    remaining <-
+      c("PARAMETERS", "SENSOR_SCHEMA", "EVENT") %>%
       setdiff(.packets, .) %>%
-      intersect(names(packets)) %>%
-      sapply(
-        dev_bin1_map_packets,
-        packets = packets,
-        tz = tz,
-        verbose = verbose,
-        simplify = FALSE
-      ) %>%
-      c(packets, .)
+      intersect(names(packets))
 
-  ## Clean up
+    existing <-
+      names(packets) %>%
+      setdiff(remaining)
 
-    new_names <- sapply(packets, function(x) class(x)[1])
-    new_names <- unname(
-      ifelse(new_names == "NULL", names(new_names), new_names)
-    )
-
-    if (verbose) cat("\n")
-    packets %<>% stats::setNames(new_names)
-    packets$info <- info
-    packets
+    sapply(
+      remaining,
+      dev_bin1_map_packets,
+      packets = packets,
+      tz = tz,
+      verbose = verbose,
+      simplify = FALSE
+    ) %>%
+    c(packets[existing], ., info = list(info)) %T>%
+    {if (verbose) cat("\n")}
 
 }

@@ -80,6 +80,10 @@ get_events <- function(packets, tz, info, verbose) {
     sapply(function(x) x$timestamp) %>%
     anytime::anytime(tz)
 
+  sizes <-
+    packets$EVENT %>%
+    sapply(function(x) length(x$payload))
+
   events <-
     packets$EVENT %>%
     sapply(function(x) readBin(
@@ -95,7 +99,7 @@ get_events <- function(packets, tz, info, verbose) {
     index = NA,
     type = 3,
     timestamp = timestamps,
-    payload_size = 1,
+    payload_size = sizes,
     event_type = event_types
   )
 
@@ -141,54 +145,58 @@ get_activity2 <- function(packets, tz, info, verbose) {
 
   if (verbose) packet_print("startup", "ACTIVITY2")
 
-  all_times <-
-    info %$%
-    seq(Start_Date, Last_Sample_Time, "1 sec")
+  ## Set up timestamps and packet flow
 
-  packet_no <-
-    packets$ACTIVITY2 %>%
-    sapply(function(x) x$timestamp) %>%
-    anytime::anytime(tz) %>%
-    match(all_times, ., 0)
+    actual_times <-
+      packets$ACTIVITY2 %>%
+      sapply(function(x) x$timestamp) %>%
+      anytime::anytime(tz)
 
-  zero_packet <-
-    info$Sample_Rate %>%
-    matrix(0, ., 3) %>%
-    data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(.accel_names) %>%
-    as.list(.)
+    full_times <-
+      info %$%
+      get_times(
+        Start_Date, Last_Sample_Time, Sample_Rate
+      ) %>%
+      lubridate::with_tz(tz)
 
-  raw <-
-    get_primary_accel_scale(info) %>%
+    expected_times <-
+      length(full_times)  %T>%
+      {stopifnot(. %% info$Sample_Rate == 0)} %>%
+      {. / info$Sample_Rate} %>%
+      {full_times[1] + seq(.) - 1}
+
+    packet_no <-
+      match(expected_times, actual_times, 0) %T>%
+      {stopifnot(all(seq(packets$ACTIVITY2) %in% .))}
+
+  ## Complete the processing
+
     dev_parse_primary_accelerometerC(
-      packets$ACTIVITY2, packet_no - 1, zero_packet,
-      info$Sample_Rate, .
+      packets$ACTIVITY2,
+      packet_no - 1,
+      blank_packet(info$Sample_Rate, .accel_names),
+      info$Sample_Rate,
+      get_primary_accel_scale(info)
     ) %>%
-    data.table::rbindlist(.)
-
-  times <-
-    info %$%
-    get_times(
-      Start_Date, Last_Sample_Time, Sample_Rate, TRUE
-    ) %>%
-    lubridate::with_tz(tz) %T>%
-    {stopifnot(length(.) == nrow(raw))}
-
-  data.frame(
-    Timestamp = times,
-    raw,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  ) %>%
-  set_packet_class("RAW") %T>%
-  {if (verbose) packet_print("cleanup", "ACTIVITY2")}
+    data.table::rbindlist(.) %>%
+    {data.frame(
+      Timestamp = full_times,
+      .,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )} %>%
+    set_packet_class("RAW") %T>%
+    {if (verbose) packet_print("cleanup", "ACTIVITY2")}
 
 }
 
 #' @rdname dev_bin_packets
 #' @param schema parsed sensor schema information
+#' @param parameters parsed parameters information
 #' @keywords internal
-get_sensor_data <- function(packets, schema, tz, info, verbose) {
+get_sensor_data <- function(
+  packets, schema, parameters, tz, info, verbose
+) {
 
   if (!"SENSOR_DATA" %in% names(packets)) return(NULL)
 
@@ -201,50 +209,59 @@ get_sensor_data <- function(packets, schema, tz, info, verbose) {
 
   if (verbose) packet_print("startup", "SENSOR_DATA")
 
-  packet_times <-
-    packets$SENSOR_DATA %>%
-    sapply(function(x) x$timestamp) %>%
-    anytime::anytime(tz)
+  ## Set up timestamps and packet flow
 
-  all_times <-
-    length(packet_times) %>%
-    packet_times[.] %>%
-    seq(packet_times[1], ., "1 sec")
+    actual_times <-
+      packets$SENSOR_DATA %>%
+      sapply(function(x) x$timestamp) %>%
+      anytime::anytime(tz)
 
-  packet_no <- match(all_times, packet_times, 0)
+    full_times <-
+      actual_times %>%
+      {get_times(
+        .[1], .[length(.)] + 1, schema$samples
+      )} %>%
+      lubridate::with_tz(tz)
 
-  zero_packet <-
-    schema$samples %>%
-    matrix(0, ., schema$columns) %>%
-    data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(schema$sensorColumns$label) %>%
-    as.list(.)
+    expected_times <-
+      length(full_times)  %T>%
+      {stopifnot(. %% schema$samples == 0)} %>%
+      {. / schema$samples} %>%
+      {full_times[1] + seq(.) - 1}
+
+    packet_no <-
+      match(expected_times, actual_times, 0) %T>%
+      {stopifnot(all(seq(packets$SENSOR_DATA) %in% .))}
+
+  ## Complete the processing
 
   imu <-
-    packets$SENSOR_DATA %>%
     dev_parse_IMU_C(
-      packet_no - 1, zero_packet, schema$id,
-      schema$samples, schema$sensorColumns
+      packets$SENSOR_DATA,
+      packet_no - 1,
+      blank_packet(schema$samples, schema$sensorColumns$label),
+      schema$id,
+      schema$samples,
+      schema$sensorColumns
     ) %>%
-    data.table::rbindlist(.)
+    data.table::rbindlist(.) %>%
+    {data.frame(
+      Timestamp = full_times,
+      .,
+      stringsAsFactors = FALSE,
+      row.names = NULL
+    )} %>%
+    set_packet_class("IMU")
 
-  times <-
-    length(packet_times) %>%
-    packet_times[.] %>%
-    get_times(
-      packet_times[1], ., schema$samples, TRUE
-    ) %>%
-    lubridate::with_tz(tz) %T>%
-    {stopifnot(length(.) == nrow(imu))}
+  if ("Temperature" %in% names(imu)) {
+    imu$Temperature %<>% {
+      . + get_temp_offset(parameters)
+    }
+  }
 
-  data.frame(
-    Timestamp = times,
-    imu,
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  ) %>%
-  set_packet_class("IMU") %T>%
-  {if (verbose) packet_print("cleanup", "SENSOR_DATA")}
+  if (verbose) packet_print("cleanup", "SENSOR_DATA")
+
+  imu
 
 }
 

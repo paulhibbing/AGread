@@ -76,8 +76,8 @@ latch_replicate <- function(start_time, stop_time, x_val, y_val, z_val) {
 #' @param samp_rate int. The sampling rate
 #' @param extra_packet bool. Add an extra packet at the end?
 #' @keywords internal
-get_times <- function(start, end, samp_rate, extra_packet = FALSE) {
-    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate, extra_packet)
+get_times <- function(start, end, samp_rate) {
+    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate)
 }
 
 #' Find the next record separator
@@ -136,13 +136,21 @@ checksumC <- function(log, start_index, end_index) {
     invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
 }
 
-#' Fill in a packet by latching to the end of the previous packet
-#' @param last_packet the previous packet
-#' @param zero_packet a zero_valued packet
-#' @param sample_rate the sampling rate
+#' Handle empty and latched packets
+#' @rdname special_packets
+#' @param sample_rate int. the sampling rate
+#' @param names CharacterVector. Names for the packet elements
 #' @keywords internal
-latch_packet <- function(last_packet, zero_packet, sample_rate) {
-    .Call('_AGread_latch_packet', PACKAGE = 'AGread', last_packet, zero_packet, sample_rate)
+blank_packet <- function(sample_rate, names) {
+    .Call('_AGread_blank_packet', PACKAGE = 'AGread', sample_rate, names)
+}
+
+#' @rdname special_packets
+#' @param last_packet the previous packet
+#' @param dummy_packet a packet to use as a template for writing values
+#' @keywords internal
+latch_packet <- function(last_packet, dummy_packet, sample_rate) {
+    .Call('_AGread_latch_packet', PACKAGE = 'AGread', last_packet, dummy_packet, sample_rate)
 }
 
 #' @rdname impute_primary

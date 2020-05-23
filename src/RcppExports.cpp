@@ -112,16 +112,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_times
-DatetimeVector get_times(Datetime start, Datetime end, int samp_rate, bool extra_packet);
-RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP, SEXP extra_packetSEXP) {
+DatetimeVector get_times(Datetime start, Datetime end, int samp_rate);
+RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Datetime >::type start(startSEXP);
     Rcpp::traits::input_parameter< Datetime >::type end(endSEXP);
     Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
-    Rcpp::traits::input_parameter< bool >::type extra_packet(extra_packetSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate, extra_packet));
+    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -186,16 +185,28 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// blank_packet
+List blank_packet(int sample_rate, CharacterVector names);
+RcppExport SEXP _AGread_blank_packet(SEXP sample_rateSEXP, SEXP namesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type sample_rate(sample_rateSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type names(namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(blank_packet(sample_rate, names));
+    return rcpp_result_gen;
+END_RCPP
+}
 // latch_packet
-List latch_packet(List last_packet, List zero_packet, int sample_rate);
-RcppExport SEXP _AGread_latch_packet(SEXP last_packetSEXP, SEXP zero_packetSEXP, SEXP sample_rateSEXP) {
+List latch_packet(List last_packet, List dummy_packet, int sample_rate);
+RcppExport SEXP _AGread_latch_packet(SEXP last_packetSEXP, SEXP dummy_packetSEXP, SEXP sample_rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type last_packet(last_packetSEXP);
-    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    Rcpp::traits::input_parameter< List >::type dummy_packet(dummy_packetSEXP);
     Rcpp::traits::input_parameter< int >::type sample_rate(sample_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(latch_packet(last_packet, zero_packet, sample_rate));
+    rcpp_result_gen = Rcpp::wrap(latch_packet(last_packet, dummy_packet, sample_rate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -410,12 +421,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
-    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 4},
+    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 3},
     {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
+    {"_AGread_blank_packet", (DL_FUNC) &_AGread_blank_packet, 2},
     {"_AGread_latch_packet", (DL_FUNC) &_AGread_latch_packet, 3},
     {"_AGread_impute_C", (DL_FUNC) &_AGread_impute_C, 2},
     {"_AGread_legacy_parse_IMU_C", (DL_FUNC) &_AGread_legacy_parse_IMU_C, 6},

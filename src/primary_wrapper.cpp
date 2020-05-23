@@ -82,10 +82,13 @@ List dev_parse_primary_accelerometerC(
 
   // Initialize output and loop variables
   List full_packets(packet_no.size());
-  int index = 0;
   List packet = packets[0];
   RawVector payload = packet["payload"];
-  bool is_last_packet = false;
+  int index = 0;
+  bool is_last_packet = index == (packets.size() - 1);
+  List dummy_packet = blank_packet(
+    samp_rate, zero_packet.names()
+  );
 
   // Manually process first packet
   if (packet_no[0] == -1) {
@@ -103,14 +106,15 @@ List dev_parse_primary_accelerometerC(
   // Populate output
   for (int i = 1; i < packet_no.size(); ++i) {
 
-    if (packet_no[i] == -1)  {
+    index = packet_no[i];
+
+    if (index == -1)  {
       full_packets[i] = latch_packet(
-        full_packets[i - 1], zero_packet, samp_rate
+        full_packets[i - 1], dummy_packet, samp_rate
       );
       continue;
     }
 
-    index = packet_no[i];
     packet = packets[index];
     payload = packet["payload"];
 
