@@ -25,6 +25,22 @@ validate_include <- function(
 
 }
 
+#' @rdname parse_log_bin
+#' @keywords internal
+validate_parser <- function(parser) {
+
+  if (identical(
+    parser, c("legacy", "dev")
+  )) return("legacy")
+
+  parser %T>%
+  {stopifnot(
+    . %in% c("legacy", "dev"),
+    length(.) == 1
+  )}
+
+}
+
 # Record header retrieval & formatting ------------------------------------
 
 #' Retrieve record headers from .gt3x binary data
@@ -193,5 +209,35 @@ setup_payload <- function(record_header, log) {
   )
 
   payload
+
+}
+
+get_temp_offset <- function(parameters) {
+
+  temp_offset <- 21
+
+  if (is.null(parameters)) {
+    warning(
+      "No `parameters` argument passed to ",
+      "get_temp_offset. 21 degress will be\n  assumed as the offset.",
+      " Make sure that\'s correct by making a read_gt3x call\n  ",
+      "that has (minimally) the following:\n  `include =",
+      " c(\"SENSOR_SCHEMA\", \"SENSOR_DATA\", \"PARAMETERS\")`",
+      call. = FALSE
+    )
+    return(temp_offset)
+  }
+
+  if (!"IMU_TEMP_OFFSET" %in% names(parameters)) {
+      warning(
+        "PARAMETERS object has no `IMU_TEMP_OFFSET` entry.",
+        " Defaulting to 21 degrees.", call. = FALSE
+      )
+      return(temp_offset)
+    }
+
+  parameters$IMU_TEMP_OFFSET %>%
+  as.character(.) %>%
+  as.numeric(.)
 
 }

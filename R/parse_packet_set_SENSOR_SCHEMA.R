@@ -2,12 +2,15 @@
 #' @export
 parse_packet_set.SENSOR_SCHEMA <- function(
   set, log, tz = "UTC", verbose = FALSE,
-  ...
+  payload = NULL, ...
 ) {
 
   BYTES_PER_COLUMN <- 23
 
-  payload <- setup_payload(set, log)
+  if (is.null(payload)) {
+    payload <- setup_payload(set, log)
+  }
+
   schema <- schema_meta(payload)
 
   stopifnot(
@@ -16,12 +19,9 @@ parse_packet_set.SENSOR_SCHEMA <- function(
   )
 
   for (i in seq(schema$columns) - 1) {
-    # i <- 0
+
     startingOffset <- 7 + (BYTES_PER_COLUMN * i)
-    # indices <- seq(
-    #   startingOffset,
-    #   startingOffset + BYTES_PER_COLUMN - 1
-    # )
+
     columnFlags <- payload[startingOffset]
 
     bigEndian <- bin_int(
@@ -75,9 +75,9 @@ parse_packet_set.SENSOR_SCHEMA <- function(
     schema$samples <- 100
   }
 
-  if (verbose) packet_print("cleanup", class(set)[1])
+  if (verbose) packet_print("cleanup", "SENSOR_SCHEMA")
 
-  structure(schema, class = class(set)[1])
+  structure(schema, class = "SENSOR_SCHEMA")
 
 }
 

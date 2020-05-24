@@ -38,14 +38,12 @@ format_sleep_events <- function(sleeps, info, tz, verbose) {
     sleeps$event_type == "sleep_ON"
   )
 
-  sleeps$timestamp <- as.character(sleeps$timestamp)
-  agg_names <- c("timestamp", "event_type", "pair_num")
-  sleeps <- reshape2::dcast(
-    sleeps[ ,agg_names],
-    ...~event_type,
-    value.var = "timestamp"
-  ) %>%
-    {.[ ,event_types]}
+  sleeps$timestamp %<>% as.character(.)
+  sleeps <-
+    c("timestamp", "event_type", "pair_num") %>%
+    sleeps[ ,.] %>%
+    reshape2::dcast(...~event_type, value.var = "timestamp") %>%
+    .[ ,event_types]
 
   sleeps$sleep_ON <- as.POSIXct(sleeps$sleep_ON, tz)
   sleeps$sleep_OFF <- as.POSIXct(sleeps$sleep_OFF, tz)

@@ -5,8 +5,6 @@ parse_packet_set.EVENT <- function(
   info, ...
 ) {
 
-  set_class <- class(set)
-
   if (!length(set)) {
 
     set <- list(
@@ -14,7 +12,10 @@ parse_packet_set.EVENT <- function(
       idle_sleep_events = data.frame()
     )
 
-    if (verbose) packet_print("cleanup", set_class[1])
+    if (verbose) cat(
+      "\n  No EVENT packets to parse (or they\'ve",
+      "been left out of `include`)"
+    )
 
     return(structure(set, class = "EVENT"))
 
@@ -42,9 +43,9 @@ parse_packet_set.EVENT <- function(
 
     set <- split(set, sleep_check)
 
-    names(set) <- gsub(
-      "^TRUE$", "idle_sleep_events", names(set)
-    ) %>% gsub("^FALSE$", "other_events", .)
+    names(set) %<>%
+      gsub("^TRUE$", "idle_sleep_events", .) %>%
+      gsub("^FALSE$", "other_events", .)
 
     set$idle_sleep_events <- format_sleep_events(
       set$idle_sleep_events, info, tz, verbose
@@ -63,7 +64,7 @@ parse_packet_set.EVENT <- function(
 
   }
 
-  if (verbose) packet_print("cleanup", set_class[1])
+  if (verbose) packet_print("cleanup", "EVENT")
 
   structure(set, class = "EVENT")
 

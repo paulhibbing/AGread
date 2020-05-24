@@ -27,10 +27,10 @@ parse_packet_set.default <- function(
   ...
 ) {
 
-  warning(paste(
-    "No method exists yet for parsing",
-    class(set)[1], "packets -- returning NULL."
-  ))
+  warning(
+    "No method exists yet for parsing ",
+    class(set)[1], " packets -- returning NULL."
+  )
 
   return(NULL)
 

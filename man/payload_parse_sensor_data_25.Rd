@@ -14,6 +14,6 @@ payload_parse_sensor_data_25(payload, parameters, schema)
 \item{schema}{a SENSOR_SCHEMA object}
 }
 \description{
-This is primarily a wrapper for \code{\link{payload_parse_sensor_data_25C}}
+This is primarily a wrapper for \code{\link{legacy_payload_parse_sensor_data_25C}}
 }
 \keyword{internal}

@@ -4,16 +4,8 @@
 \alias{read_AG_raw_block}
 \title{Read a large raw file in blocks}
 \usage{
-read_AG_raw_block(
-  file,
-  output_window_secs,
-  calibrate,
-  verbose,
-  skip,
-  meta,
-  timer,
-  ...
-)
+read_AG_raw_block(file, output_window_secs, calibrate, verbose, skip, meta,
+  timer, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}

@@ -1,4 +1,6 @@
-if(getRversion() >= "2.15.1") utils::globalVariables(".")
+if(getRversion() >= "2.15.1") utils::globalVariables(c(
+  ".", "Last_Sample_Time", "Sample_Rate", "Start_Date", "values"
+))
 
 .onAttach <- function(libname, pkgname) {
 

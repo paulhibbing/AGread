@@ -11,17 +11,12 @@ impute_primary <- function(object, verbose) {
     "(idle sleep mode, USB events, etc)"
   )
 
-  any_gaps <- (!stats::complete.cases(
-    object[ ,.accel_names]
-  )) %>% {do.call(
-    data.frame, rle(.)
-  )} %>% {cbind(.,
-    stop_index = cumsum(.$lengths) - 1
-  )} %>% {cbind(.,
-    start_index = .$stop_index - .$lengths + 1
-  )} %>% {
-    .[.$values, ]
-  }
+  any_gaps <-
+    (!stats::complete.cases(object[ ,.accel_names])) %>%
+    {do.call(data.frame, rle(.))} %>%
+    {cbind(., stop_index = cumsum(.$lengths) - 1)} %>%
+    {cbind(., start_index = .$stop_index - .$lengths + 1)} %>%
+    {.[.$values, ]}
 
   if (!length(any_gaps)) return(object)
 
@@ -52,27 +47,28 @@ idle_sleep_impute <- function(object, events, info, tz, verbose) {
     )))==1
   ))
 
-  latches <- get_latch_index(
-    events$idle_sleep_events$sleep_ON,
-    object$Timestamp
-  ) %>% get_latch_values(
-    object
-  ) %>% {data.frame(
-    run_start = events$idle_sleep_events$sleep_ON,
-    run_stop = events$idle_sleep_events$sleep_OFF,
-    .
-  )}
+  latches <-
+    events$idle_sleep_events$sleep_ON %>%
+    get_latch_index(object$Timestamp) %>%
+    get_latch_values(object) %>%
+    {data.frame(
+      run_start = events$idle_sleep_events$sleep_ON,
+      run_stop = events$idle_sleep_events$sleep_OFF,
+      .
+    )}
 
-  latches <- lapply(
-    split(latches, seq(nrow(latches))),
-    function(x) {
+  latches <-
+    nrow(latches) %>%
+    seq(.) %>%
+    split(latches, .) %>%
+    lapply(function(x) {
       latch_replicate(
         x$run_start, x$run_stop,
         x$Accelerometer_X, x$Accelerometer_Y,
         x$Accelerometer_Z
       )
-    }
-  ) %>% do.call(rbind, .)
+    }) %>%
+    do.call(rbind, .)
 
   latch_entries <- get_latch_entries(
     info$Sample_Rate,
@@ -86,21 +82,20 @@ idle_sleep_impute <- function(object, events, info, tz, verbose) {
     latch_entries$Timestamp, tz
   )
 
-  latch_entries <- ifelse(
-    latch_entries$Timestamp %in%
+  latch_entries <-
+    ifelse(
+      latch_entries$Timestamp %in%
       object$Timestamp,
-    FALSE,
-    TRUE
-  ) %>% {
+      FALSE,
+      TRUE
+    ) %>%
     latch_entries[., ]
-  }
 
-  object <- data.table::rbindlist(
-    list(object, latch_entries)
-  ) %>% data.frame(
-    .
-  ) %>%
-  {.[order(.$Timestamp), ]}
+  object %<>%
+    list(latch_entries) %>%
+    data.table::rbindlist(.) %>%
+    data.frame(.) %>%
+    {.[order(.$Timestamp), ]}
 
   row.names(object) <- NULL
 
