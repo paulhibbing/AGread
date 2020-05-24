@@ -2,7 +2,7 @@
 #' parsers
 #'
 #' @param file path to the gt3x file for use in comparing the parsers
-#' @param dev time logical. Should timing information be returned?
+#' @param time logical. Should timing information be returned?
 #' @param verbose logical. Print updates to console?
 #'
 #' @return If \code{time = FALSE} (default), a logical scalar is returned,
@@ -64,8 +64,9 @@ legacy_dev_compare <- function(file, time = FALSE, verbose = FALSE) {
     dev$EVENT$other_events$index <- NULL
     class(dev$EVENT) <- class(legacy$EVENT)
     class(dev$EVENT$other_events) <- class(legacy$EVENT$other_events)
-    dev$EVENT$other_events$type %<>% as.character(.)
-
+    if (!is.null(dev$EVENT$other_events$type)) {
+      dev$EVENT$other_events$type %<>% as.character(.)
+    }
     if (!rlang::is_true(all.equal(legacy$EVENT, dev$EVENT))) {
       stop("EVENT packets differ")
     }
@@ -85,10 +86,13 @@ legacy_dev_compare <- function(file, time = FALSE, verbose = FALSE) {
 
   }
 
-  all.equal(legacy, dev, scale = 1, tolerance = 0.001) %>%
-  rlang::is_true(.) %T>%
-  stopifnot(.) %T>%
-  {if (verbose) cat("\n...Success!")} %>%
-  {if (time) times else .}
+  test <- all.equal(legacy, dev, scale = 1, tolerance = 0.001)
+
+  if (!rlang::is_true(test)) stop(
+    "\n", paste(test, collapse = "\n"), call. = FALSE
+  )
+
+  if (verbose) cat("\n...Success!")
+  if (time) times else test
 
 }

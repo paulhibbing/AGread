@@ -30,6 +30,8 @@ the previous index}
 
 \item{zero_packet}{list containing a properly-formatted packet pre-filled
 with values of zero (used for USB connection events)}
+
+\item{latch_packets}{list of empty packets to be filled during latch periods}
 }
 \description{
 Parse all primary accelerometer packets in a file

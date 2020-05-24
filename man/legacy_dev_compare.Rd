@@ -5,12 +5,14 @@
 \title{Verify \code{\link{read_gt3x}} gives equivalent output using legacy and dev
 parsers}
 \usage{
-legacy_dev_compare(file, time = FALSE)
+legacy_dev_compare(file, time = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{file}{path to the gt3x file for use in comparing the parsers}
 
-\item{dev}{time logical. Should timing information be returned?}
+\item{time}{logical. Should timing information be returned?}
+
+\item{verbose}{logical. Print updates to console?}
 }
 \value{
 If \code{time = FALSE} (default), a logical scalar is returned,

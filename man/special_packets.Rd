@@ -7,7 +7,7 @@
 \usage{
 blank_packet(sample_rate, names)
 
-latch_packet(last_packet, dummy_packet, sample_rate)
+latch_packet(last_packet, sample_rate)
 }
 \arguments{
 \item{sample_rate}{int. the sampling rate}
@@ -15,8 +15,6 @@ latch_packet(last_packet, dummy_packet, sample_rate)
 \item{names}{CharacterVector. Names for the packet elements}
 
 \item{last_packet}{the previous packet}
-
-\item{dummy_packet}{a packet to use as a template for writing values}
 }
 \description{
 Handle empty and latched packets
