@@ -130,8 +130,6 @@ get_events <- function(packets, tz, info, verbose) {
 
   }
 
-  if (verbose) packet_print("cleanup", "EVENT")
-
   set_packet_class(set, "EVENT") %T>%
   {if (verbose) packet_print("cleanup", "EVENT")}
 
@@ -160,8 +158,7 @@ get_activity2 <- function(packets, tz, info, verbose) {
       lubridate::with_tz(tz)
 
     expected_times <-
-      length(full_times)  %T>%
-      {stopifnot(. %% info$Sample_Rate == 0)} %>%
+      length(full_times) %>%
       {. / info$Sample_Rate} %>%
       {full_times[1] + seq(.) - 1}
 
@@ -224,8 +221,7 @@ get_sensor_data <- function(
       lubridate::with_tz(tz)
 
     expected_times <-
-      length(full_times)  %T>%
-      {stopifnot(. %% schema$samples == 0)} %>%
+      length(full_times)%>%
       {. / schema$samples} %>%
       {full_times[1] + seq(.) - 1}
 
@@ -233,13 +229,23 @@ get_sensor_data <- function(
       match(expected_times, actual_times, 0) %T>%
       {stopifnot(all(seq(packets$SENSOR_DATA) %in% .))}
 
+    zero_packet <- blank_packet(
+      schema$samples, schema$sensorColumns$label
+    )
+
+    temperature <- "Temperature" %in% names(zero_packet)
+    if (temperature) {
+      temp_offset <- get_temp_offset(parameters)
+      zero_packet$Temperature %<>% {. - temp_offset}
+    }
+
   ## Complete the processing
 
   imu <-
     dev_parse_IMU_C(
       packets$SENSOR_DATA,
       packet_no - 1,
-      blank_packet(schema$samples, schema$sensorColumns$label),
+      zero_packet,
       schema$id,
       schema$samples,
       schema$sensorColumns
@@ -253,7 +259,7 @@ get_sensor_data <- function(
     )} %>%
     set_packet_class("IMU")
 
-  if ("Temperature" %in% names(imu)) {
+  if (temperature) {
     imu$Temperature %<>% {
       . + get_temp_offset(parameters)
     }
