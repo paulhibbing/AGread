@@ -73,6 +73,7 @@ List legacy_parse_primary_accelerometerC(
 //'   the previous index
 //' @param zero_packet list containing a properly-formatted packet pre-filled
 //'   with values of zero (used for USB connection events)
+//' @param latch_packets list of empty packets to be filled during latch periods
 //' @keywords internal
 // [[Rcpp::export]]
 List dev_parse_primary_accelerometerC(
@@ -86,9 +87,6 @@ List dev_parse_primary_accelerometerC(
   RawVector payload = packet["payload"];
   int index = 0;
   bool is_last_packet = index == (packets.size() - 1);
-  List dummy_packet = blank_packet(
-    samp_rate, zero_packet.names()
-  );
 
   // Manually process first packet
   if (packet_no[0] == -1) {
@@ -108,11 +106,18 @@ List dev_parse_primary_accelerometerC(
 
     index = packet_no[i];
 
-    if (index == -1)  {
-      full_packets[i] = latch_packet(
-        full_packets[i - 1], dummy_packet, samp_rate
+    if (index == -1) {
+
+      List new_value = latch_packet(
+        full_packets[i - 1], samp_rate
       );
+      full_packets[i] = new_value;
+      while(packet_no[i + 1] == -1) {
+        full_packets[i + 1] = new_value;
+        ++i;
+      }
       continue;
+
     }
 
     packet = packets[index];

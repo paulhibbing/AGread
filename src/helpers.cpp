@@ -138,21 +138,22 @@ List blank_packet(int sample_rate, CharacterVector names){
 
 //' @rdname special_packets
 //' @param last_packet the previous packet
-//' @param dummy_packet a packet to use as a template for writing values
 //' @keywords internal
 // [[Rcpp::export]]
 List latch_packet(
-    List last_packet, List dummy_packet, int sample_rate
+    List last_packet, int sample_rate
 ) {
 
+  List result(last_packet.size());
+  result.names() = last_packet.names();
   NumericVector axis;
   double latch_value;
   for (int i = 0; i < last_packet.size(); ++i) {
     axis = last_packet[i];
     latch_value = axis[axis.size() - 1];
-    dummy_packet[i] = NumericVector(sample_rate, latch_value);
+    result[i] = NumericVector(sample_rate, latch_value);
   }
 
-  return dummy_packet;
+  return result;
 
 }

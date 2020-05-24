@@ -198,15 +198,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // latch_packet
-List latch_packet(List last_packet, List dummy_packet, int sample_rate);
-RcppExport SEXP _AGread_latch_packet(SEXP last_packetSEXP, SEXP dummy_packetSEXP, SEXP sample_rateSEXP) {
+List latch_packet(List last_packet, int sample_rate);
+RcppExport SEXP _AGread_latch_packet(SEXP last_packetSEXP, SEXP sample_rateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type last_packet(last_packetSEXP);
-    Rcpp::traits::input_parameter< List >::type dummy_packet(dummy_packetSEXP);
     Rcpp::traits::input_parameter< int >::type sample_rate(sample_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(latch_packet(last_packet, dummy_packet, sample_rate));
+    rcpp_result_gen = Rcpp::wrap(latch_packet(last_packet, sample_rate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -428,7 +427,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_print_progC", (DL_FUNC) &_AGread_print_progC, 2},
     {"_AGread_checksumC", (DL_FUNC) &_AGread_checksumC, 3},
     {"_AGread_blank_packet", (DL_FUNC) &_AGread_blank_packet, 2},
-    {"_AGread_latch_packet", (DL_FUNC) &_AGread_latch_packet, 3},
+    {"_AGread_latch_packet", (DL_FUNC) &_AGread_latch_packet, 2},
     {"_AGread_impute_C", (DL_FUNC) &_AGread_impute_C, 2},
     {"_AGread_legacy_parse_IMU_C", (DL_FUNC) &_AGread_legacy_parse_IMU_C, 6},
     {"_AGread_dev_parse_IMU_C", (DL_FUNC) &_AGread_dev_parse_IMU_C, 6},

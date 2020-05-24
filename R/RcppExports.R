@@ -147,10 +147,9 @@ blank_packet <- function(sample_rate, names) {
 
 #' @rdname special_packets
 #' @param last_packet the previous packet
-#' @param dummy_packet a packet to use as a template for writing values
 #' @keywords internal
-latch_packet <- function(last_packet, dummy_packet, sample_rate) {
-    .Call('_AGread_latch_packet', PACKAGE = 'AGread', last_packet, dummy_packet, sample_rate)
+latch_packet <- function(last_packet, sample_rate) {
+    .Call('_AGread_latch_packet', PACKAGE = 'AGread', last_packet, sample_rate)
 }
 
 #' @rdname impute_primary
@@ -294,6 +293,7 @@ legacy_parse_primary_accelerometerC <- function(primary_records, log, scale_fact
 #'   the previous index
 #' @param zero_packet list containing a properly-formatted packet pre-filled
 #'   with values of zero (used for USB connection events)
+#' @param latch_packets list of empty packets to be filled during latch periods
 #' @keywords internal
 dev_parse_primary_accelerometerC <- function(packets, packet_no, zero_packet, samp_rate, scale_factor) {
     .Call('_AGread_dev_parse_primary_accelerometerC', PACKAGE = 'AGread', packets, packet_no, zero_packet, samp_rate, scale_factor)

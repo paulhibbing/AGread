@@ -77,40 +77,35 @@ List dev_parse_IMU_C(
 ) {
 
   // Initialize output and loop variables
+  List full_packets(packet_no.size());
+  int index;
+  List packet;
+  RawVector payload;
 
-    List full_packets(packet_no.size());
-    int index = 0;
-    List packet = packets[0];
-    RawVector payload = packet["payload"];
+  // Populate output
+  for (int i = 0; i < packet_no.size(); ++i) {
 
-  // Run the loop
+    index = packet_no[i];
 
-    for (int i = 0; i < packet_no.size(); ++i) {
-
-      if (packet_no[i] == -1)  {
-        full_packets[i] = latch_packet(
-          full_packets[i - 1], zero_packet, samp_rate
-        );
-        continue;
-      }
-
-      index = packet_no[i];
-      packet = packets[index];
-      payload = packet["payload"];
-
-      if (payload.size() == 1) {
-        full_packets[i] = zero_packet;
-        continue;
-      }
-
-      full_packets[i] = dev_payload_parse_sensor_data_25C(
-        payload, info, id, samp_rate
-      );
-
+    if (index == -1)  {
+      full_packets[i] = zero_packet;
+      continue;
     }
 
-  // Clean up
+    packet = packets[index];
+    payload = packet["payload"];
 
-    return full_packets;
+    if (payload.size() == 1) {
+      full_packets[i] = zero_packet;
+      continue;
+    }
+
+    full_packets[i] = dev_payload_parse_sensor_data_25C(
+      payload, info, id, samp_rate
+    );
+
+  }
+
+  return full_packets;
 
 }
