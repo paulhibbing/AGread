@@ -15,7 +15,7 @@
 #' file_3x <- system.file(
 #'   "extdata", "example.gt3x", package = "AGread"
 #' )
-#' legacy_dev_compare(file)
+#' legacy_dev_compare(file_3x)
 #' }
 legacy_dev_compare <- function(file, time = FALSE, verbose = FALSE) {
 
