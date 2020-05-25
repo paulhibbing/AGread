@@ -127,11 +127,13 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
 validate_direction <- function(direction) {
 
   direction <- try(
-    match.arg(direction, c("forwards", "backwards")),
+    match.arg(
+      direction, c("err", "forwards", "backwards"), FALSE
+    ),
     silent = TRUE
   )
 
-  if (class(direction) == "try-error") {
+  if (class(direction) == "try-error" | direction == "err") {
     warning(paste("Argument `direction` must be exactly one of",
       "\"forwards\" or \"backwards\". Defaulting to forwards."))
     direction <- "forwards"
