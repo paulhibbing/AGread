@@ -16,9 +16,11 @@
 #'
 #' @examples
 #'
-#' data("imu_to_check", package = "AGread")
-#' ag <-
-#'   imu_to_check[ ,c("Timestamp", "mean_abs_Gyroscope_x_DegPerS")]
+#' test_file <- system.file(
+#'   "extdata", "example1sec.csv", package = "AGread"
+#' )
+#'
+#' ag <- read_AG_counts(test_file, skip = 11)
 #'
 #' # Forwards reintegration
 #'   reintegrate(
@@ -117,6 +119,10 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
 }
 
 #' @rdname reintegrate
+#' @usage
+#' ## Related internal functions:
+#'
+#' #  validate_direction(direction)
 #' @keywords internal
 validate_direction <- function(direction) {
 
@@ -136,6 +142,8 @@ validate_direction <- function(direction) {
 }
 
 #' @rdname reintegrate
+#' @usage
+#' #  get_epoch(ag, to, time_var, verbose)
 #' @keywords internal
 get_epoch <- function(ag, to, time_var, verbose) {
 

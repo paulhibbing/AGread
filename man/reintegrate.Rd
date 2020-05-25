@@ -9,9 +9,11 @@
 reintegrate(ag, to, time_var = "Timestamp", direction = c("forwards",
   "backwards"), verbose = FALSE, method = c("Rcpp", "legacy"))
 
-validate_direction(direction)
+## Related internal functions:
 
-get_epoch(ag, to, time_var, verbose)
+#  validate_direction(direction)
+
+#  get_epoch(ag, to, time_var, verbose)
 }
 \arguments{
 \item{ag}{A data frame to reintegrate}
@@ -36,9 +38,11 @@ Reintegrate a data stream
 }
 \examples{
 
-data("imu_to_check", package = "AGread")
-ag <-
-  imu_to_check[ ,c("Timestamp", "mean_abs_Gyroscope_x_DegPerS")]
+test_file <- system.file(
+  "extdata", "example1sec.csv", package = "AGread"
+)
+
+ag <- read_AG_counts(test_file, skip = 11)
 
 # Forwards reintegration
   reintegrate(
