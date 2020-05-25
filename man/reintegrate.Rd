@@ -2,10 +2,16 @@
 % Please edit documentation in R/Reintegrate.R
 \name{reintegrate}
 \alias{reintegrate}
+\alias{validate_direction}
+\alias{get_epoch}
 \title{Reintegrate a data stream}
 \usage{
 reintegrate(ag, to, time_var = "Timestamp", direction = c("forwards",
-  "backwards"), verbose = FALSE)
+  "backwards"), verbose = FALSE, method = c("Rcpp", "legacy"))
+
+validate_direction(direction)
+
+get_epoch(ag, to, time_var, verbose)
 }
 \arguments{
 \item{ag}{A data frame to reintegrate}
@@ -21,6 +27,9 @@ refers to the timespan after the previous data point ("backwards"), or
 before the next data point ("forwards").}
 
 \item{verbose}{logical. Print updates to console?}
+
+\item{method}{Method to use for vector magnitude calculations, namely Rcpp
+(default, faster) or legacy (for checking backward compatibility)}
 }
 \description{
 Reintegrate a data stream
@@ -63,3 +72,4 @@ ag <-
 }
 
 }
+\keyword{internal}
