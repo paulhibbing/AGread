@@ -1,5 +1,38 @@
 .triaxial_vars <- c("Axis1", "Axis2", "Axis3")
 
+#' @rdname reintegrate
+#' @usage
+#' #  reintegrate_setup(input)
+#' @keywords internal
+reintegrate_setup <- function(
+  ag, to, time_var = "Timestamp",
+  direction = c("forwards", "backwards"), verbose = FALSE,
+  method = c("Rcpp", "legacy")
+) {
+
+  col_classes <- sapply(ag, function(x) class(x)[1])
+  col_numeric <- col_classes %in% c("numeric", "integer")
+
+  list(
+
+    method = match.arg(method),
+
+    direction = validate_direction(direction),
+
+    start_epoch = get_epoch(
+      ag, to, time_var, verbose
+    ),
+
+    first_vars = names(col_classes)[!col_numeric],
+
+    sum_vars = names(col_classes)[col_numeric],
+
+    tz = lubridate::tz(ag[ ,time_var])
+
+  )
+
+}
+
 #' Remove trailing rows with missing values from data frame
 #'
 #' @param ag A data frame on which to perform the operation
@@ -35,20 +68,46 @@ rm_trail_na <- function(ag) {
 get_blocks <- function(ag, time_var, to, start_epoch, block_size, direction) {
 
   if (direction == "forwards") {
-    begin <- which(as.numeric(ag[ ,time_var]) %% to == 0)[1]
+
+    begin <-
+      ag[ ,time_var] %>%
+      as.numeric(.) %>%
+      {. %% to == 0} %>%
+      which(.) %>%
+      .[1]
+
   }
 
   if (direction == "backwards") {
-    begin <- which(as.numeric(ag[ ,time_var]) %% to == 0)[2]
-    begin <- begin - (block_size - 1)
-    keep <- seq(nrow(ag)) >= begin
-    ag <- ag[keep, ]
+
+    begin <-
+      ag[ ,time_var] %>%
+      as.numeric(.) %>%
+      {. %% to == 0} %>%
+      which(.) %>%
+      .[2] %>%
+      {. - (block_size - 1)}
+
+    ag %<>%
+      nrow(.) %>%
+      seq(.) %>%
+      {. >= begin} %>%
+      ag[., ]
 
     begin <- 1
+
   }
 
-  new_block <- (as.numeric(ag[begin ,time_var]) %% to)
-  block_no  <- cumsum(as.numeric(ag[ ,time_var]) %% to == new_block)
+  new_block <-
+    ag[begin, time_var] %>%
+    as.numeric(.) %>%
+    {. %% to}
+
+  block_no  <-
+    ag[ ,time_var] %>%
+    as.numeric(.) %>%
+    {. %% to == new_block} %>%
+    cumsum(.)
 
   sizes <- tapply(block_no, block_no, length)
   keep  <- sizes == block_size

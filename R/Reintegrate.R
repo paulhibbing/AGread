@@ -58,31 +58,28 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
   method = c("Rcpp", "legacy")
 ) {
 
-  method <- match.arg(method)
-  direction %<>% validate_direction(.)
+  ## Initial setup
 
-  start_epoch <- get_epoch(ag, to, time_var, verbose)
-  if (is.null(start_epoch)) return(ag)
+    setup <- reintegrate_setup(
+      ag, to, time_var, direction, verbose, method
+    )
+    if (is.null(setup$start_epoch)) return(ag)
 
-  col_classes <- sapply(ag, function(x) class(x)[1])
-  col_numeric <- col_classes %in% c("numeric", "integer")
-  first_vars  <- names(col_classes)[!col_numeric]
-  sum_vars    <- names(col_classes)[col_numeric]
-  tz <- lubridate::tz(ag[ ,time_var])
+  ## Establish the reintegrated epoch groupings
 
-  ag <-
-    (to / start_epoch) %>%
-    get_blocks(ag, time_var, to, start_epoch, ., direction)
+    ag <-
+      (to / setup$start_epoch) %>%
+      get_blocks(ag, time_var, to, setup$start_epoch, ., setup$direction)
 
   ag[ ,time_var] %<>% as.character(.)
 
   firsts  <-
     names(ag) %>%
-    match(first_vars, .) %>%
+    match(setup$first_vars, .) %>%
     sapply(
       function(x) tapply(
         ag[ ,x], ag$block_no, function(y) switch(
-          direction,
+          setup$direction,
           "forwards" = y[1],
           "backwards" = y[length(y)]
         )
@@ -90,27 +87,27 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
     ) %>%
     {if (is.null(dim(.))) t(.) else .} %>%
     data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(first_vars)
+    stats::setNames(setup$first_vars)
 
   sums <-
     names(ag) %>%
-    match(sum_vars, .) %>%
+    match(setup$sum_vars, .) %>%
     sapply(function(x) tapply(
       ag[ ,x], ag$block_no, sum, na.rm = TRUE
     )) %>%
     {if (is.null(dim(.))) t(.) else .} %>%
     data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(sum_vars)
+    stats::setNames(setup$sum_vars)
 
   ag <- data.frame(firsts, sums, stringsAsFactors = FALSE)
-  ag[ ,sum_vars] %<>% sapply(as.numeric)
-  ag[ ,time_var] %<>% as.POSIXct(tz)
+  ag[ ,setup$sum_vars] %<>% sapply(as.numeric)
+  ag[ ,time_var] %<>% as.POSIXct(setup$tz)
   ag$block_no <- NULL
 
   if (all(.triaxial_vars %in% names(ag))) {
     ag$Vector.Magnitude <-
       ag[ ,.triaxial_vars] %>%
-      get_VM(method, verbose) %>%
+      get_VM("Rcpp", verbose) %>%
       round(2)
   }
 
