@@ -73,7 +73,7 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
 
     ag <-
       switch(
-        direction,
+        setup$direction,
         "forwards" = dplyr::first,
         "backwards" = dplyr::last
       ) %>%
