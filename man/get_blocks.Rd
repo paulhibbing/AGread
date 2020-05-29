@@ -13,7 +13,7 @@ forwards_start(ag, time_var, to, block_size, begin = 1)
 
 backwards_start(ag, time_var, to, block_size, begin = 1)
 
-get_blocks(ag, time_var, to, start_epoch, block_size, direction)
+get_blocks(ag, time_var, to, start_epoch, direction)
 }
 \arguments{
 \item{timestamp}{POSIX scalar}

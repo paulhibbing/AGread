@@ -65,8 +65,7 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
   ## Establish the reintegrated epoch groupings
 
     ag %<>% get_blocks(
-      time_var, to, setup$start_epoch,
-      (to / setup$start_epoch), setup$direction
+      time_var, to, setup$start_epoch, setup$direction
     )
 
   ## Run the reintegration operations
@@ -79,7 +78,7 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
       ) %>%
       {mapply(
         reint_wrap,
-        input_vars = list(setup$first_vars, setup$sum_vars),
+        input_vars = list(setup$char_vars, setup$num_vars),
         fun = list(., sum),
         MoreArgs = list(ag = ag),
         SIMPLIFY = FALSE
@@ -96,55 +95,5 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
     }
 
     ag
-
-}
-
-#' @rdname reintegrate
-#' @usage
-#' ## Related internal functions:
-#'
-#' #  validate_direction(direction)
-#' @keywords internal
-validate_direction <- function(direction) {
-
-  direction <- try(
-    match.arg(
-      direction, c("err", "forwards", "backwards"), FALSE
-    ),
-    silent = TRUE
-  )
-
-  if (class(direction) == "try-error" | direction == "err") {
-    warning(paste("Argument `direction` must be exactly one of",
-      "\"forwards\" or \"backwards\". Defaulting to forwards."))
-    direction <- "forwards"
-  }
-
-  direction
-
-}
-
-#' @rdname reintegrate
-#' @usage
-#' #  get_epoch(ag, to, time_var, verbose)
-#' @keywords internal
-get_epoch <- function(ag, to, time_var, verbose) {
-
-  ag[ ,time_var] %>%
-    diff(.) %>%
-    unique(.) %T>%
-    {stopifnot(
-      length(.) == 1,
-      (to / .) %% 1 == 0
-    )} %>%
-    {if (. == to) {
-      if (verbose) cat(
-        "\nReturning original data --",
-        "already in desired epoch length"
-      )
-      NULL
-    } else {
-      .
-    }}
 
 }

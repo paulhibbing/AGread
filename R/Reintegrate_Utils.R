@@ -24,6 +24,56 @@ rm_trail_na <- function(ag) {
 
 #' @rdname reintegrate
 #' @usage
+#' ## Related internal functions:
+#'
+#' #  validate_direction(direction)
+#' @keywords internal
+validate_direction <- function(direction) {
+
+  direction <- try(
+    match.arg(
+      direction, c("err", "forwards", "backwards"), FALSE
+    ),
+    silent = TRUE
+  )
+
+  if (class(direction) == "try-error" | direction == "err") {
+    warning(paste("Argument `direction` must be exactly one of",
+      "\"forwards\" or \"backwards\". Defaulting to forwards."))
+    direction <- "forwards"
+  }
+
+  direction
+
+}
+
+#' @rdname reintegrate
+#' @usage
+#' #  get_epoch(ag, to, time_var, verbose)
+#' @keywords internal
+get_epoch <- function(ag, to, time_var, verbose) {
+
+  ag[ ,time_var] %>%
+    diff(.) %>%
+    unique(.) %T>%
+    {stopifnot(
+      length(.) == 1,
+      (to / .) %% 1 == 0
+    )} %>%
+    {if (. == to) {
+      if (verbose) cat(
+        "\nReturning original data --",
+        "already in desired epoch length"
+      )
+      NULL
+    } else {
+      .
+    }}
+
+}
+
+#' @rdname reintegrate
+#' @usage
 #' #  reintegrate_setup(ag, to, time_var = "Timestamp",
 #' #    direction = c("forwards", "backwards"), verbose = FALSE)
 #' @keywords internal
@@ -43,9 +93,9 @@ reintegrate_setup <- function(
       ag, to, time_var, verbose
     ),
 
-    first_vars = names(col_classes)[!col_numeric],
+    char_vars = names(col_classes)[!col_numeric],
 
-    sum_vars = names(col_classes)[col_numeric],
+    num_vars = names(col_classes)[col_numeric],
 
     tz = lubridate::tz(ag[ ,time_var])
 
@@ -64,6 +114,8 @@ test_second <- function(timestamp, to) {
 }
 
 #' @rdname get_blocks
+#' @param block_size The number of rows of data included in each reintegrated
+#'   epoch
 #' @param begin A starting index
 #' @keywords internal
 forwards_start <- function(
@@ -99,14 +151,13 @@ backwards_start <- function(
 #'
 #' @inheritParams reintegrate
 #' @param start_epoch The initial epoch length of the data being reintegrated
-#' @param block_size The number of rows of data included in each reintegrated
-#'   epoch
 #'
 #' @keywords internal
-#'
 get_blocks <- function(
-  ag, time_var, to, start_epoch, block_size, direction
+  ag, time_var, to, start_epoch, direction
 ) {
+
+  block_size <- to / start_epoch
 
   ag <-
     switch(
