@@ -1,44 +1,10 @@
 .triaxial_vars <- c("Axis1", "Axis2", "Axis3")
 
-#' @rdname reintegrate
-#' @usage
-#' #  reintegrate_setup(input)
-#' @keywords internal
-reintegrate_setup <- function(
-  ag, to, time_var = "Timestamp",
-  direction = c("forwards", "backwards"), verbose = FALSE,
-  method = c("Rcpp", "legacy")
-) {
-
-  col_classes <- sapply(ag, function(x) class(x)[1])
-  col_numeric <- col_classes %in% c("numeric", "integer")
-
-  list(
-
-    method = match.arg(method),
-
-    direction = validate_direction(direction),
-
-    start_epoch = get_epoch(
-      ag, to, time_var, verbose
-    ),
-
-    first_vars = names(col_classes)[!col_numeric],
-
-    sum_vars = names(col_classes)[col_numeric],
-
-    tz = lubridate::tz(ag[ ,time_var])
-
-  )
-
-}
-
 #' Remove trailing rows with missing values from data frame
 #'
 #' @param ag A data frame on which to perform the operation
 #'
 #' @keywords internal
-#'
 #'
 rm_trail_na <- function(ag) {
   missing <- apply(ag, 1, function(x) any(is.na(x)))
@@ -56,6 +22,79 @@ rm_trail_na <- function(ag) {
   return(ag[seq(last_row), ])
 }
 
+#' @rdname reintegrate
+#' @usage
+#' #  reintegrate_setup(input)
+#' @keywords internal
+reintegrate_setup <- function(
+  ag, to, time_var = "Timestamp",
+  direction = c("forwards", "backwards"), verbose = FALSE
+) {
+
+  col_classes <- sapply(ag, function(x) class(x)[1])
+  col_numeric <- col_classes %in% c("numeric", "integer")
+
+  list(
+
+    direction = validate_direction(direction),
+
+    start_epoch = get_epoch(
+      ag, to, time_var, verbose
+    ),
+
+    first_vars = names(col_classes)[!col_numeric],
+
+    sum_vars = names(col_classes)[col_numeric],
+
+    tz = lubridate::tz(ag[ ,time_var])
+
+  )
+
+}
+
+#' @rdname get_blocks
+#' @param timestamp POSIX scalar
+#' @keywords internal
+test_second <- function(timestamp, to) {
+  lubridate::floor_date(timestamp, "1 min") %>%
+  {timestamp - .} %>%
+  as.numeric(.) %>%
+  {. %% to == 0}
+}
+
+#' @rdname get_blocks
+#' @param begin A starting index
+#' @keywords internal
+forwards_start <- function(
+  ag, time_var, to, block_size, begin = 1
+) {
+
+  while (!test_second(ag[begin, time_var], to)) {
+    begin %<>% {. + 1}
+  }
+
+  begin
+
+}
+
+#' @rdname get_blocks
+#' @param begin A starting index
+#' @keywords internal
+backwards_start <- function(
+  ag, time_var, to, block_size, begin = 1
+) {
+
+  while(!all(
+    test_second(ag[begin, time_var], to),
+    begin - block_size + 1 > 0
+  )) {
+    begin %<>% {. + 1}
+  }
+
+  begin - block_size + 1
+
+}
+
 #' Assign blocks to data stream for reintegration
 #'
 #' @inheritParams reintegrate
@@ -67,57 +106,47 @@ rm_trail_na <- function(ag) {
 #'
 get_blocks <- function(ag, time_var, to, start_epoch, block_size, direction) {
 
-  if (direction == "forwards") {
+  ag <-
+    switch(
+      direction,
+      "forwards"  = forwards_start(ag, time_var, to, block_size),
+      "backwards" = backwards_start(ag, time_var, to, block_size)
+    ) %>%
+    setdiff(1:., .) %>%
+    {if (!length(.)) ag else ag[-., ]}
 
-    begin <-
-      ag[ ,time_var] %>%
-      as.numeric(.) %>%
-      {. %% to == 0} %>%
-      which(.) %>%
-      .[1]
-
+  while ( (nrow(ag)*start_epoch) %% to != 0 ) {
+    ag %<>% {.[-nrow(.), ]}
   }
 
-  if (direction == "backwards") {
+  ag$block <-
+    nrow(ag) %>%
+    {. / block_size} %T>%
+    {stopifnot(. %% 1 == 0)} %>%
+    seq(.) %>%
+    rep(each = block_size) %T>%
+    {stopifnot(length(.) == nrow(ag))}
 
-    begin <-
-      ag[ ,time_var] %>%
-      as.numeric(.) %>%
-      {. %% to == 0} %>%
-      which(.) %>%
-      .[2] %>%
-      {. - (block_size - 1)}
+  ag
 
-    ag %<>%
-      nrow(.) %>%
-      seq(.) %>%
-      {. >= begin} %>%
-      ag[., ]
+}
 
-    begin <- 1
+#' Run a reintegration operation on a data frame with a \code{block} indicator
+#'
+#' @param ag data frame with a \code{block} column to indicate groupings for the
+#'   reintegration operation
+#' @param input_vars character vector of column names on which to reintegrate
+#' @param fun the function(s) to perform
+#'
+#' @keywords internal
+reint_wrap <- function(ag, input_vars, fun) {
 
-  }
+  c(input_vars, "block") %>%
+  unique(.) %>%
+  ag[ ,.] %>%
+  dplyr::group_by(block) %>%
+  dplyr::summarise_all(fun) %>%
+  data.frame(stringsAsFactors = FALSE) %>%
+  .[ ,input_vars]
 
-  new_block <-
-    ag[begin, time_var] %>%
-    as.numeric(.) %>%
-    {. %% to}
-
-  block_no  <-
-    ag[ ,time_var] %>%
-    as.numeric(.) %>%
-    {. %% to == new_block} %>%
-    cumsum(.)
-
-  sizes <- tapply(block_no, block_no, length)
-  keep  <- sizes == block_size
-
-  ag$block_no   <- block_no
-  ag$block_size <- sizes[match(block_no, names(sizes))]
-  ag$keep       <- keep[match(block_no, names(keep))]
-
-  ag            <- ag[ag$keep, ]
-  ag$keep       <- NULL
-  ag$block_size <- NULL
-  return(ag)
 }

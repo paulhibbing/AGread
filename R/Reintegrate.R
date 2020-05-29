@@ -1,16 +1,14 @@
 #' Reintegrate a data stream
 #'
-#' @param ag A data frame to reintegrate
-#' @param to The epoch length desired. Starting epoch length will be determined
-#'   automatically.
+#' @param ag a data frame to reintegrate
+#' @param to the desired epoch length of the output. Starting epoch length will
+#'   be determined automatically (while also verifying the data are continuous).
 #' @param time_var The name of the column containing POSIX-formatted timestamp
 #'   information
 #' @param direction The direction of reintegration, i.e. whether a timestamp
 #'   refers to the timespan after the previous data point ("backwards"), or
 #'   before the next data point ("forwards").
 #' @param verbose logical. Print updates to console?
-#' @param method Method to use for vector magnitude calculations, namely Rcpp
-#'   (default, faster) or legacy (for checking backward compatibility)
 #'
 #' @export
 #'
@@ -54,64 +52,50 @@
 #' }
 #'
 reintegrate <- function(ag, to, time_var = "Timestamp",
-  direction = c("forwards", "backwards"), verbose = FALSE,
-  method = c("Rcpp", "legacy")
+  direction = c("forwards", "backwards"), verbose = FALSE
 ) {
 
   ## Initial setup
 
     setup <- reintegrate_setup(
-      ag, to, time_var, direction, verbose, method
+      ag, to, time_var, direction, verbose
     )
     if (is.null(setup$start_epoch)) return(ag)
 
   ## Establish the reintegrated epoch groupings
 
+    ag %<>% get_blocks(
+      time_var, to, setup$start_epoch,
+      (to / setup$start_epoch), setup$direction
+    )
+
+  ## Run the reintegration operations
+
     ag <-
-      (to / setup$start_epoch) %>%
-      get_blocks(ag, time_var, to, setup$start_epoch, ., setup$direction)
+      switch(
+        direction,
+        "forwards" = dplyr::first,
+        "backwards" = dplyr::last
+      ) %>%
+      {mapply(
+        reint_wrap,
+        input_vars = list(setup$first_vars, setup$sum_vars),
+        fun = list(., sum),
+        MoreArgs = list(ag = ag),
+        SIMPLIFY = FALSE
+      )} %>%
+      data.frame(stringsAsFactors = FALSE, row.names = NULL)
 
-  ag[ ,time_var] %<>% as.character(.)
+  ## Re-format VM and return
 
-  firsts  <-
-    names(ag) %>%
-    match(setup$first_vars, .) %>%
-    sapply(
-      function(x) tapply(
-        ag[ ,x], ag$block_no, function(y) switch(
-          setup$direction,
-          "forwards" = y[1],
-          "backwards" = y[length(y)]
-        )
-      )
-    ) %>%
-    {if (is.null(dim(.))) t(.) else .} %>%
-    data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(setup$first_vars)
+    if (all(.triaxial_vars %in% names(ag))) {
+      ag$Vector.Magnitude <-
+        ag[ ,.triaxial_vars] %>%
+        get_VM("Rcpp", verbose) %>%
+        round(2)
+    }
 
-  sums <-
-    names(ag) %>%
-    match(setup$sum_vars, .) %>%
-    sapply(function(x) tapply(
-      ag[ ,x], ag$block_no, sum, na.rm = TRUE
-    )) %>%
-    {if (is.null(dim(.))) t(.) else .} %>%
-    data.frame(stringsAsFactors = FALSE) %>%
-    stats::setNames(setup$sum_vars)
-
-  ag <- data.frame(firsts, sums, stringsAsFactors = FALSE)
-  ag[ ,setup$sum_vars] %<>% sapply(as.numeric)
-  ag[ ,time_var] %<>% as.POSIXct(setup$tz)
-  ag$block_no <- NULL
-
-  if (all(.triaxial_vars %in% names(ag))) {
-    ag$Vector.Magnitude <-
-      ag[ ,.triaxial_vars] %>%
-      get_VM("Rcpp", verbose) %>%
-      round(2)
-  }
-
-  return(ag)
+    ag
 
 }
 
