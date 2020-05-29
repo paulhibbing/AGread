@@ -24,7 +24,8 @@ rm_trail_na <- function(ag) {
 
 #' @rdname reintegrate
 #' @usage
-#' #  reintegrate_setup(input)
+#' #  reintegrate_setup(ag, to, time_var = "Timestamp",
+#' #    direction = c("forwards", "backwards"), verbose = FALSE)
 #' @keywords internal
 reintegrate_setup <- function(
   ag, to, time_var = "Timestamp",
@@ -78,7 +79,6 @@ forwards_start <- function(
 }
 
 #' @rdname get_blocks
-#' @param begin A starting index
 #' @keywords internal
 backwards_start <- function(
   ag, time_var, to, block_size, begin = 1
@@ -95,7 +95,7 @@ backwards_start <- function(
 
 }
 
-#' Assign blocks to data stream for reintegration
+#' Assign blocks to a data stream for reintegration
 #'
 #' @inheritParams reintegrate
 #' @param start_epoch The initial epoch length of the data being reintegrated
@@ -104,7 +104,9 @@ backwards_start <- function(
 #'
 #' @keywords internal
 #'
-get_blocks <- function(ag, time_var, to, start_epoch, block_size, direction) {
+get_blocks <- function(
+  ag, time_var, to, start_epoch, block_size, direction
+) {
 
   ag <-
     switch(
