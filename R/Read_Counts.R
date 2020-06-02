@@ -4,10 +4,9 @@
 #'   file with count values
 #' @param verbose A logical scalar: Print processing updates?
 #' @param skip Header length: Number of rows to skip when reading the file
-#' @param nrows Header length: Number of rows to read when retrieving meta-data
 #' @param header A logical scalar: Are variable names contained in first row of
 #'   file?
-#' @param ... Further arguments passed to \code{read.csv} and \code{fread}
+#' @param ... Further arguments passed to \code{data.table::fread}
 #'
 #' @return A data frame reflecting the data contained in the csv file
 #' @export
@@ -23,8 +22,9 @@
 #' )
 #' head(AG_counts)
 #'
-read_AG_counts <- function(file, verbose = FALSE, skip = 10,
-    nrows = 10, header = FALSE, ...) {
+read_AG_counts <- function(
+  file, verbose = FALSE, skip = 11, header = FALSE, ...
+) {
 
   timer <- PAutilities::manage_procedure(
     "Start", "\nReading", basename(file), verbose = verbose
@@ -34,16 +34,12 @@ read_AG_counts <- function(file, verbose = FALSE, skip = 10,
 
     if (verbose) message_update(1, file = file)
 
-    meta <- AG_meta(
-      file,
-      verbose = verbose,
-      nrows = nrows,
-      header = header,
-      ...
-    )
+    meta <- AG_meta(file, verbose)
 
-    file_mode <- modes[modes$mode == meta$mode, ]
-    stopifnot(nrow(file_mode) == 1)
+    file_mode <-
+      (modes$mode == meta$mode) %>%
+      modes[., ] %T>%
+      {stopifnot(nrow(.) == 1)}
 
   # Pick out expected variable names
 
