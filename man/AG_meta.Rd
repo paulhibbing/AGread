@@ -2,9 +2,15 @@
 % Please edit documentation in R/Read_Counts_Utils.R
 \name{AG_meta}
 \alias{AG_meta}
+\alias{value_check}
+\alias{meta_format}
 \title{Extract meta-data from file header}
 \usage{
-AG_meta(file, verbose = FALSE, ...)
+AG_meta(file, verbose = FALSE)
+
+value_check(values)
+
+meta_format(x)
 }
 \arguments{
 \item{file}{A character scalar giving path to an automatically-generated csv
@@ -12,7 +18,9 @@ file with count values}
 
 \item{verbose}{A logical scalar: Print processing updates?}
 
-\item{...}{Further arguments passed to \code{read.csv} and \code{fread}}
+\item{values}{list of meta values to check for completeness}
+
+\item{x}{string to format (one line of input from the data file)}
 }
 \description{
 Extract meta-data from file header
@@ -24,3 +32,4 @@ counts_file <- system.file(
 AGread::AG_meta(counts_file)
 
 }
+\keyword{internal}
