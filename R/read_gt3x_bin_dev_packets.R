@@ -145,25 +145,14 @@ get_activity2 <- function(packets, tz, info, verbose) {
 
   ## Set up timestamps and packet flow
 
-    actual_times <-
-      packets$ACTIVITY2 %>%
-      sapply(function(x) x$timestamp) %>%
-      anytime::anytime(tz)
-
-    full_times <-
-      info %$%
-      get_times(
-        Start_Date, Last_Sample_Time, Sample_Rate
-      ) %>%
-      lubridate::with_tz(tz)
+    actual_times <- get_actual(packets$ACTIVITY2, tz)
 
     expected_times <-
-      length(full_times) %>%
-      {. / info$Sample_Rate} %>%
-      {full_times[1] + seq(.) - 1}
+      info %$%
+      get_expected(Start_Date, Last_Sample_Time, Sample_Rate)
 
     packet_no <-
-      match(expected_times, actual_times, 0) %T>%
+      match(expected_times$expected_floor, actual_times, 0) %T>%
       {stopifnot(all(seq(packets$ACTIVITY2) %in% .))}
 
   ## Complete the processing
@@ -177,7 +166,7 @@ get_activity2 <- function(packets, tz, info, verbose) {
     ) %>%
     data.table::rbindlist(.) %>%
     {data.frame(
-      Timestamp = full_times,
+      Timestamp = expected_times$expected_full,
       .,
       stringsAsFactors = FALSE,
       row.names = NULL
@@ -208,25 +197,16 @@ get_sensor_data <- function(
 
   ## Set up timestamps and packet flow
 
-    actual_times <-
-      packets$SENSOR_DATA %>%
-      sapply(function(x) x$timestamp) %>%
-      anytime::anytime(tz)
-
-    full_times <-
-      actual_times %>%
-      {get_times(
-        .[1], .[length(.)] + 1, schema$samples
-      )} %>%
-      lubridate::with_tz(tz)
+    actual_times <- get_actual(packets$SENSOR_DATA, tz)
 
     expected_times <-
-      length(full_times)%>%
-      {. / schema$samples} %>%
-      {full_times[1] + seq(.) - 1}
+      actual_times %>%
+      {get_expected(
+        dplyr::first(.), dplyr::last(.) + 1, schema$samples
+      )}
 
     packet_no <-
-      match(expected_times, actual_times, 0) %T>%
+      match(expected_times$expected_floor, actual_times, 0) %T>%
       {stopifnot(all(seq(packets$SENSOR_DATA) %in% .))}
 
     zero_packet <- blank_packet(
@@ -241,33 +221,33 @@ get_sensor_data <- function(
 
   ## Complete the processing
 
-  imu <-
-    dev_parse_IMU_C(
-      packets$SENSOR_DATA,
-      packet_no - 1,
-      zero_packet,
-      schema$id,
-      schema$samples,
-      schema$sensorColumns
-    ) %>%
-    data.table::rbindlist(.) %>%
-    {data.frame(
-      Timestamp = full_times,
-      .,
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )} %>%
-    set_packet_class("IMU")
+    imu <-
+      dev_parse_IMU_C(
+        packets$SENSOR_DATA,
+        packet_no - 1,
+        zero_packet,
+        schema$id,
+        schema$samples,
+        schema$sensorColumns
+      ) %>%
+      data.table::rbindlist(.) %>%
+      {data.frame(
+        Timestamp = expected_times$expected_full,
+        .,
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )} %>%
+      set_packet_class("IMU")
 
-  if (temperature) {
-    imu$Temperature %<>% {
-      . + get_temp_offset(parameters)
+    if (temperature) {
+      imu$Temperature %<>% {
+        . + get_temp_offset(parameters)
+      }
     }
-  }
 
-  if (verbose) packet_print("cleanup", "SENSOR_DATA")
+    if (verbose) packet_print("cleanup", "SENSOR_DATA")
 
-  imu
+    imu
 
 }
 

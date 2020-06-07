@@ -111,19 +111,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// get_times
-DatetimeVector get_times(Datetime start, Datetime end, int samp_rate);
-RcppExport SEXP _AGread_get_times(SEXP startSEXP, SEXP endSEXP, SEXP samp_rateSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Datetime >::type start(startSEXP);
-    Rcpp::traits::input_parameter< Datetime >::type end(endSEXP);
-    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_times(start, end, samp_rate));
-    return rcpp_result_gen;
-END_RCPP
-}
 // next_separator
 int next_separator(RawVector log, int index);
 RcppExport SEXP _AGread_next_separator(SEXP logSEXP, SEXP indexSEXP) {
@@ -420,7 +407,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_get_latch_values", (DL_FUNC) &_AGread_get_latch_values, 2},
     {"_AGread_get_latch_entries", (DL_FUNC) &_AGread_get_latch_entries, 6},
     {"_AGread_latch_replicate", (DL_FUNC) &_AGread_latch_replicate, 5},
-    {"_AGread_get_times", (DL_FUNC) &_AGread_get_times, 3},
     {"_AGread_next_separator", (DL_FUNC) &_AGread_next_separator, 2},
     {"_AGread_get_short", (DL_FUNC) &_AGread_get_short, 4},
     {"_AGread_mid_round", (DL_FUNC) &_AGread_mid_round, 2},

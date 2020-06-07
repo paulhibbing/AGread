@@ -18,7 +18,7 @@ parse_packet_set.SENSOR_DATA <- function(
 
   init <-
     set %>%
-    {get_times(
+    {get_seq(
       .$timestamp[1],
       .$timestamp[nrow(.)] + 1,
       schema$samples

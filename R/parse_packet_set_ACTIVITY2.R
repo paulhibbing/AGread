@@ -10,7 +10,7 @@ parse_packet_set.ACTIVITY2 <- function(
 
   init <-
     info %$%
-    get_times(Start_Date, Last_Sample_Time, Sample_Rate) %>%
+    get_seq(Start_Date, Last_Sample_Time, Sample_Rate) %>%
     {data.frame(
       Timestamp = lubridate::with_tz(., tz)
     )}

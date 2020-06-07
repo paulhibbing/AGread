@@ -5,23 +5,23 @@ devtools::load_all()
 
 # Automated ---------------------------------------------------------------
 
-# legacy <- read_gt3x(
-#   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
-#   tz = "UTC",
-#   verbose = TRUE, parser = "legacy"
-# )
-#
 # dev <- read_gt3x(
 #   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
 #   tz = "UTC",
 #   verbose = TRUE, parser = "dev"
+# )
+#
+# legacy <- read_gt3x(
+#   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
+#   tz = "UTC",
+#   verbose = TRUE, parser = "legacy"
 # )
 
 # Interactive -------------------------------------------------------------
 
 ## inputs
 
-  file <- "data-raw/internal_tests/test7.gt3x"
+  file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
   verbose <- TRUE
   tz <- "UTC"
   give_timestamp <- TRUE

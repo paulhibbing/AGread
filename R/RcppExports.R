@@ -70,16 +70,6 @@ latch_replicate <- function(start_time, stop_time, x_val, y_val, z_val) {
     .Call('_AGread_latch_replicate', PACKAGE = 'AGread', start_time, stop_time, x_val, y_val, z_val)
 }
 
-#' Determine the expected timestamps for primary accelerometer output
-#' @param start The file start time
-#' @param end The file end time
-#' @param samp_rate int. The sampling rate
-#' @param extra_packet bool. Add an extra packet at the end?
-#' @keywords internal
-get_times <- function(start, end, samp_rate) {
-    .Call('_AGread_get_times', PACKAGE = 'AGread', start, end, samp_rate)
-}
-
 #' Find the next record separator
 #'
 #' @param log RawVector. The contents of log.bin
