@@ -13,7 +13,7 @@ parse_packet_set.EVENT <- function(
     )
 
     if (verbose) cat(
-      "\n  No EVENT packets to parse (or they\'ve",
+      "\r  No EVENT packets to parse (or they\'ve",
       "been left out of `include`)"
     )
 
