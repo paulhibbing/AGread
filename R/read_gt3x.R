@@ -55,7 +55,7 @@ read_gt3x <- function(
       TRUE
     )
 
-    if ("try-error" %in% class(file_3x)) {
+    if (inherits(file_3x, "try-error")) {
       stop(paste(
         deparse(substitute(file)),
         "is not a valid gt3x file."
