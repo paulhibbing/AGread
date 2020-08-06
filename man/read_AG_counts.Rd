@@ -4,14 +4,7 @@
 \alias{read_AG_counts}
 \title{Read data table files containing count values}
 \usage{
-read_AG_counts(
-  file,
-  verbose = FALSE,
-  skip = 10,
-  nrows = 10,
-  header = FALSE,
-  ...
-)
+read_AG_counts(file, verbose = FALSE, skip = 11, header = FALSE, ...)
 }
 \arguments{
 \item{file}{A character scalar giving path to an automatically-generated csv
@@ -21,12 +14,10 @@ file with count values}
 
 \item{skip}{Header length: Number of rows to skip when reading the file}
 
-\item{nrows}{Header length: Number of rows to read when retrieving meta-data}
-
 \item{header}{A logical scalar: Are variable names contained in first row of
 file?}
 
-\item{...}{Further arguments passed to \code{read.csv} and \code{fread}}
+\item{...}{Further arguments passed to \code{data.table::fread}}
 }
 \value{
 A data frame reflecting the data contained in the csv file

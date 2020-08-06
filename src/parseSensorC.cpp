@@ -60,7 +60,7 @@ DataFrame imu_df(List input){
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-DataFrame payload_parse_sensor_data_25C(
+DataFrame legacy_payload_parse_sensor_data_25C(
     RawVector payload, DataFrame info,
     int id, int samp_rate, Datetime timestamp
 ) {

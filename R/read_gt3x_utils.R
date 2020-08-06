@@ -2,11 +2,24 @@
 .gyro_names <- c("Gyroscope_X", "Gyroscope_Y", "Gyroscope_Z")
 .mag_names <- c("Magnetometer_X", "Magnetometer_Y", "Magnetometer_Z")
 .packets <- c(
-  "METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
-  "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
-  "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
-  "SENSOR_DATA"
+  "ACTIVITY", "BATTERY", "EVENT", "HEART_RATE_BPM", "LUX", "METADATA",
+  "TAG", "EPOCH", "HEART_RATE_ANT", "EPOCH2", "CAPSENSE", "HEART_RATE_BLE",
+  "EPOCH3", "EPOCH4", "PARAMETERS", "SENSOR_SCHEMA", "SENSOR_DATA", "ACTIVITY2"
 )
+.numbers <- as.integer(
+  c(0, 2:7, 9, 11:16, 21, 24:26)
+)
+
+#' Switch character packet inclusion vector to an integer vector for Rcpp dev
+#' parser
+#'
+#' @inheritParams read_gt3x
+#'
+#' @keywords internal
+cpp_include <- function(include) {
+  match(include, .packets) %>%
+  .numbers[.]
+}
 
 #' Construct missing packet entries for ACTIVITY2 (RAW) data
 #'

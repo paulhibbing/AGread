@@ -5,7 +5,12 @@
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
 #' @param flag_idle_sleep should recorded idle sleep times be tagged?
-#' @param cleanup should any unzipped files be deleted?
+#' @param parser the parsing scheme to use, either \code{legacy} or \code{dev}.
+#'   The former runs slower but includes more extensive checks to ensure
+#'   alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
+#'   faster and has also been checked for alignment with \code{RAW.csv} and
+#'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
+#'   performed by \code{parser="dev"}.
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -32,12 +37,11 @@
 #'
 read_gt3x <- function(
   file, tz = "UTC", verbose = FALSE,
-  flag_idle_sleep = FALSE,
   include =   c("METADATA", "PARAMETERS", "SENSOR_SCHEMA", "BATTERY", "EVENT",
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
-  cleanup = FALSE
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev")
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -45,71 +49,26 @@ read_gt3x <- function(
     verbose = verbose
   )
 
-  #1) Verify .gt3x file is a zip file
+  file %<>% read_gt3x_setup(verbose)
 
-  file <- unzip_zipped_gt3x(file, cleanup = cleanup)
-  remove_file = attr(file, "remove")
 
-    file_3x <- try(
-      utils::unzip(file, list = TRUE),
-      TRUE
-    )
+  info <- read_gt3x_info(file, tz, verbose)
 
-    if (inherits(file_3x, "try-error")) {
-      stop(paste(
-        deparse(substitute(file)),
-        "is not a valid gt3x file."
-      ))
-    } else {
-      row.names(file_3x) <- file_3x$Name
-    }
+  log  <-
+    file$path %>%
+    utils::unzip("log.bin", exdir = tempdir()) %>%
+    parse_log_bin(info, tz, verbose, include, parser, file)
 
-  #2) Verify .gt3x file has log.bin file
-  #3) Verify .gt3x file has info.txt file
+  if (flag_idle_sleep) {
+    log$RAW %<>% flag_idle(log$EVENT)
+  }
 
-    stopifnot(all(c("info.txt", "log.bin") %in% file_3x$Name))
-
-  #4) Extract info.txt
-
-    info_con <- unz(file, "info.txt")
-
-  #5) Parse and save the sample rate from the info.txt file (it's stored in Hz)
-  #6) Parse and save the start date from the info.txt file (it's stored in .NET
-  #Ticks)
-
-    info <- parse_info_txt(info_con, tz, verbose)
-    close(info_con)
-
-  #7) Extract log.bin
-  #8) Parse log.bin
-
-    log_file  <- utils::unzip(file, "log.bin", exdir = tempdir())
-    log  <- parse_log_bin(
-      log_file, file_3x["log.bin", "Length"], info, tz,
-      verbose, include
-    )
-
-    if (flag_idle_sleep) {
-      # if (!all(c("RAW", "EVENT") %in% names(log))) {
-      #   warning(paste0("flag_idle_sleep = TRUE, but RAW and EVENT",
-      #                  " were not included in choices or were NULL, ",
-      #                  "skipping"))
-      # }
-      log$RAW = flag_idle(log$RAW, log$EVENT)
-    }
   PAutilities::manage_procedure(
     "End", "\n\nProcessing complete. Elapsed time",
     PAutilities::get_duration(timer),
     "minutes.\n", verbose = verbose
   )
-  if (cleanup) {
-    if (remove_file) {
-      file.remove(file)
-    }
-    file.remove(file.path(tempdir(), "log.bin"))
-  }
 
   return(log)
 
 }
-

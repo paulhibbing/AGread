@@ -1,6 +1,27 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+//' Find the next record separator
+//'
+//' @param log RawVector. The contents of log.bin
+//' @param index int. The starting index from which to search for a record
+//'   separator
+//' @keywords internal
+// [[Rcpp::export]]
+int next_separator(RawVector log, int index) {
+  unsigned char sep_value = 0x1E;
+  bool is_separator = (log[index] == sep_value);
+  while (!is_separator) {
+    index++;
+    if (index >= log.size()) {
+      index = NA_INTEGER;
+      break;
+    }
+    is_separator = (log[index] == sep_value);
+  }
+  return index;
+}
+
 //' Flexibly (big/little endian, signed/unsigned) convert two raw bytes to short
 //'
 //' @param x the bytes (RawVector) from which to extract the short
@@ -96,5 +117,43 @@ void checksumC(RawVector log, int start_index, int end_index) {
   if (!pass) {
     stop("Checksum calculation failed.");
   }
+
+}
+
+//' Handle empty and latched packets
+//' @rdname special_packets
+//' @param sample_rate int. the sampling rate
+//' @param names CharacterVector. Names for the packet elements
+//' @keywords internal
+// [[Rcpp::export]]
+List blank_packet(int sample_rate, CharacterVector names){
+  NumericVector values(sample_rate);
+  List result(names.size());
+  result.names() = names;
+  for (int i = 0; i < result.size(); ++i) {
+    result[i] = values;
+  }
+  return result;
+}
+
+//' @rdname special_packets
+//' @param last_packet the previous packet
+//' @keywords internal
+// [[Rcpp::export]]
+List latch_packet(
+    List last_packet, int sample_rate
+) {
+
+  List result(last_packet.size());
+  result.names() = last_packet.names();
+  NumericVector axis;
+  double latch_value;
+  for (int i = 0; i < last_packet.size(); ++i) {
+    axis = last_packet[i];
+    latch_value = axis[axis.size() - 1];
+    result[i] = NumericVector(sample_rate, latch_value);
+  }
+
+  return result;
 
 }

@@ -1,8 +1,8 @@
 #' Reintegrate a data stream
 #'
-#' @param ag A data frame to reintegrate
-#' @param to The epoch length desired. Starting epoch length will be determined
-#'   automatically.
+#' @param ag a data frame to reintegrate
+#' @param to the desired epoch length of the output. Starting epoch length will
+#'   be determined automatically (while also verifying the data are continuous).
 #' @param time_var The name of the column containing POSIX-formatted timestamp
 #'   information
 #' @param direction The direction of reintegration, i.e. whether a timestamp
@@ -14,9 +14,11 @@
 #'
 #' @examples
 #'
-#' data("imu_to_check", package = "AGread")
-#' ag <-
-#'   imu_to_check[ ,c("Timestamp", "mean_abs_Gyroscope_x_DegPerS")]
+#' test_file <- system.file(
+#'   "extdata", "example1sec.csv", package = "AGread"
+#' )
+#'
+#' ag <- read_AG_counts(test_file, skip = 11)
 #'
 #' # Forwards reintegration
 #'   reintegrate(
@@ -50,67 +52,48 @@
 #' }
 #'
 reintegrate <- function(ag, to, time_var = "Timestamp",
-  direction = c("forwards", "backwards"), verbose = FALSE) {
-  # to <- 60
-  # time_var <- "Timestamp"
-  # direction <- "backwards"
+  direction = c("forwards", "backwards"), verbose = FALSE
+) {
 
-  direction <- try(
-    match.arg(direction, c("forwards", "backwards", "error")),
-    silent = TRUE)
+  ## Initial setup
 
-  if (class(direction) == "try-error") {
-    warning(paste("Argument `direction` must be exactly one of",
-      "\"forwards\" or \"backwards\". Defaulting to forwards."))
-    direction <- "forwards"
-  }
-
-  start_epoch <- unique(diff.POSIXt(ag[ ,time_var]))
-  if (start_epoch == to) {
-    if (verbose) cat(
-      "\nReturning original data --",
-      "already in desired epoch length"
+    setup <- reintegrate_setup(
+      ag, to, time_var, direction, verbose
     )
-    return(ag)
-  }
+    if (is.null(setup$start_epoch)) return(ag)
 
-  stopifnot(length(start_epoch) == 1, (to / start_epoch) %% 1 == 0)
+  ## Establish the reintegrated epoch groupings
 
-  block_size <- to / start_epoch
-  ag <- get_blocks(ag, time_var, to, start_epoch, block_size, direction)
+    ag %<>% get_blocks(
+      time_var, to, setup$start_epoch, setup$direction
+    )
 
-  col_classes <- sapply(ag, function(x) class(x)[1])
-  col_numeric <- col_classes %in% c("numeric", "integer")
-  first_vars  <- names(col_classes)[!col_numeric]
-  sum_vars    <- names(col_classes)[col_numeric]
+  ## Run the reintegration operations
 
-  ag[ ,time_var]  <- as.character(ag[ ,time_var])
-  firsts  <-
-    sapply(match(first_vars, names(ag)), function(x)
-      tapply(ag[ ,x], ag$block_no, function(y)
-        switch(direction,
-          "forwards" = y[1], "backwards" = y[length(y)])))
-  firsts <-
-    stats::setNames(data.frame(firsts, stringsAsFactors = FALSE),
-      first_vars)
+    ag <-
+      switch(
+        setup$direction,
+        "forwards" = dplyr::first,
+        "backwards" = dplyr::last
+      ) %>%
+      {mapply(
+        reint_wrap,
+        input_vars = list(setup$char_vars, setup$num_vars),
+        fun = list(., sum),
+        MoreArgs = list(ag = ag),
+        SIMPLIFY = FALSE
+      )} %>%
+      data.frame(stringsAsFactors = FALSE, row.names = NULL)
 
-  sums    <-
-    sapply(match(sum_vars, names(ag)), function(x)
-      tapply(ag[ ,x], ag$block_no, sum, na.rm = TRUE))
-  sums <- stats::setNames(data.frame(sums, stringsAsFactors = FALSE),
-    sum_vars)
+  ## Re-format VM and return
 
-  ag <- data.frame(cbind(firsts, sums), stringsAsFactors = FALSE)
-  ag[ ,sum_vars] <- sapply(ag[ ,sum_vars], as.numeric)
-  ag[ ,time_var] <- as.POSIXct(ag$Timestamp, "UTC")
+    if (all(.triaxial_vars %in% names(ag))) {
+      ag$Vector.Magnitude <-
+        ag[ ,.triaxial_vars] %>%
+        get_VM("Rcpp", verbose) %>%
+        round(2)
+    }
 
-  ag$block_no <- NULL
+    ag
 
-  triaxial_vars <- c("Axis1", "Axis2", "Axis3")
-  if (all(triaxial_vars %in% names(ag))) {
-    ag$Vector.Magnitude <-
-      round(get_VM(ag[ ,triaxial_vars]), 2)
-  }
-
-  return(ag)
 }

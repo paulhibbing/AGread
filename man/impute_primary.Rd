@@ -68,7 +68,8 @@ the latch index}
 
 \item{verbose}{logical. Print updates to console?}
 
-\item{events}{the result of parsing EVENTS packets}
+\item{events}{the result of parsing EVENTS packets
+(internal use)}
 
 \item{info}{the result of \code{\link{parse_info_txt}}}
 

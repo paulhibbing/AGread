@@ -1,27 +1,6 @@
-#' Parse the log component of a gt3x file
-#'
-#' @param log_file character. Path to the log.bin file
-#' @param file_3x_len length of log.bin, obtained from the \code{file_3x} object
-#'   from the parent function \code{\link{read_gt3x}}
-#' @param info result of \code{\link{parse_info_txt}}
-#' @inheritParams read_gt3x
-#'
+#' @rdname parse_log_bin
 #' @keywords internal
-#'
-parse_log_bin <- function(
-  log_file, file_3x_len, info, tz = "UTC", verbose = FALSE,
-  include = .packets
-) {
-
-  ## Validate the input to `include`
-
-    include <- validate_include(include, verbose)
-
-  ## Read the bin file
-
-    if (verbose) cat("\n  Reading log.bin")
-    log <- readBin(log_file, "raw", file_3x_len)
-    if (verbose) cat("  ............. COMPLETE")
+legacy_bin_type1 <- function(log, tz, verbose = FALSE, include, info) {
 
   ## Get headers
 
@@ -95,7 +74,8 @@ parse_log_bin <- function(
     )
 
     if (verbose) cat("\n")
-    results = stats::setNames(results, new_names)
-    results$info = info
+    results %<>% stats::setNames(new_names)
+    results$info <- info
     results
+
 }

@@ -1,27 +1,7 @@
 #include <Rcpp.h>
+#include "helpers.h"
 using namespace Rcpp;
 using namespace std;
-
-//' Find the next record separator
-//'
-//' @param log RawVector. The contents of log.bin
-//' @param index int. The starting index from which to search for a record
-//'   separator
-//' @keywords internal
-// [[Rcpp::export]]
-int next_separator(RawVector log, int index) {
-  unsigned char sep_value = 0x1E;
-  bool is_separator = (log[index] == sep_value);
-  while (!is_separator) {
-    index++;
-    if (index >= log.size()) {
-      index = NA_INTEGER;
-      break;
-    }
-    is_separator = (log[index] == sep_value);
-  }
-  return index;
-}
 
 //' Collect information about the packets stored in log.bin
 //'
@@ -30,6 +10,11 @@ int next_separator(RawVector log, int index) {
 //' @keywords internal
 // [[Rcpp::export]]
 DataFrame get_headersC(RawVector x, bool verbose) {
+
+  //Console update
+  if (verbose) {
+    Rcout << "\r  Getting record headers ";
+  }
 
   //Retrieve information for first record
   int max_samples = round(x.size()*1.5);
@@ -44,16 +29,6 @@ DataFrame get_headersC(RawVector x, bool verbose) {
 
   //Run the loop
   while ( next_index < x.size() ) {
-
-    //Set up printing
-    if (verbose) {
-      double prop = double(next_index) /
-        double(x.size());
-      int perc = floor(prop * 100);
-      Rcout << "\r  Getting record headers " <<
-        " ............. " <<
-          perc << "%";
-    }
 
     next_index = next_separator(x, next_index);
     if (next_index == NA_INTEGER) {
@@ -84,6 +59,12 @@ DataFrame get_headersC(RawVector x, bool verbose) {
   payload_size = payload_size[l1];
 
   //Wrapup
+
+  if (verbose) {
+    Rcout << "\r  Getting record headers " <<
+      " ............. COMPLETE";
+  }
+
   return DataFrame::create(
     Named("index") = index ,
     Named("type") = type ,

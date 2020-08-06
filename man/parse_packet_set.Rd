@@ -5,6 +5,7 @@
 %   R/parse_packet_set__generic_&_simple_methods.R
 \name{parse_packet_set.ACTIVITY2}
 \alias{parse_packet_set.ACTIVITY2}
+\alias{capsense_payload}
 \alias{parse_packet_set.CAPSENSE}
 \alias{parse_packet_set.METADATA}
 \alias{parse_packet_set.EVENT}
@@ -18,9 +19,11 @@
 \usage{
 \method{parse_packet_set}{ACTIVITY2}(set, log, tz = "UTC", verbose = FALSE, info, events, ...)
 
+capsense_payload(payload)
+
 \method{parse_packet_set}{CAPSENSE}(set, log, tz = "UTC", verbose = FALSE, ...)
 
-\method{parse_packet_set}{METADATA}(set, log, tz = "UTC", verbose = FALSE, ...)
+\method{parse_packet_set}{METADATA}(set, log, tz = "UTC", verbose = FALSE, payload = NULL, ...)
 
 \method{parse_packet_set}{EVENT}(set, log, tz = "UTC", verbose = FALSE, info, ...)
 
@@ -34,7 +37,7 @@
   ...
 )
 
-\method{parse_packet_set}{SENSOR_SCHEMA}(set, log, tz = "UTC", verbose = FALSE, ...)
+\method{parse_packet_set}{SENSOR_SCHEMA}(set, log, tz = "UTC", verbose = FALSE, payload = NULL, ...)
 
 parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
@@ -55,9 +58,12 @@ parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
 \item{info}{the result of \code{\link{parse_info_txt}}}
 
-\item{events}{the result of parsing EVENTS packets}
+\item{events}{the result of parsing EVENTS packets
+(internal use)}
 
 \item{...}{further arguments passed to methods}
+
+\item{payload}{a raw vector containing packet payload}
 
 \item{parameters}{A PARAMETERS object}
 
