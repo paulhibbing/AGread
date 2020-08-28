@@ -137,6 +137,47 @@ get_events <- function(packets, tz, info, verbose) {
 
 #' @rdname dev_bin_packets
 #' @keywords internal
+get_activity <- function(packets, tz, info, verbose) {
+
+  if (!"ACTIVITY" %in% names(packets)) return(NULL)
+
+  if (verbose) packet_print("startup", "ACTIVITY")
+
+  ## Set up timestamps and packet flow
+
+  actual_times <- get_actual(packets$ACTIVITY, tz)
+
+  expected_times <-
+    info %$%
+    get_expected(Start_Date, Last_Sample_Time, Sample_Rate)
+
+  packet_no <-
+    match(expected_times$expected_floor, actual_times, 0) %T>%
+    {stopifnot(all(seq(packets$ACTIVITY) %in% .))}
+
+  # ## Complete the processing
+
+  dev_parse_activity(
+    packets$ACTIVITY,
+    packet_no - 1,
+    blank_packet(info$Sample_Rate, .accel_names),
+    info$Sample_Rate,
+    get_primary_accel_scale(info)
+  ) %>%
+  data.table::rbindlist(.) %>%
+  {data.frame(
+    Timestamp = expected_times$expected_full,
+    .,
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )} %>%
+  set_packet_class("RAW") %T>%
+  {if (verbose) packet_print("cleanup", "ACTIVITY")}
+
+}
+
+#' @rdname dev_bin_packets
+#' @keywords internal
 get_activity2 <- function(packets, tz, info, verbose) {
 
   if (!"ACTIVITY2" %in% names(packets)) return(NULL)

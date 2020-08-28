@@ -38,6 +38,23 @@ parse_packet_set.default <- function(
 
 #' @rdname parse_packet_set
 #' @export
+parse_packet_set.ACTIVITY <- function(
+  set, log, tz = "UTC", verbose = FALSE,
+  ...
+) {
+
+  warning(
+    "ACTIVITY packets can only be parsed if ",
+    "you set\n  `parser = \"dev\"` -- returning",
+    " NULL for now.", call. = FALSE
+  )
+
+  return(NULL)
+
+}
+
+#' @rdname parse_packet_set
+#' @export
 parse_packet_set.PARAMETERS <- function(
   set, log, tz = "UTC", verbose = FALSE,
   ...

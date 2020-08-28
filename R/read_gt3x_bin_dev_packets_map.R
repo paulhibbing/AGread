@@ -19,7 +19,6 @@ dev_bin1_map_packets <- function(
 ) {
   switch(
     type,
-    "ACTIVITY" = get_default_packet(type),
     "BATTERY" = get_battery(packets, tz, verbose),
     "CAPSENSE" = get_capsense(packets, tz, verbose),
     "EPOCH" = get_default_packet(type),
