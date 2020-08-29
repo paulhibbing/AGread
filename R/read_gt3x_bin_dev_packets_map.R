@@ -15,7 +15,7 @@ get_default_packet <- function(type) {
 #' @rdname dev_bin_packets
 #' @keywords internal
 dev_bin1_map_packets <- function(
-  type, packets, tz, verbose
+  type, packets, tz, info, verbose
 ) {
   switch(
     type,
@@ -28,7 +28,7 @@ dev_bin1_map_packets <- function(
     "HEART_RATE_ANT" = get_default_packet(type),
     "HEART_RATE_BLE" = get_default_packet(type),
     "HEART_RATE_BPM" = get_default_packet(type),
-    "LUX" = get_default_packet(type),
+    "LUX" = get_lux(packets, tz, info, verbose),
     "METADATA" = get_metadata(packets, tz, verbose),
     "TAG" = get_default_packet(type)
   )

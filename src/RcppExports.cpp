@@ -330,6 +330,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lux_payload
+DataFrame lux_payload(RawVector payload);
+RcppExport SEXP _AGread_lux_payload(SEXP payloadSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type payload(payloadSEXP);
+    rcpp_result_gen = Rcpp::wrap(lux_payload(payload));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dev_parse_lux
+List dev_parse_lux(List packets, IntegerVector packet_no, List zero_packet);
+RcppExport SEXP _AGread_dev_parse_lux(SEXP packetsSEXP, SEXP packet_noSEXP, SEXP zero_packetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type packets(packetsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type packet_no(packet_noSEXP);
+    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_parse_lux(packets, packet_no, zero_packet));
+    return rcpp_result_gen;
+END_RCPP
+}
 // check_id
 void check_id(RawVector x, int id);
 RcppExport SEXP _AGread_check_id(SEXP xSEXP, SEXP idSEXP) {
@@ -467,6 +491,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_interval_match", (DL_FUNC) &_AGread_interval_match, 2},
     {"_AGread_interpolate_C", (DL_FUNC) &_AGread_interpolate_C, 2},
     {"_AGread_interpolate_IMU", (DL_FUNC) &_AGread_interpolate_IMU, 2},
+    {"_AGread_lux_payload", (DL_FUNC) &_AGread_lux_payload, 1},
+    {"_AGread_dev_parse_lux", (DL_FUNC) &_AGread_dev_parse_lux, 3},
     {"_AGread_check_id", (DL_FUNC) &_AGread_check_id, 2},
     {"_AGread_imu_df", (DL_FUNC) &_AGread_imu_df, 1},
     {"_AGread_legacy_payload_parse_sensor_data_25C", (DL_FUNC) &_AGread_legacy_payload_parse_sensor_data_25C, 5},

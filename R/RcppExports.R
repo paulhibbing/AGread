@@ -27,7 +27,8 @@ activity_payload <- function(payload, samp_rate, scale_factor, is_last_packet) {
 #'   the previous index
 #' @param zero_packet list containing a properly-formatted packet pre-filled
 #'   with values of zero (used for USB connection events)
-#' @param latch_packets list of empty packets to be filled during latch periods
+#' @param samp_rate int. The sampling rate
+#' @param scale_factor int. The scaling factor
 #' @keywords internal
 dev_parse_activity <- function(packets, packet_no, zero_packet, samp_rate, scale_factor) {
     .Call('_AGread_dev_parse_activity', PACKAGE = 'AGread', packets, packet_no, zero_packet, samp_rate, scale_factor)
@@ -234,6 +235,26 @@ interpolate_C <- function(original_samples, target_frequency) {
 #' @keywords internal
 interpolate_IMU <- function(original_samples, target_frequency) {
     .Call('_AGread_interpolate_IMU', PACKAGE = 'AGread', original_samples, target_frequency)
+}
+
+#' Parse the payload for a LUX packet
+#' @param payload RawVector. The payload
+#' @keywords internal
+lux_payload <- function(payload) {
+    .Call('_AGread_lux_payload', PACKAGE = 'AGread', payload)
+}
+
+#' Parse a set of LUX packets
+#'
+#' @param packets list of packets
+#' @param packet_no IntegerVector indicating which index of \code{packets} to
+#'   use for each second of expected output. Values of -1 indicate a latch to
+#'   the previous index
+#' @param zero_packet list containing a properly-formatted packet pre-filled
+#'   with values of zero (used for USB connection events and possibly file starts)
+#' @keywords internal
+dev_parse_lux <- function(packets, packet_no, zero_packet) {
+    .Call('_AGread_dev_parse_lux', PACKAGE = 'AGread', packets, packet_no, zero_packet)
 }
 
 #' Check sensor payload ID prior to parsing the packet
