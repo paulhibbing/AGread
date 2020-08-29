@@ -13,6 +13,7 @@
 \alias{parse_packet_set.SENSOR_SCHEMA}
 \alias{parse_packet_set}
 \alias{parse_packet_set.default}
+\alias{parse_packet_set.ACTIVITY}
 \alias{parse_packet_set.PARAMETERS}
 \alias{parse_packet_set.BATTERY}
 \title{Parse all packets of a given type}
@@ -40,6 +41,9 @@ capsense_payload(payload)
 parse_packet_set(set, log, tz = "UTC", verbose = FALSE, ...)
 
 \method{parse_packet_set}{default}(set, log, tz = "UTC", verbose = FALSE,
+  ...)
+
+\method{parse_packet_set}{ACTIVITY}(set, log, tz = "UTC", verbose = FALSE,
   ...)
 
 \method{parse_packet_set}{PARAMETERS}(set, log, tz = "UTC", verbose = FALSE,

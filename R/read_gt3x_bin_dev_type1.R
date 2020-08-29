@@ -49,10 +49,39 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
     packets %<>%
       get_activity2(tz, info, verbose) %>%
-      list(RAW = .) %>%
+      list(RAW = .) %>% ## New name
       c(packets, .) %>%
-      .[names(.) != "ACTIVITY2"] %>%
+      .[names(.) != "ACTIVITY2"] %>% ## Remove binary data
       {.[!sapply(., is.null)]}
+
+  ## Get ACTIVITY (if applicable)
+
+    packets %<>%
+      get_activity(tz, info, verbose) %>%
+      list(parsed_activity = .) %>% ## Temp name
+      c(packets, .) %>%
+      .[names(.) != "ACTIVITY"] ## Remove binary data
+
+    if ("RAW" %in% names(packets)) {
+
+      warning(
+        "File contains both ACTIVITY and",
+        " ACTIVITY2 packets:\n  Returning ",
+        "ACTIVITY2 as `packets$RAW` and\n  ",
+        "ACTIVITY as `packets$ACTIVITY`"
+      )
+
+      names(packets) %<>% gsub(
+        "^parsed_activity$", "ACTIVITY", .
+      )
+
+    } else {
+
+      names(packets) %<>% gsub(
+        "^parsed_activity$", "RAW", .
+      )
+
+    }
 
   ## Get SENSOR_DATA (if applicable)
 
@@ -66,7 +95,7 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       .[names(.) != "SENSOR_DATA"] %>%
       {.[!sapply(., is.null)]}
 
-    ## Get remaining packets (if applicable)
+  ## Get remaining packets (if applicable)
 
     remaining <-
       c("PARAMETERS", "SENSOR_SCHEMA", "EVENT") %>%

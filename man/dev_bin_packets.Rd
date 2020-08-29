@@ -6,6 +6,7 @@
 \alias{get_parameters}
 \alias{get_schema}
 \alias{get_events}
+\alias{get_activity}
 \alias{get_activity2}
 \alias{get_sensor_data}
 \alias{get_battery}
@@ -22,6 +23,8 @@ get_parameters(packets, tz, verbose)
 get_schema(packets, tz, verbose)
 
 get_events(packets, tz, info, verbose)
+
+get_activity(packets, tz, info, verbose)
 
 get_activity2(packets, tz, info, verbose)
 
