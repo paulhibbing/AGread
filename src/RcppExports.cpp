@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // get_int12
-int get_int12(RawVector x, int i1, int i2, bool full_first);
+signed short get_int12(RawVector x, int i1, int i2, bool full_first);
 RcppExport SEXP _AGread_get_int12(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP full_firstSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

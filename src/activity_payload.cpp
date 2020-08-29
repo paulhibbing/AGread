@@ -10,7 +10,7 @@ using namespace Rcpp;
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-int get_int12(RawVector x, int i1, int i2, bool full_first) {
+signed short get_int12(RawVector x, int i1, int i2, bool full_first) {
   int value;
   if (full_first) {
     value = (x[i1] << 4) + ((x[i2] & 0xF0) >> 4);
@@ -20,7 +20,7 @@ int get_int12(RawVector x, int i1, int i2, bool full_first) {
   if (value > 2047) {
     value |= 0xF000;
   }
-  return value;
+  return (signed short)(value);
 }
 
 //' Parse the payload for an ACTIVITY packet
@@ -32,13 +32,9 @@ DataFrame activity_payload(
 ) {
 
   //Test for last packet, and deal accordingly
-  bool length_2 = (payload.size() % 2 == 0);
-  bool length_3 = (payload.size() % 3 == 0);
-  LogicalVector size_tests = LogicalVector::create(
-    length_2, length_3
-  );
+  double expected = double(samp_rate) * 3 * 1.5;
 
-  bool test_pass = is_true(all(size_tests));
+  bool test_pass = payload.size() == expected;
   bool last_quit = (is_last_packet & (!test_pass));
 
   if (last_quit) {
@@ -51,24 +47,47 @@ DataFrame activity_payload(
     stop("Payload has unexpected length and is not the last packet");
   }
 
-  bool is_signed = TRUE;
-  DoubleVector accel_x(samp_rate);
-  DoubleVector accel_y(samp_rate);
-  DoubleVector accel_z(samp_rate);
-
+  bool full_first = true;
+  int y, x, z;
+  DoubleVector accel_y(samp_rate), accel_x(samp_rate), accel_z(samp_rate);
   int counter = 0;
-  for (int i = 0; i < (payload.size() - 1); i += 2) {
-    int int_result = get_int12(payload, i + 1, i, is_signed);
-    double dub_result = double(int_result) / scale_factor;
-    int col = i % 3;
-    if (col == 0) {
-      accel_x[counter] = dub_result;
-    } else if (col == 2) {
-      accel_y[counter] = dub_result;
-    } else if (col == 1) {
-      accel_z[counter] = dub_result;
-      counter += 1;
+  int i = 0;
+
+  while (i < (payload.size() - 1)) {
+
+    if (full_first) {
+
+      if ((i + 4) > (payload.size() - 1)) {
+        break;
+      }
+
+      y = get_int12(payload, i, i + 1, true);
+      x = get_int12(payload, i + 1, i + 2, false);
+      z = get_int12(payload, i + 3, i + 4, true);
+
+      i += 3;
+
+    } else {
+
+      if ((i + 5) > (payload.size() - 1)) {
+        break;
+      }
+
+      y = get_int12(payload, i + 1, i + 2, false);
+      x = get_int12(payload, i + 3, i + 4, true);
+      z = get_int12(payload, i + 4, i + 5, false);
+
+      i += 6;
+
     }
+
+    accel_y[counter] = double(y) / scale_factor;
+    accel_x[counter] = double(x) / scale_factor;
+    accel_z[counter] = double(z) / scale_factor;
+
+    full_first = !full_first;
+    counter += 1;
+
   }
 
   List final_result = List::create(
