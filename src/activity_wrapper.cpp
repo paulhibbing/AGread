@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include "helpers.h"
-#include "primary_payload.h"
+#include "activity_payload.h"
 using namespace Rcpp;
 
 //' Parse a set of ACTIVITY packets
@@ -34,7 +34,7 @@ List dev_parse_activity(
     full_packets[0] = zero_packet;
   }
   else {
-    full_packets[0] = dev_activity2_payload(
+    full_packets[0] = activity_payload(
       payload, samp_rate, scale_factor, is_last_packet
     );
   }
@@ -67,7 +67,7 @@ List dev_parse_activity(
     }
 
     is_last_packet = index == (packets.size() - 1);
-    full_packets[i] = dev_activity2_payload(
+    full_packets[i] = activity_payload(
       payload, samp_rate, scale_factor, is_last_packet
     );
 
