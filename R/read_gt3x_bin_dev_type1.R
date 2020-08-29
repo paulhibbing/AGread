@@ -95,7 +95,7 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       .[names(.) != "SENSOR_DATA"] %>%
       {.[!sapply(., is.null)]}
 
-    ## Get remaining packets (if applicable)
+  ## Get remaining packets (if applicable)
 
     remaining <-
       c("PARAMETERS", "SENSOR_SCHEMA", "EVENT") %>%
