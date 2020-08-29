@@ -3,6 +3,7 @@
 S3method(collapse_gt3x,IMU)
 S3method(collapse_gt3x,RAW)
 S3method(collapse_packet_set,default)
+S3method(parse_packet_set,ACTIVITY)
 S3method(parse_packet_set,ACTIVITY2)
 S3method(parse_packet_set,BATTERY)
 S3method(parse_packet_set,CAPSENSE)

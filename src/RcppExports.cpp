@@ -5,6 +5,49 @@
 
 using namespace Rcpp;
 
+// get_int12
+signed short get_int12(RawVector x, int i1, int i2, bool full_first);
+RcppExport SEXP _AGread_get_int12(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP full_firstSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type i1(i1SEXP);
+    Rcpp::traits::input_parameter< int >::type i2(i2SEXP);
+    Rcpp::traits::input_parameter< bool >::type full_first(full_firstSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_int12(x, i1, i2, full_first));
+    return rcpp_result_gen;
+END_RCPP
+}
+// activity_payload
+DataFrame activity_payload(RawVector payload, int samp_rate, int scale_factor, bool is_last_packet);
+RcppExport SEXP _AGread_activity_payload(SEXP payloadSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP, SEXP is_last_packetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type payload(payloadSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
+    Rcpp::traits::input_parameter< bool >::type is_last_packet(is_last_packetSEXP);
+    rcpp_result_gen = Rcpp::wrap(activity_payload(payload, samp_rate, scale_factor, is_last_packet));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dev_parse_activity
+List dev_parse_activity(List packets, IntegerVector packet_no, List zero_packet, int samp_rate, int scale_factor);
+RcppExport SEXP _AGread_dev_parse_activity(SEXP packetsSEXP, SEXP packet_noSEXP, SEXP zero_packetSEXP, SEXP samp_rateSEXP, SEXP scale_factorSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type packets(packetsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type packet_no(packet_noSEXP);
+    Rcpp::traits::input_parameter< List >::type zero_packet(zero_packetSEXP);
+    Rcpp::traits::input_parameter< int >::type samp_rate(samp_rateSEXP);
+    Rcpp::traits::input_parameter< int >::type scale_factor(scale_factorSEXP);
+    rcpp_result_gen = Rcpp::wrap(dev_parse_activity(packets, packet_no, zero_packet, samp_rate, scale_factor));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dev1_bin_initialize
 List dev1_bin_initialize(RawVector log, bool verbose, IntegerVector include);
 RcppExport SEXP _AGread_dev1_bin_initialize(SEXP logSEXP, SEXP verboseSEXP, SEXP includeSEXP) {
@@ -399,6 +442,9 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_AGread_get_int12", (DL_FUNC) &_AGread_get_int12, 4},
+    {"_AGread_activity_payload", (DL_FUNC) &_AGread_activity_payload, 4},
+    {"_AGread_dev_parse_activity", (DL_FUNC) &_AGread_dev_parse_activity, 5},
     {"_AGread_dev1_bin_initialize", (DL_FUNC) &_AGread_dev1_bin_initialize, 3},
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
