@@ -9,7 +9,7 @@ using namespace Rcpp;
 DataFrame lux_payload(RawVector payload) {
 
   List result = List::create(
-    Named("Lux") = get_short(payload, 0, 1, false)
+    Named("Lux") = get_short(payload, 1, 0, false)
   );
 
   return result;
