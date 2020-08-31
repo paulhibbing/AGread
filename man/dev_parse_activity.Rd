@@ -16,7 +16,9 @@ the previous index}
 \item{zero_packet}{list containing a properly-formatted packet pre-filled
 with values of zero (used for USB connection events)}
 
-\item{latch_packets}{list of empty packets to be filled during latch periods}
+\item{samp_rate}{int. The sampling rate}
+
+\item{scale_factor}{int. The scaling factor}
 }
 \description{
 Parse a set of ACTIVITY packets
