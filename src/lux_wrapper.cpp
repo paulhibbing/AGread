@@ -1,23 +1,33 @@
 #include <Rcpp.h>
 #include "helpers.h"
-#include "activity_payload.h"
 using namespace Rcpp;
 
-//' Parse a set of ACTIVITY packets
+//' Parse the payload for a LUX packet
+//' @param payload RawVector. The payload
+//' @keywords internal
+// [[Rcpp::export]]
+DataFrame lux_payload(RawVector payload) {
+
+  List result = List::create(
+    Named("Lux") = get_short(payload, 1, 0, false)
+  );
+
+  return result;
+
+}
+
+//' Parse a set of LUX packets
 //'
 //' @param packets list of packets
 //' @param packet_no IntegerVector indicating which index of \code{packets} to
 //'   use for each second of expected output. Values of -1 indicate a latch to
 //'   the previous index
 //' @param zero_packet list containing a properly-formatted packet pre-filled
-//'   with values of zero (used for USB connection events)
-//' @param samp_rate int. The sampling rate
-//' @param scale_factor int. The scaling factor
+//'   with values of zero (used for USB connection events and possibly file starts)
 //' @keywords internal
 // [[Rcpp::export]]
-List dev_parse_activity(
-    List packets, IntegerVector packet_no, List zero_packet,
-    int samp_rate, int scale_factor
+List dev_parse_lux(
+    List packets, IntegerVector packet_no, List zero_packet
 ) {
 
   // Initialize output and loop variables
@@ -25,7 +35,6 @@ List dev_parse_activity(
   List packet = packets[0];
   RawVector payload = packet["payload"];
   int index = 0;
-  bool is_last_packet = index == (packets.size() - 1);
 
   // Manually process first packet
   if (packet_no[0] == -1) {
@@ -35,9 +44,7 @@ List dev_parse_activity(
     full_packets[0] = zero_packet;
   }
   else {
-    full_packets[0] = activity_payload(
-      payload, samp_rate, scale_factor, is_last_packet
-    );
+    full_packets[0] = lux_payload(payload);
   }
 
   // Populate output
@@ -48,7 +55,7 @@ List dev_parse_activity(
     if (index == -1) {
 
       List new_value = latch_packet(
-        full_packets[i - 1], samp_rate
+        full_packets[i - 1], 1
       );
       full_packets[i] = new_value;
       while(packet_no[i + 1] == -1) {
@@ -67,10 +74,7 @@ List dev_parse_activity(
       continue;
     }
 
-    is_last_packet = index == (packets.size() - 1);
-    full_packets[i] = activity_payload(
-      payload, samp_rate, scale_factor, is_last_packet
-    );
+    full_packets[i] = lux_payload(payload);
 
   }
 

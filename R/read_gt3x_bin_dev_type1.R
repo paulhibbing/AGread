@@ -111,6 +111,7 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       dev_bin1_map_packets,
       packets = packets,
       tz = tz,
+      info = info,
       verbose = verbose,
       simplify = FALSE
     ) %>%
