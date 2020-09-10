@@ -64,16 +64,18 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
     if ("RAW" %in% names(packets)) {
 
-      warning(
-        "File contains both ACTIVITY and",
-        " ACTIVITY2 packets:\n  Returning ",
-        "ACTIVITY2 as `packets$RAW` and\n  ",
-        "ACTIVITY as `packets$ACTIVITY`"
-      )
-
       names(packets) %<>% gsub(
         "^parsed_activity$", "ACTIVITY", .
       )
+
+      if (!is.null(packets$ACTIVITY)) {
+        warning(
+          "File contains both ACTIVITY and",
+          " ACTIVITY2 packets:\n  Returning ",
+          "ACTIVITY2 as `packets$RAW` and\n  ",
+          "ACTIVITY as `packets$ACTIVITY`"
+        )
+      }
 
     } else {
 
