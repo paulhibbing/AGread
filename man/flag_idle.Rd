@@ -4,12 +4,14 @@
 \alias{flag_idle}
 \title{Flag Idle Sleep Times}
 \usage{
-flag_idle(RAW, EVENT)
+flag_idle(RAW, EVENT, verbose = FALSE)
 }
 \arguments{
 \item{RAW}{packet from \code{\link{parse_log_bin}}}
 
 \item{EVENT}{packet from \code{\link{parse_log_bin}}}
+
+\item{verbose}{logical. Print updates to console?}
 }
 \description{
 Flag Idle Sleep Times
