@@ -60,9 +60,10 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
       get_activity(tz, info, verbose) %>%
       list(parsed_activity = .) %>% ## Temp name
       c(packets, .) %>%
-      .[names(.) != "ACTIVITY"] ## Remove binary data
+      .[names(.) != "ACTIVITY"] %>% ## Remove binary data
+      {.[!sapply(., is.null)]}
 
-    if ("RAW" %in% names(packets)) {
+    if ("parsed_activity" %in% names(packets) & "RAW" %in% names(packets)) {
 
       warning(
         "File contains both ACTIVITY and",
