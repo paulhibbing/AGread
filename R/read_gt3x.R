@@ -11,6 +11,7 @@
 #'   faster and has also been checked for alignment with \code{RAW.csv} and
 #'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
 #'   performed by \code{parser="dev"}.
+#' @param cleanup logical. Delete unzipped files?
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -41,7 +42,7 @@ read_gt3x <- function(
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
-  flag_idle_sleep = FALSE, parser = c("legacy", "dev")
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev"), cleanup = FALSE
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -49,7 +50,7 @@ read_gt3x <- function(
     verbose = verbose
   )
 
-  file %<>% read_gt3x_setup(verbose)
+  file %<>% read_gt3x_setup(verbose, cleanup)
 
   info <- read_gt3x_info(file, tz, verbose)
 
@@ -59,7 +60,43 @@ read_gt3x <- function(
     parse_log_bin(info, tz, verbose, include, parser, file)
 
   if (flag_idle_sleep) {
-    log$RAW %<>% flag_idle(log$EVENT)
+
+    if (!all(
+      "RAW" %in% names(log),
+      "EVENT" %in% names(log)
+    )) {
+
+      warning(
+        "Cannot flag idle sleep unless both `RAW` and `EVENT` are elements",
+        " of the output.\n  Make sure `include` contains \"ACTIVITY\",",
+        "\"ACTIVITY2\", and \"EVENT\".",
+        call. = FALSE
+      )
+
+    } else {
+
+      log$RAW %<>% flag_idle(log$EVENT, verbose)
+
+    }
+
+  }
+
+  if (cleanup) {
+
+    if (verbose) cat("\n\n  Cleaning up")
+
+    remove_file <- attr(file$path, "remove")
+
+    if (remove_file) {
+      file.remove(file$path)
+    }
+
+    tempdir() %>%
+    file.path("log.bin") %>%
+    file.remove(.)
+
+    if (verbose) cat("  ............. COMPLETE")
+
   }
 
   PAutilities::manage_procedure(
@@ -67,6 +104,7 @@ read_gt3x <- function(
     PAutilities::get_duration(timer),
     "minutes.\n", verbose = verbose
   )
+
 
   return(log)
 

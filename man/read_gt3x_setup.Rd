@@ -6,14 +6,16 @@
 \alias{read_gt3x_setup}
 \title{Prepare a gt3x file for parsing}
 \usage{
-unzip_gt3x(file)
+unzip_gt3x(file, cleanup = FALSE)
 
 check_gt3x_components(file, verbose = FALSE)
 
-read_gt3x_setup(file, verbose = FALSE)
+read_gt3x_setup(file, verbose = FALSE, cleanup = FALSE)
 }
 \arguments{
 \item{file}{character. Path to the file}
+
+\item{cleanup}{logical. Delete unzipped files?}
 
 \item{verbose}{logical. Print updates to console?}
 }
