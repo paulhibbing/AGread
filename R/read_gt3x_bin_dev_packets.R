@@ -199,7 +199,8 @@ get_activity2 <- function(packets, tz, info, verbose) {
       {stopifnot(!anyNA(.))}
 
     any_discrepancies <-
-      setequal(packet_seq, packet_no) %>%
+      setdiff(packet_no, 0) %>%
+      setequal(packet_seq) %>%
       {!.}
 
     if (any_discrepancies) {
