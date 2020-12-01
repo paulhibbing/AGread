@@ -41,6 +41,13 @@ List dev1_bin_initialize(
         (unsigned int)(log[current_index + 6])
       );
 
+      if (current_index + 9 + size >= log.size()) {
+        if (verbose) {
+          Rcerr << "\nLast packet is incomplete -- skipping it\n";
+        }
+        break;
+      }
+
       if (
           setdiff(IntegerVector(1,type), include).size() == 0
       ) {

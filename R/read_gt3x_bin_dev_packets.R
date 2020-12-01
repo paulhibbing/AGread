@@ -192,9 +192,26 @@ get_activity2 <- function(packets, tz, info, verbose) {
       info %$%
       get_expected(Start_Date, Last_Sample_Time, Sample_Rate)
 
+    packet_seq <- seq(packets$ACTIVITY2)
+
     packet_no <-
       match(expected_times$expected_floor, actual_times, 0) %T>%
-      {stopifnot(all(seq(packets$ACTIVITY2) %in% .))}
+      {stopifnot(!anyNA(.))}
+
+    any_discrepancies <-
+      setequal(packet_seq, packet_no) %>%
+      {!.}
+
+    if (any_discrepancies) {
+
+      ## Okay if it's only one packet at the end of the file
+      setdiff(packet_seq, packet_no) %>%
+      {stopifnot(
+        length(.) == 1,
+        . == length(packets$ACTIVITY2)
+      )}
+
+    }
 
   ## Complete the processing
 

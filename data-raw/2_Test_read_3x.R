@@ -6,13 +6,13 @@ devtools::load_all()
 # Automated ---------------------------------------------------------------
 
 # dev <- read_gt3x(
-#   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
+#   file = "C:/Users/prhibbing/Downloads/SFD-26-CB (2018-06-21).gt3x",
 #   tz = "UTC",
 #   verbose = TRUE, parser = "dev"
 # )
 #
 # legacy <- read_gt3x(
-#   file = "data-raw/119AGBPFLW (2016-03-08).gt3x",
+#   file = "C:/Users/prhibbing/Downloads/SFD-26-CB (2018-06-21).gt3x",
 #   tz = "UTC",
 #   verbose = TRUE, parser = "legacy"
 # )
@@ -21,7 +21,7 @@ devtools::load_all()
 
 ## inputs
 
-  file <- "data-raw/119AGBPFLW (2016-03-08).gt3x"
+  file <- "C:/Users/prhibbing/Downloads/SFD-26-CB (2018-06-21).gt3x"
   verbose <- TRUE
   tz <- "UTC"
   give_timestamp <- TRUE
@@ -33,6 +33,7 @@ devtools::load_all()
   )
   flag_idle_sleep <- FALSE
   parser <- "dev"
+  cleanup <- FALSE
 
 ## read_gt3x
 
