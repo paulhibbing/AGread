@@ -25,8 +25,15 @@ legacy_parse(file, ...)
 
 dev_parse(file, ...)
 
-parse_log_bin(log_file, info, tz = "UTC", verbose = FALSE,
-  include = .packets, parser, file)
+parse_log_bin(
+  log_file,
+  info,
+  tz = "UTC",
+  verbose = FALSE,
+  include = .packets,
+  parser,
+  file
+)
 
 validate_parser(parser)
 }
@@ -54,9 +61,6 @@ alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
 faster and has also been checked for alignment with \code{RAW.csv} and
 \code{IMU.csv} files, but not as strictly. For example, rounding is not
 performed by \code{parser="dev"}.}
-
-\item{...}{for internal use. Arguments passed to the specific parser from the
-\code{parse_log_bin} shell}
 }
 \description{
 Parse the log component of a gt3x file

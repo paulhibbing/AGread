@@ -6,16 +6,37 @@
 \alias{collapse_gt3x.IMU}
 \title{Collapse data that were read using \code{\link{read_gt3x}}}
 \usage{
-collapse_gt3x(AG, filename = "gt3x file", output_window_secs = 1,
-  filter = TRUE, filter_hz = 35, verbose = FALSE, ...)
+collapse_gt3x(
+  AG,
+  filename = "gt3x file",
+  output_window_secs = 1,
+  filter = TRUE,
+  filter_hz = 35,
+  verbose = FALSE,
+  ...
+)
 
-\method{collapse_gt3x}{RAW}(AG, filename = "gt3x file",
-  output_window_secs = 1, filter = TRUE, filter_hz = 35,
-  verbose = FALSE, method = c("legacy", "expanded"), ...)
+\method{collapse_gt3x}{RAW}(
+  AG,
+  filename = "gt3x file",
+  output_window_secs = 1,
+  filter = TRUE,
+  filter_hz = 35,
+  verbose = FALSE,
+  method = c("legacy", "expanded"),
+  ...
+)
 
-\method{collapse_gt3x}{IMU}(AG, filename = "gt3x file",
-  output_window_secs = 1, filter = TRUE, filter_hz = 35,
-  verbose = FALSE, method = c("legacy", "expanded"), ...)
+\method{collapse_gt3x}{IMU}(
+  AG,
+  filename = "gt3x file",
+  output_window_secs = 1,
+  filter = TRUE,
+  filter_hz = 35,
+  verbose = FALSE,
+  method = c("legacy", "expanded"),
+  ...
+)
 }
 \arguments{
 \item{AG}{The object to collapse, inheriting from class "RAW" or "IMU"}

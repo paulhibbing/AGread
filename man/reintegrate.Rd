@@ -7,8 +7,13 @@
 \alias{reintegrate_setup}
 \title{Reintegrate a data stream}
 \usage{
-reintegrate(ag, to, time_var = "Timestamp", direction = c("forwards",
-  "backwards"), verbose = FALSE)
+reintegrate(
+  ag,
+  to,
+  time_var = "Timestamp",
+  direction = c("forwards", "backwards"),
+  verbose = FALSE
+)
 
 ## Related internal functions:
 

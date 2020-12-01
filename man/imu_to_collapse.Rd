@@ -4,7 +4,8 @@
 \name{imu_to_collapse}
 \alias{imu_to_collapse}
 \title{IMU data to collapse}
-\format{A data frame with 1500 rows and 17 variables:
+\format{
+A data frame with 1500 rows and 17 variables:
 \describe{
   \item{Timestamp}{The corresponding time for each row of data}
   \item{Accelerometer.X}{Secondary accelerometer x-axis data, in G}
@@ -26,7 +27,8 @@
   second}
   \item{Magnetometer_VM_MicroT}{Vector magnitude of the magnetometer signal,
   in micro-Teslas}
-}}
+}
+}
 \usage{
 imu_to_collapse
 }

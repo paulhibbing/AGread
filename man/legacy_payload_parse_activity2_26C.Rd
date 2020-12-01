@@ -5,8 +5,13 @@
 \alias{dev_activity2_payload}
 \title{Parse a packet of primary accelerometer data in C++}
 \usage{
-legacy_payload_parse_activity2_26C(payload, samp_rate, scale_factor,
-  is_last_packet, timestamp)
+legacy_payload_parse_activity2_26C(
+  payload,
+  samp_rate,
+  scale_factor,
+  is_last_packet,
+  timestamp
+)
 
 dev_activity2_payload(payload, samp_rate, scale_factor, is_last_packet)
 }

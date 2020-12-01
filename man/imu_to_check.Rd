@@ -4,7 +4,8 @@
 \name{imu_to_check}
 \alias{imu_to_check}
 \title{IMU data to check}
-\format{A data frame with 300 rows and 8 variables:
+\format{
+A data frame with 300 rows and 8 variables:
 \describe{
   \item{file_source_IMU}{The filename of the IMU file}
   \item{date_processed_IMU}{The date the IMU file was processed}
@@ -16,7 +17,8 @@
   \item{mean_abs_Gyroscope_z_DegPerS}{Rotation in z axis, degrees per second}
   \item{mean_magnetometer_direction}{Cardinal direction of magnetometer
   signal, averaged over one second}
-}}
+}
+}
 \usage{
 imu_to_check
 }
