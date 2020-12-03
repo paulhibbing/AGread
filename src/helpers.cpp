@@ -106,7 +106,7 @@ void print_progC(int n, const char* label) {
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-void checksumC(RawVector log, int start_index, int end_index) {
+bool checksumC(RawVector log, int start_index, int end_index) {
 
   unsigned char checksum(0xFF);
   for (int i = start_index; i < end_index; ++i) {
@@ -114,9 +114,8 @@ void checksumC(RawVector log, int start_index, int end_index) {
   }
 
   bool pass = checksum == log[end_index];
-  if (!pass) {
-    stop("Checksum calculation failed.");
-  }
+
+  return pass;
 
 }
 
