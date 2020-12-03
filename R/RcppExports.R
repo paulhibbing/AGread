@@ -156,7 +156,7 @@ print_progC <- function(n, label) {
 #'
 #' @keywords internal
 checksumC <- function(log, start_index, end_index) {
-    invisible(.Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index))
+    .Call('_AGread_checksumC', PACKAGE = 'AGread', log, start_index, end_index)
 }
 
 #' Handle empty and latched packets

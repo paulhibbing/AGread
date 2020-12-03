@@ -6,7 +6,8 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
 
     packets <-
       cpp_include(include) %>%
-      dev1_bin_initialize(log, verbose, .)
+      dev1_bin_initialize(log, verbose, .) %>%
+      check_packets(.)
 
     packets %<>%
       sapply(function(x) x$type) %>%
