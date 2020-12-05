@@ -3,21 +3,28 @@
 #' Read an ActiGraph agd file
 #'
 #' @param file character. Path to the agd file
-#' @param tz character. The desired timezone
 #' @param return character. The desired elements to return (see details)
+#' @param tz character. The desired timezone
+#' @param verbose logical. Print updates to console?
 #'
 #' @details The agd is made up of a \code{settings} element and a \code{data}
 #'   element. The former is likely only necessary for debugging, and so the
 #'   default is to return only the \code{data} element. Both \code{settings} and
-#'   \code{data} are in data frame format. If both are returned, they are given
-#'   as a list.
+#'   \code{data} are in data frame format. If \code{return = "both"}, they are
+#'   given as a list.
 #'
 #' @return the desired output
-#' @seealso \url{ActiGraph documentation}{https://github.com/actigraph/ActiLifeManual/blob/master/docs/appendix.rst}
+#' @seealso \href{https://github.com/actigraph/ActiLifeManual/blob/master/docs/appendix.rst}{ActiGraph documentation}
 #' @export
 #'
 #' @examples
-read_agd <- function(file, tz = "UTC", return = c("data", "settings", "both")) {
+read_agd <- function(
+  file, return = c("data", "settings", "both"), tz = "UTC", verbose = FALSE
+) {
+
+  timer <- PAutilities::manage_procedure(
+    "Start", "\nReading", basename(file), verbose = verbose
+  )
 
   return <- match.arg(return)
 
@@ -32,7 +39,8 @@ read_agd <- function(file, tz = "UTC", return = c("data", "settings", "both")) {
     SIMPLIFY = FALSE
   ) %T>%
   {DBI::dbDisconnect(conn)} %>%
-  agd_format(tz, return)
+  agd_format(return, tz) %T>%
+  {PAutilities::manage_procedure("End", timer = timer, verbose = verbose)}
 
 }
 
@@ -58,7 +66,7 @@ read_agd <- function(file, tz = "UTC", return = c("data", "settings", "both")) {
 #' @rdname agd_format
 #'
 #' @keywords internal
-agd_format <- function(AG, tz, return) {
+agd_format <- function(AG, return, tz) {
 
   ## Checks
 
@@ -116,10 +124,10 @@ agd_date_string <- function(timestamp, tz) {
 #'   should be inserted
 #' @param new character. The new column names that should be inserted
 agd_order_names <- function(AG, target = "Timestamp", new = c("Date", "Time")) {
-  target %T>%
-  {stopifnot(. %in% names(AG))} %>%
-  match(names(AG)) %>%
-  append(names(AG), new, .)
+  names(AG) %>%
+  setdiff(new) %T>%
+  {stopifnot(target %in% .)} %>%
+  append(new, match(target, .))
 }
 
 #' @rdname agd_format
@@ -138,12 +146,6 @@ agd_vector_magnitude <- function(AG, expected = paste0("Axis", 1:3)) {
   ## the data already includes it. Not a big deal because the operation runs
   ## quickly.
   if (all(expected %in% names(AG))) {
-    new_names <-
-      length(expected) %T>%
-      {stopifnot(. == 3)} %>%
-      expected[.] %>%
-      match(names(AG)) %>%
-      append(names(AG), "Vector.Magnitude", .)
     AG[ ,expected] %>%
     as.list(.) %>%
     stats::setNames(c("x", "y", "z")) %>%
@@ -151,11 +153,11 @@ agd_vector_magnitude <- function(AG, expected = paste0("Axis", 1:3)) {
     round(2) %>%
     {within(AG, {
       Vector.Magnitude = .
-    })} %>%
-    agd_order_columns(
-      expected[length(expected)],
-      "Vector.Magnitude"
-    )
+    })} #%>%
+    # agd_order_columns(
+    #   expected[length(expected)],
+    #   "Vector.Magnitude"
+    # )
   } else {
     AG
   }

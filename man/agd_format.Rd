@@ -8,7 +8,7 @@
 \alias{agd_vector_magnitude}
 \title{Format ActiGraph agd data after initial reading}
 \usage{
-agd_format(AG, tz, return)
+agd_format(AG, return, tz)
 
 agd_date_string(timestamp, tz)
 
@@ -21,9 +21,9 @@ agd_vector_magnitude(AG, expected = paste0("Axis", 1:3))
 \arguments{
 \item{AG}{list. The result of initial reading}
 
-\item{tz}{character. The desired timezone}
-
 \item{return}{character. The desired elements to return (see details)}
+
+\item{tz}{character. The desired timezone}
 
 \item{target}{character. The target column after which the new variables
 should be inserted}

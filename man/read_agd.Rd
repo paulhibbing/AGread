@@ -4,14 +4,21 @@
 \alias{read_agd}
 \title{Read an ActiGraph agd file}
 \usage{
-read_agd(file, tz = "UTC", return = c("data", "settings", "both"))
+read_agd(
+  file,
+  return = c("data", "settings", "both"),
+  tz = "UTC",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{file}{character. Path to the agd file}
 
+\item{return}{character. The desired elements to return (see details)}
+
 \item{tz}{character. The desired timezone}
 
-\item{return}{character. The desired elements to return (see details)}
+\item{verbose}{logical. Print updates to console?}
 }
 \value{
 the desired output
@@ -23,9 +30,9 @@ Read an ActiGraph agd file
 The agd is made up of a \code{settings} element and a \code{data}
   element. The former is likely only necessary for debugging, and so the
   default is to return only the \code{data} element. Both \code{settings} and
-  \code{data} are in data frame format. If both are returned, they are given
-  as a list.
+  \code{data} are in data frame format. If \code{return = "both"}, they are
+  given as a list.
 }
 \seealso{
-\url{ActiGraph documentation}{https://github.com/actigraph/ActiLifeManual/blob/master/docs/appendix.rst}
+\href{https://github.com/actigraph/ActiLifeManual/blob/master/docs/appendix.rst}{ActiGraph documentation}
 }
