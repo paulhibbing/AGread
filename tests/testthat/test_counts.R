@@ -11,7 +11,7 @@ library(AGread)
 # > all.equal(AG, AG_legacy)
 # [1] TRUE
 
-testthat::test_that("File reading produces expected output", {
+testthat::test_that("csv file reading produces expected output", {
   testthat::expect_equal_to_reference(
     read_AG_counts(
       system.file(

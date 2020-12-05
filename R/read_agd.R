@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' agd_file <- system.file("example1sec.csv", package = "AGread")
+#' agd_file <- system.file("extdata", "example1sec.agd", package = "AGread")
 #' read_agd(agd_file, "both")
 read_agd <- function(
   file, return = c("data", "settings", "both"), tz = "UTC", verbose = FALSE

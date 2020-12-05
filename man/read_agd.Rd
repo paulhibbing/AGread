@@ -33,6 +33,10 @@ The agd is made up of a \code{settings} element and a \code{data}
   \code{data} are in data frame format. If \code{return = "both"}, they are
   given as a list.
 }
+\examples{
+agd_file <- system.file("extdata", "example1sec.agd", package = "AGread")
+read_agd(agd_file, "both")
+}
 \seealso{
 \href{https://github.com/actigraph/ActiLifeManual/blob/master/docs/appendix.rst}{ActiGraph documentation}
 }
