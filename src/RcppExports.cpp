@@ -204,15 +204,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // checksumC
-void checksumC(RawVector log, int start_index, int end_index);
+bool checksumC(RawVector log, int start_index, int end_index);
 RcppExport SEXP _AGread_checksumC(SEXP logSEXP, SEXP start_indexSEXP, SEXP end_indexSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
     Rcpp::traits::input_parameter< int >::type start_index(start_indexSEXP);
     Rcpp::traits::input_parameter< int >::type end_index(end_indexSEXP);
-    checksumC(log, start_index, end_index);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(checksumC(log, start_index, end_index));
+    return rcpp_result_gen;
 END_RCPP
 }
 // blank_packet

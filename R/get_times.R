@@ -30,6 +30,6 @@ get_expected <- function(start, end, samp_rate) {
 get_seq <- function(start, end, samp_rate) {
 
   seq(start, end, 1/samp_rate) %>%
-    .[-length(.)]
+  .[-length(.)]
 
 }

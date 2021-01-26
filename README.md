@@ -3,7 +3,7 @@
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build
-Status](https://travis-ci.org/paulhibbing/AGread.svg?branch=master)](https://travis-ci.org/paulhibbing/AGread)
+Status](https://travis-ci.com/paulhibbing/AGread.svg?branch=master)](https://travis-ci.com/paulhibbing/AGread)
 [![License](https://img.shields.io/badge/licence-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 -----

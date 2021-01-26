@@ -71,40 +71,34 @@ read_AG_raw <- function(file, output_window_secs = 1,
 
     if (return_raw) {
 
-      AG$Timestamp <- meta$start +
-        seq(0, (nrow(AG)-1) / meta$samp_freq, 1 / meta$samp_freq)
-
-      # AG$Block <- NULL
+      AG$Timestamp <-
+        nrow(AG) %>%
+        {. - 1} %>%
+        rep(1/meta$samp_freq, .) %>%
+        cumsum(.) %>%
+        c(0, .) %>%
+        {meta$start + .}
 
       AG$file_source_PrimaryAccel <- basename(file)
       AG$date_processed_PrimaryAccel <- Sys.time()
 
-      # AG$day_of_year <- get_day_of_year(
-      #   AG$Timestamp,
-      #   format = "%Y-%m-%d %H:%M:%S"
-      # )
-      # AG$minute_of_day <- get_minute(
-      #   AG$Timestamp,
-      #   format = "%Y-%m-%d %H:%M:%S"
-      # )
+      ordered_names <-
+        c(
+          "file_source_PrimaryAccel",
+          "date_processed_PrimaryAccel",
+          "Timestamp"
+        ) %>%
+        c(., setdiff(names(AG), .)) %>%
+        gsub("[. ]+", "_", .)
 
-      ordered_names <- c(
-        "file_source_PrimaryAccel",
-        "date_processed_PrimaryAccel",
-        "Timestamp"#,
-        # "day_of_year",
-        # "minute_of_day"
-      )
-      ordered_names <- c(
-        ordered_names,
-        setdiff(names(AG), ordered_names)
-      )
-      AG <- AG[, ordered_names]
-      AG <- data.frame(
-        AG, stringsAsFactors = FALSE,
-        row.names = NULL
-      )
-      names(AG) <- gsub("\\.", "_", names(AG))
+      AG %<>%
+        data.frame(
+          stringsAsFactors = FALSE,
+          row.names = NULL
+        ) %>%
+        stats::setNames(., gsub("[. ]+", "_", names(.))) %T>%
+        {stopifnot(setequal(names(.), ordered_names))} %>%
+        .[, ordered_names]
 
       if (verbose) message_update(
         16, dur = PAutilities::get_duration(timer)

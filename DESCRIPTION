@@ -1,6 +1,6 @@
 Package: AGread
 Title: Read Data Files from ActiGraph Monitors
-Version: 1.1.1
+Version: 1.1.1.9000
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
           role = c("aut","cre")),
@@ -39,7 +39,9 @@ Imports:
     stringr (>= 1.3.0),
     tools,
     utils,
-    readr
+    readr,
+    RSQLite,
+    DBI
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

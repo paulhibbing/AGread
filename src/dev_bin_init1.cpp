@@ -26,6 +26,7 @@ List dev1_bin_initialize(
     int record_end;
     IntegerVector payload_indices;
     RawVector payload;
+    bool check;
 
   // Define counter variables
     int packet_number = 0;
@@ -41,6 +42,13 @@ List dev1_bin_initialize(
         (unsigned int)(log[current_index + 6])
       );
 
+      if (current_index + 9 + size > log.size()) {
+        if (verbose) {
+          Rcerr << "\nLast packet is incomplete -- skipping it\n";
+        }
+        break;
+      }
+
       if (
           setdiff(IntegerVector(1,type), include).size() == 0
       ) {
@@ -52,18 +60,26 @@ List dev1_bin_initialize(
           (unsigned int)(log[current_index + 2])
         );
 
+        //Rcout << "\rCurrent index: " << current_index;
+
         payload_start = current_index + 8;
         record_end = payload_start + size;
         payload_indices = seq(payload_start, record_end - 1);
         payload = log[payload_indices];
-        checksumC(log, current_index, record_end);
+        check = checksumC(log, current_index, record_end);
 
-        packets[packet_number] = List::create(
-          Named("type") = type,
-          Named("timestamp") = timestamp,
-          Named("payload") = payload
-        );
-        ++packet_number;
+        if (check) {
+          packets[packet_number] = List::create(
+            Named("type") = type,
+            Named("timestamp") = timestamp,
+            Named("payload") = payload
+          );
+          ++packet_number;
+
+        } else {
+          packets[packet_number] = R_NilValue;
+          ++packet_number;
+        }
 
       }
 

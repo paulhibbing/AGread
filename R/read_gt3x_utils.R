@@ -21,6 +21,33 @@ cpp_include <- function(include) {
   .numbers[.]
 }
 
+#' Check for packets with failed checksum
+#'
+#' @inheritParams get_parameters
+#'
+#' @keywords internal
+check_packets <- function(packets) {
+
+  failed <- sapply(packets, is.null)
+
+  if (!any(failed)) {
+
+    return(packets)
+
+  } else {
+
+    message(
+      "\nSkipping ", sum(failed),
+      " packet(s) for which checksum failed"
+    )
+
+    packets[!failed]
+
+  }
+
+
+}
+
 #' Construct missing packet entries for ACTIVITY2 (RAW) data
 #'
 #' @param timestamps the packet timestamps
