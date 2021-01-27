@@ -1,6 +1,7 @@
 .accel_names <- c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
 .gyro_names <- c("Gyroscope_X", "Gyroscope_Y", "Gyroscope_Z")
 .mag_names <- c("Magnetometer_X", "Magnetometer_Y", "Magnetometer_Z")
+.odd_value_threshold <- 20
 .packets <- c(
   "ACTIVITY", "BATTERY", "EVENT", "HEART_RATE_BPM", "LUX", "METADATA",
   "TAG", "EPOCH", "HEART_RATE_ANT", "EPOCH2", "CAPSENSE", "HEART_RATE_BLE",

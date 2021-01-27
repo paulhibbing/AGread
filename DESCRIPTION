@@ -3,7 +3,7 @@ Title: Read Data Files from ActiGraph Monitors
 Version: 1.1.1.9000
 Authors@R: c(
     person(c("Paul", "R."), "Hibbing", email = "paulhibbing@gmail.com",
-		  role = c("aut","cre")),
+          role = c("aut","cre")),
     person(c("Vincent", "T."), "van Hees", role = "ctb"),
     person(c("Samuel", "R."), "LaMunion", role = "ctb"),
     person(c("John"), "Muschelli", role = "ctb"),

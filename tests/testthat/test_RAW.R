@@ -1,5 +1,4 @@
-context("RAW data processing")
-library(AGread)
+testthat::context("RAW data processing")
 
 ## MANUAL LEGACY TEST (verified 2/14/19)
 # AG_legacy <- readRDS("data-raw/RAW_legacy.rds")

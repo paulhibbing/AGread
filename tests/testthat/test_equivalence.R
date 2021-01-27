@@ -1,5 +1,4 @@
-context("file reading method equivalence")
-library(AGread)
+testthat::context("file reading method equivalence")
 
 testthat::test_that(
   "file reading methods give equivalent results", {

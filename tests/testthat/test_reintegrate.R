@@ -1,5 +1,4 @@
-context("Reintegration")
-library(AGread)
+testthat::context("Reintegration")
 
 testthat::test_that("Reintegration produces expected output", {
 

@@ -1,5 +1,4 @@
-context("gt3x file reading")
-library(AGread)
+testthat::context("gt3x file reading")
 
 testthat::test_that(
   "gt3x file reading and operations are consistent", {

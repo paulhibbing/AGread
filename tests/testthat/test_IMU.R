@@ -1,5 +1,4 @@
-context("IMU data processing")
-library(AGread)
+testthat::context("IMU data processing")
 
 ## MANUAL LEGACY TEST (verified 2/14/19)
 # AG_legacy <- readRDS("data-raw/IMU_legacy.rds")

@@ -1,5 +1,4 @@
-context("Interpolation")
-library(AGread)
+testthat::context("Interpolation")
 
 testthat::test_that("Interpolation give expected values", {
 
