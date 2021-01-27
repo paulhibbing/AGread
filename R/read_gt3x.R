@@ -93,10 +93,9 @@ read_gt3x <- function(
       call. = FALSE
     )
 
-    cn = c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
-    cn = intersect(cn, names(log$RAW))
+    cn = intersect(.accel_names, names(log$RAW))
     if (length(cn) > 0) {
-      check = any(abs(log$RAW[,cn]) > 20)
+      check <- any(abs(log$RAW[,cn]) > 20)
       if (check) {
         warning(paste0(
           "Data values outside of ", 20,
@@ -104,6 +103,8 @@ read_gt3x <- function(
           call. = FALSE)
       }
     }
+    if (verbose) cat("Checking............. COMPLETE")
+
   }
 
   if (cleanup) {
