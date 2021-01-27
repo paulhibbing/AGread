@@ -12,25 +12,24 @@ Status](https://travis-ci.com/paulhibbing/AGread.svg?branch=master)](https://tra
 
 -----
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # AGread
 
 AGread is for bringing ActiGraph sensor data into R. It is designed to
 streamline and standardize the file-reading process, regardless of which
-file format is provided (currently supporting `.gt3x` and `.csv`).
+file format is provided (currently supporting `.gt3x`, `.agd`, and `.csv`).
 
 AGread can be used flexibly to develop new methods for handling
 ActiGraph data, or to invoke existing methods, many of which exist in
 other R packages
-(e.g. [PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
+(e.g. [PhysicalActivity](https://cran.r-project.org/package=PhysicalActivity)
 and [TwoRegression](https://cran.r-project.org/package=TwoRegression)),
 or will soon.
 
-New in AGread 1.0.0, `Rcpp` has been invoked to speed up the process of
+As of AGread 1.0.0, `Rcpp` has been invoked to speed up the process of
 reading `.gt3x` files. There is now documented equivalence between the
-outcomes of `read_gt3x` and csv reading functions `read_AG__raw` and
-`read_AG_IMU`.
+outcomes of `read_gt3x` and csv reading functions `read_AG_raw` and
+`read_AG_IMU`. For faster reading, users can set `parser = "dev"` when
+calling `read_gt3x`.
 
 ## Installation
 
