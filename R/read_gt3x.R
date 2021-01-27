@@ -55,7 +55,6 @@ read_gt3x <- function(
 
   file %<>% read_gt3x_setup(verbose, cleanup)
 
-
   info <- read_gt3x_info(file, tz, verbose)
 
   log  <-
