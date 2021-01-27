@@ -14,7 +14,7 @@ read_gt3x(
   flag_idle_sleep = FALSE,
   parser = c("legacy", "dev"),
   cleanup = FALSE,
-  extra_checks = TRUE
+  data_checks = TRUE
 )
 }
 \arguments{
@@ -37,7 +37,7 @@ performed by \code{parser="dev"}.}
 
 \item{cleanup}{logical. Delete unzipped files?}
 
-\item{extra_checks}{Run extra checks on the data, including large values
+\item{data_checks}{Run extra checks on the data, including large values
 and duplicated time stamps.  Set to \code{FALSE} to speed up reading.}
 }
 \value{

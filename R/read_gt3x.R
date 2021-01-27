@@ -12,7 +12,7 @@
 #'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
 #'   performed by \code{parser="dev"}.
 #' @param cleanup logical. Delete unzipped files?
-#' @param extra_checks Run extra checks on the data, including large values
+#' @param data_checks Run extra checks on the data, including large values
 #' and duplicated time stamps.  Set to \code{FALSE} to speed up reading.
 #'
 #' @return A list of processed data, with one element for each of the relevant
@@ -45,7 +45,7 @@ read_gt3x <- function(
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
   flag_idle_sleep = FALSE, parser = c("legacy", "dev"), cleanup = FALSE,
-  extra_checks = TRUE
+  data_checks = TRUE
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -84,8 +84,8 @@ read_gt3x <- function(
 
   }
 
-  if (!is.null(log$RAW$Timestamp) & extra_checks) {
-    if (verbose) cat("\n  Running some extra checks")
+  if (!is.null(log$RAW$Timestamp) & data_checks) {
+    if (verbose) cat("\n  Running some extra data checks")
 
     if (anyDuplicated(log$RAW$Timestamp)) warning(
       "Duplicated timestamps in the data. This usually indicates an error",
