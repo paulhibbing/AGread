@@ -1,5 +1,4 @@
-context("agd file reading")
-library(AGread)
+testthat::context("agd file reading")
 
 ## MANUAL LEGACY TEST (verified 2/14/19)
 # AG_legacy <- readRDS("data-raw/counts_legacy.rds")

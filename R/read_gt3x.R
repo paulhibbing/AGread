@@ -12,6 +12,8 @@
 #'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
 #'   performed by \code{parser="dev"}.
 #' @param cleanup logical. Delete unzipped files?
+#' @param extra_checks Run extra checks on the data, including large values
+#' and duplicated time stamps.  Set to \code{FALSE} to speed up reading.
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -42,7 +44,8 @@ read_gt3x <- function(
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
-  flag_idle_sleep = FALSE, parser = c("legacy", "dev"), cleanup = FALSE
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev"), cleanup = FALSE,
+  extra_checks = TRUE
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -81,31 +84,24 @@ read_gt3x <- function(
     }
 
   }
-  if ("RAW" %in% names(log)) {
-    if ("Timestamp" %in% names(log$RAW)) {
-      check = anyDuplicated(log$RAW$Timestamp)
-      if (any(check)) {
-        warning(
-          "Duplicated timestamps in the data, this usually indicates an error",
-          call. = FALSE
-        )
-      }
-    }
-    xyz = c("X", "Y", "Z")
-    odd_value_threshold = 20
-    cn = paste0("Accelerometer_", xyz)
-    if (any(cn %in% names(log$RAW))) {
-      values = log[,intersect(cn, names(log$RAW))]
-      check = any(abs(values) > odd_value_threshold)
-      rm(values)
-      if (any(check)) {
-        warning(
-          paste0("Data values outside of ",
-                 odd_value_threshold,
-                 " threshold, ",
-                 "this usually indicates an error"),
-          call. = FALSE
-        )
+
+  if (!is.null(log$RAW$Timestamp) & extra_checks) {
+    if (verbose) cat("\n  Running some extra checks")
+
+    if (anyDuplicated(log$RAW$Timestamp)) warning(
+      "Duplicated timestamps in the data. This usually indicates an error",
+      call. = FALSE
+    )
+
+    cn = c("Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z")
+    cn = intersect(cn, names(log$RAW))
+    if (length(cn) > 0) {
+      check = any(abs(log$RAW[,cn]) > 20)
+      if (check) {
+        warning(paste0(
+          "Data values outside of ", 20,
+          " threshold, this usually indicates an error"),
+          call. = FALSE)
       }
     }
   }

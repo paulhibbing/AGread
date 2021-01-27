@@ -1,5 +1,5 @@
-context("gt3x parsers")
-library(AGread)
+testthat::context("gt3x parsers")
+
 
 testthat::test_that(
   "gt3x parsers yield convergent output", {

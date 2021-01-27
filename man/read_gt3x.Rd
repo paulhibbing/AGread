@@ -13,7 +13,8 @@ read_gt3x(
     "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"),
   flag_idle_sleep = FALSE,
   parser = c("legacy", "dev"),
-  cleanup = FALSE
+  cleanup = FALSE,
+  extra_checks = TRUE
 )
 }
 \arguments{
@@ -35,6 +36,9 @@ faster and has also been checked for alignment with \code{RAW.csv} and
 performed by \code{parser="dev"}.}
 
 \item{cleanup}{logical. Delete unzipped files?}
+
+\item{extra_checks}{Run extra checks on the data, including large values
+and duplicated time stamps.  Set to \code{FALSE} to speed up reading.}
 }
 \value{
 A list of processed data, with one element for each of the relevant

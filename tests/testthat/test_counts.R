@@ -1,5 +1,4 @@
-context("Count data processing")
-library(AGread)
+testthat::context("Count data processing")
 
 ## MANUAL LEGACY TEST (verified 2/14/19)
 # AG_legacy <- readRDS("data-raw/counts_legacy.rds")
