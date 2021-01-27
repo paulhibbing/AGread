@@ -97,7 +97,7 @@ agd_format <- function(AG, return, tz) {
         Date = agd_date_string(Timestamp, tz)
         Time = strftime(Timestamp, "%H:%M:%S", tz)
       }) %>%
-      agd_order_columns(.) %>%
+      PAutilities::df_reorder(c("Date", "Time"), "Timestamp") %>%
       agd_vector_magnitude(.)
 
   ## Finish up
@@ -122,25 +122,6 @@ agd_date_string <- function(timestamp, tz) {
 }
 
 #' @rdname agd_format
-#' @param target character. The target column after which the new variables
-#'   should be inserted
-#' @param new character. The new column names that should be inserted
-agd_order_names <- function(AG, target = "Timestamp", new = c("Date", "Time")) {
-  names(AG) %>%
-  setdiff(new) %T>%
-  {stopifnot(target %in% .)} %>%
-  append(new, match(target, .))
-}
-
-#' @rdname agd_format
-#' @param ... arguments passed to \code{agd_order_names}
-#' @keywords internal
-agd_order_columns <- function(AG, ...) {
-  agd_order_names(AG, ...) %>%
-  AG[ ,.]
-}
-
-#' @rdname agd_format
 #' @param expected character. The expected names of the triaxial variables
 #' @keywords internal
 agd_vector_magnitude <- function(AG, expected = paste0("Axis", 1:3)) {
@@ -155,11 +136,7 @@ agd_vector_magnitude <- function(AG, expected = paste0("Axis", 1:3)) {
     round(2) %>%
     {within(AG, {
       Vector.Magnitude = .
-    })} #%>%
-    # agd_order_columns(
-    #   expected[length(expected)],
-    #   "Vector.Magnitude"
-    # )
+    })}
   } else {
     AG
   }

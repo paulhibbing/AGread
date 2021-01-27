@@ -3,18 +3,12 @@
 \name{agd_format}
 \alias{agd_format}
 \alias{agd_date_string}
-\alias{agd_order_names}
-\alias{agd_order_columns}
 \alias{agd_vector_magnitude}
 \title{Format ActiGraph agd data after initial reading}
 \usage{
 agd_format(AG, return, tz)
 
 agd_date_string(timestamp, tz)
-
-agd_order_names(AG, target = "Timestamp", new = c("Date", "Time"))
-
-agd_order_columns(AG, ...)
 
 agd_vector_magnitude(AG, expected = paste0("Axis", 1:3))
 }
@@ -24,13 +18,6 @@ agd_vector_magnitude(AG, expected = paste0("Axis", 1:3))
 \item{return}{character. The desired elements to return (see details)}
 
 \item{tz}{character. The desired timezone}
-
-\item{target}{character. The target column after which the new variables
-should be inserted}
-
-\item{new}{character. The new column names that should be inserted}
-
-\item{...}{arguments passed to \code{agd_order_names}}
 
 \item{expected}{character. The expected names of the triaxial variables}
 }
