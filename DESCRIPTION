@@ -29,7 +29,7 @@ Imports:
     GGIR (>= 1.5.0),
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
-    PAutilities (>= 0.2.0),
+    PAutilities (>= 1.1.0.9000),
     Rcpp (>= 1.0.1),
     reshape2 (>= 1.4.3),
     rlang (>= 0.2.0),
