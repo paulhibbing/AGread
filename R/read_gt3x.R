@@ -85,6 +85,7 @@ read_gt3x <- function(
   }
 
   if (!is.null(log$RAW$Timestamp) & data_checks) {
+
     if (verbose) cat("\n  Running some extra data checks")
 
     if (anyDuplicated(log$RAW$Timestamp)) warning(
@@ -92,16 +93,21 @@ read_gt3x <- function(
       call. = FALSE
     )
 
-    cn = intersect(.accel_names, names(log$RAW))
-    if (length(cn) > 0) {
-      check <- any(abs(log$RAW[,cn]) > .odd_value_threshold)
-      if (check) {
-        warning(paste0(
-          "Data values outside of ", .odd_value_threshold,
-          " threshold, this usually indicates an error"),
-          call. = FALSE)
-      }
+    if (any(.accel_names %in% names(log$RAW))) {
+
+      intersect(.accel_names, names(log$RAW)) %>%
+      log$RAW[ ,cn] %>%
+      abs(.) %>%
+      {. > .odd_value_threshold} %>%
+      any(.)
+      {if (.) warning(
+        "Data values outside of ", .odd_value_threshold,
+        " threshold, this usually indicates an error",
+        call. = FALSE
+      )}
+
     }
+
     if (verbose) cat("Checking............. COMPLETE")
 
   }
