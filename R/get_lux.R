@@ -1,3 +1,17 @@
+.lux_scale <- c(
+  "NEO" = NA, "CLE" = NA,
+  "MOS0" = 2.05, "MOS2" = 2.05,
+  "MRA" = NA, "MOS3" = NA,
+  "MOS4" = NA
+)
+
+.lux_max <- c(
+  "NEO" = NA, "CLE" = NA,
+  "MOS0" = 5000, "MOS2" = 5000,
+  "MRA" = NA, "MOS3" = NA,
+  "MOS4" = NA
+)
+
 #' @rdname dev_bin_packets
 #' @inheritParams parse_log_bin
 #' @keywords internal
