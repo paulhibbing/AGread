@@ -6,7 +6,7 @@
 get_actual <- function(packets, tz) {
 
   packets %>%
-  sapply(function(x) x$timestamp) %>%
+  sapply("[[", "timestamp") %>%
   anytime::anytime(tz)
 
 }

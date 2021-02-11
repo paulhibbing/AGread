@@ -7,11 +7,8 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
     packets <-
       cpp_include(include) %>%
       dev1_bin_initialize(log, verbose, .) %>%
-      check_packets(.)
-
-    packets %<>%
-      sapply(function(x) x$type) %>%
-      split(packets, .) %>%
+      check_packets(.) %>%
+      split(., sapply(., "[[", "type")) %>%
       stats::setNames(
         ., .packets[match(names(.), .numbers)]
       )
@@ -70,14 +67,12 @@ dev_bin_type1 <- function(log, tz, verbose, include, info) {
         "^parsed_activity$", "ACTIVITY", .
       )
 
-      if (!is.null(packets$ACTIVITY)) {
-        warning(
-          "File contains both ACTIVITY and",
-          " ACTIVITY2 packets:\n  Returning ",
-          "ACTIVITY2 as `packets$RAW` and\n  ",
-          "ACTIVITY as `packets$ACTIVITY`"
-        )
-      }
+      if (!is.null(packets$ACTIVITY)) warning(
+        "File contains both ACTIVITY and",
+        " ACTIVITY2 packets:\n  Returning ",
+        "ACTIVITY2 as `packets$RAW` and\n  ",
+        "ACTIVITY as `packets$ACTIVITY`"
+      )
 
     } else {
 

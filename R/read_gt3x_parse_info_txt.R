@@ -68,7 +68,7 @@ parse_info_txt <- function(info, tz = "UTC", verbose, ...) {
     ifelse(4, 3) %>%
     substring(meta$Serial_Number, 1, .) %>%
     sapply(list(.lux_scale, .lux_max), "[", .) %>%
-    stats::setNames(c("lux_scale_default", "lux_max_default")) %>%
+    stats::setNames(c("lux_scale", "lux_max")) %>%
     t(.) %>%
     data.frame(.) %>%
     data.frame(meta, .) %T>%

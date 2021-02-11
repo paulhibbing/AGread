@@ -12,6 +12,21 @@
   "MOS4" = NA
 )
 
+#' @param lux output from \code{dev_parse_lux}, with minor modifications
+#' @param info data frame containing the lux factors
+#' @keywords internal
+format_lux <- function(lux, info) {
+
+  ifelse(lux$Lux < 20, 0, lux$Lux) %>%
+  {. * info$lux_scale} %>%
+  round(.) %>%
+  {ifelse(
+    . > info$lux_max, info$lux_max, .
+  )} %>%
+  {within(lux, {Lux = .})}
+
+}
+
 #' @rdname dev_bin_packets
 #' @inheritParams parse_log_bin
 #' @keywords internal
@@ -47,6 +62,7 @@ get_lux <- function(packets, tz, info, verbose) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )} %>%
+  format_lux(info) %>%
   set_packet_class("LUX") %T>%
   {if (verbose) packet_print("cleanup", "LUX")}
 
