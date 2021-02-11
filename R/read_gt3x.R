@@ -96,10 +96,10 @@ read_gt3x <- function(
     if (any(.accel_names %in% names(log$RAW))) {
 
       intersect(.accel_names, names(log$RAW)) %>%
-      log$RAW[ ,cn] %>%
+      log$RAW[ ,.] %>%
       abs(.) %>%
       {. > .odd_value_threshold} %>%
-      any(.)
+      any(.) %>%
       {if (.) warning(
         "Data values outside of ", .odd_value_threshold,
         " threshold, this usually indicates an error",

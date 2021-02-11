@@ -12,6 +12,8 @@
   "MOS4" = NA
 )
 
+#' Convert pre-parsed lux data into its final format
+#'
 #' @param lux output from \code{dev_parse_lux}, with minor modifications
 #' @param info data frame containing the lux factors
 #' @keywords internal
