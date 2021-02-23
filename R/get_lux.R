@@ -1,15 +1,17 @@
 .lux_scale <- c(
-  "NEO" = NA, "CLE" = NA,
-  "MOS0" = 2.05, "MOS2" = 2.05,
-  "MRA" = NA, "MOS3" = NA,
-  "MOS4" = NA
+  "NEO" = 1.25, "CLE" = 1.25,
+  "MOS0" = NA,
+  "MOS1" = 2.05, "MOS2" = 2.05,
+  "MOS3" = 2.67, "MOS4" = 2.67,
+  "MRA" = 3.25
 )
 
 .lux_max <- c(
-  "NEO" = NA, "CLE" = NA,
-  "MOS0" = 5000, "MOS2" = 5000,
-  "MRA" = NA, "MOS3" = NA,
-  "MOS4" = NA
+  "NEO" = 2500, "CLE" = 2500,
+  "MOS0" = NA,
+  "MOS1" = 5000, "MOS2" = 5000,
+  "MOS3" = 6500, "MOS4" = 6500,
+  "MRA" = 6000
 )
 
 #' Convert pre-parsed lux data into its final format
@@ -47,8 +49,9 @@ get_lux <- function(packets, tz, info, verbose) {
   )
 
   packet_no <-
-    match(expected_times, actual_times, 0) %T>%
-    {stopifnot(all(seq(packets$LUX) %in% .))}
+    match(expected_times, actual_times, 0) #%T>%
+    # {stopifnot(all(seq(packets$LUX) %in% .))}
+    # ^^This may fail sometimes if lux starts recording before accelerometer
 
   # ## Complete the processing
 
