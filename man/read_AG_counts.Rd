@@ -4,7 +4,14 @@
 \alias{read_AG_counts}
 \title{Read data table files containing count values}
 \usage{
-read_AG_counts(file, verbose = FALSE, skip = 11, header = FALSE, ...)
+read_AG_counts(
+  file,
+  verbose = FALSE,
+  skip = 11,
+  header = FALSE,
+  header_timestamp_format = "\%m/\%d/\%Y \%H:\%M:\%S",
+  ...
+)
 }
 \arguments{
 \item{file}{A character scalar giving path to an automatically-generated csv
@@ -16,6 +23,9 @@ file with count values}
 
 \item{header}{A logical scalar: Are variable names contained in first row of
 file?}
+
+\item{header_timestamp_format}{character. Space delimited format of the date
+and time in the file header (default is \code{\%m/\%d/\%Y \%H:\%M:\%S})}
 
 \item{...}{Further arguments passed to \code{data.table::fread}}
 }

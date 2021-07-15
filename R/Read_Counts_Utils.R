@@ -24,7 +24,10 @@ capitalize <- function(string) {
 #' AGread::AG_meta(counts_file)
 #'
 #' @export
-AG_meta <- function(file, verbose = FALSE) {
+AG_meta <- function(
+  file, verbose = FALSE,
+  header_timestamp_format = "%m/%d/%Y %H:%M:%S"
+) {
 
   if (verbose) message_update(4)
 
@@ -48,9 +51,10 @@ AG_meta <- function(file, verbose = FALSE) {
     if (grepl("start date", x, TRUE)) {
       values$start_date <-
         meta_format(x) %T>%
-        {stopifnot(grepl(
-          "[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$", .
-        ))}
+        {stopifnot(
+          grepl("[0-9]{1,2}[/-][0-9]{1,2}[/-][0-9]{2,4}$", .) |
+          grepl("[0-9]{2,4}[/-][0-9]{1,2}[/-][0-9]{1,2}$", .)
+        )}
     }
     if (grepl("epoch", x, TRUE)) {
       values$epoch <-
@@ -83,7 +87,17 @@ AG_meta <- function(file, verbose = FALSE) {
 
   start <-
     paste(values$start_date, values$start_time) %>%
-    as.POSIXct("UTC", "%m/%d/%Y %H:%M:%S")
+    as.POSIXct("UTC", header_timestamp_format)
+
+  if (is.na(start)) {
+    stop(
+      "\nFailed to parse start date/time from header of `",
+      basename(file), "`\nYou may need to pass a different",
+      " value for header_timestamp_format,\ne.g.",
+      " `header_timestamp_format = \"%Y-%m-%d %H:%M:%S\"`",
+      call. = FALSE
+    )
+  }
 
   epoch <-
     values$epoch %>%

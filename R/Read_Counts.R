@@ -6,6 +6,8 @@
 #' @param skip Header length: Number of rows to skip when reading the file
 #' @param header A logical scalar: Are variable names contained in first row of
 #'   file?
+#' @param header_timestamp_format character. Space delimited format of the date
+#'   and time in the file header (default is \code{\%m/\%d/\%Y \%H:\%M:\%S})
 #' @param ... Further arguments passed to \code{data.table::fread}
 #'
 #' @return A data frame reflecting the data contained in the csv file
@@ -23,7 +25,8 @@
 #' head(AG_counts)
 #'
 read_AG_counts <- function(
-  file, verbose = FALSE, skip = 11, header = FALSE, ...
+  file, verbose = FALSE, skip = 11, header = FALSE,
+  header_timestamp_format = "%m/%d/%Y %H:%M:%S", ...
 ) {
 
   timer <- PAutilities::manage_procedure(
@@ -34,7 +37,7 @@ read_AG_counts <- function(
 
     if (verbose) message_update(1, file = file)
 
-    meta <- AG_meta(file, verbose)
+    meta <- AG_meta(file, verbose, header_timestamp_format)
 
     file_mode <-
       (modes$mode == meta$mode) %>%

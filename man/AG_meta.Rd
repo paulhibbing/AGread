@@ -6,7 +6,11 @@
 \alias{meta_format}
 \title{Extract meta-data from file header}
 \usage{
-AG_meta(file, verbose = FALSE)
+AG_meta(
+  file,
+  verbose = FALSE,
+  header_timestamp_format = "\%m/\%d/\%Y \%H:\%M:\%S"
+)
 
 value_check(values)
 
@@ -17,6 +21,9 @@ meta_format(x)
 file with count values}
 
 \item{verbose}{A logical scalar: Print processing updates?}
+
+\item{header_timestamp_format}{character. Space delimited format of the date
+and time in the file header (default is \code{\%m/\%d/\%Y \%H:\%M:\%S})}
 
 \item{values}{list of meta values to check for completeness}
 
