@@ -29,7 +29,9 @@ As of AGread 1.0.0, `Rcpp` has been invoked to speed up the process of
 reading `.gt3x` files. There is now documented equivalence between the
 outcomes of `read_gt3x` and csv reading functions `read_AG_raw` and
 `read_AG_IMU`. For faster reading, users can set `parser = "dev"` when
-calling `read_gt3x`.
+calling `read_gt3x`. (Beware of setting `verbose = TRUE` when using
+the legacy parser, as progress updates are implemented with sickening
+inefficiency.)
 
 ## Installation
 
@@ -44,7 +46,7 @@ Windows users, make sure you have
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed
 before running the above.
 
-Alternatively, AGread v1.0.0 is available on CRAN. Install it with:
+Alternatively, AGread v1.1.1 is available on CRAN. Install it with:
 
 ``` r
 install.packages("AGread")

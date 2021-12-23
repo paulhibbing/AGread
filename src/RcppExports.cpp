@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // get_int12
 signed short get_int12(RawVector x, int i1, int i2, bool full_first);
 RcppExport SEXP _AGread_get_int12(SEXP xSEXP, SEXP i1SEXP, SEXP i2SEXP, SEXP full_firstSEXP) {
