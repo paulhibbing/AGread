@@ -38,8 +38,8 @@ inefficiency.)
 You can install the development version of AGread from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("paulhibbing/AGread")
+# install.packages("remotes")
+remotes::install_github("paulhibbing/AGread")
 ```
 
 Windows users, make sure you have
