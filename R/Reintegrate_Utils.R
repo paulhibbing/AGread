@@ -49,26 +49,23 @@ validate_direction <- function(direction) {
 
 #' @rdname reintegrate
 #' @usage
-#' #  get_epoch(ag, to, time_var, verbose)
+#' #  check_epoch(ag, to, time_var, verbose)
 #' @keywords internal
-get_epoch <- function(ag, to, time_var, verbose) {
+check_epoch <- function(ag, to, time_var, verbose) {
 
-  ag[ ,time_var] %>%
-    diff(.) %>%
-    unique(.) %T>%
-    {stopifnot(
-      length(.) == 1,
-      (to / .) %% 1 == 0
-    )} %>%
-    {if (. == to) {
-      if (verbose) cat(
-        "\nReturning original data --",
-        "already in desired epoch length"
-      )
-      NULL
-    } else {
-      .
-    }}
+  get_epoch(ag, time_var) %T>%
+  {stopifnot(
+    (to / .) %% 1 == 0
+  )} %>%
+  {if (. == to) {
+    if (verbose) cat(
+      "\nReturning original data --",
+      "already in desired epoch length"
+    )
+    NULL
+  } else {
+    .
+  }}
 
 }
 
@@ -89,7 +86,7 @@ reintegrate_setup <- function(
 
     direction = validate_direction(direction),
 
-    start_epoch = get_epoch(
+    start_epoch = check_epoch(
       ag, to, time_var, verbose
     ),
 

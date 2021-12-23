@@ -3,7 +3,7 @@
 \name{reintegrate}
 \alias{reintegrate}
 \alias{validate_direction}
-\alias{get_epoch}
+\alias{check_epoch}
 \alias{reintegrate_setup}
 \title{Reintegrate a data stream}
 \usage{
@@ -19,7 +19,7 @@ reintegrate(
 
 #  validate_direction(direction)
 
-#  get_epoch(ag, to, time_var, verbose)
+#  check_epoch(ag, to, time_var, verbose)
 
 #  reintegrate_setup(ag, to, time_var = "Timestamp",
 #    direction = c("forwards", "backwards"), verbose = FALSE)
