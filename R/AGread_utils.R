@@ -74,6 +74,7 @@ get_epoch <- function(AG, time_var = "Timestamp") {
   nrow(AG) %>%
   {. * 0.1} %>%
   ceiling(.) %>%
+  pmax(2) %>%
   seq(.) %>%
   AG[.,time_var] %>%
   diff(.) %>%
