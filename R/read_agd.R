@@ -41,7 +41,7 @@ read_agd <- function(
     SIMPLIFY = FALSE
   ) %T>%
   {DBI::dbDisconnect(conn)} %>%
-  agd_format(return, tz) %T>%
+  agd_format(return, tz, file) %T>%
   {PAutilities::manage_procedure("End", timer = timer, verbose = verbose)}
 
 }
@@ -68,16 +68,20 @@ read_agd <- function(
 #' @rdname agd_format
 #'
 #' @keywords internal
-agd_format <- function(AG, return, tz) {
+agd_format <- function(AG, return, tz, file) {
 
   ## Checks
 
-    # Continuity
-    diff(AG$data$dataTimestamp) %>%
-    unique(.) %>%
-    length(.) %>%
-    {. == 1} %>%
-    stopifnot(.)
+    if (nrow(AG$data) > 0) {
+      # Continuity
+      diff(AG$data$dataTimestamp) %>%
+      unique(.) %>%
+      length(.) %>%
+      {. == 1} %>%
+      stopifnot(.)
+    } else {
+      warning("No data in ", basename(file), call. = FALSE)
+    }
 
     # Variable names
     names(AG$data) %>%
@@ -97,7 +101,10 @@ agd_format <- function(AG, return, tz) {
         Date = agd_date_string(Timestamp, tz)
         Time = strftime(Timestamp, "%H:%M:%S", tz)
       }) %>%
-      PAutilities::df_reorder(c("Date", "Time"), "Timestamp") %>%
+      dplyr::relocate(
+        dplyr::any_of(c("Date", "Time")),
+        .after = "Timestamp"
+      ) %>%
       agd_vector_magnitude(.)
 
   ## Finish up

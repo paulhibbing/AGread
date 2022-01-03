@@ -6,7 +6,7 @@
 \alias{agd_vector_magnitude}
 \title{Format ActiGraph agd data after initial reading}
 \usage{
-agd_format(AG, return, tz)
+agd_format(AG, return, tz, file)
 
 agd_date_string(timestamp, tz)
 
@@ -18,6 +18,8 @@ agd_vector_magnitude(AG, expected = paste0("Axis", 1:3))
 \item{return}{character. The desired elements to return (see details)}
 
 \item{tz}{character. The desired timezone}
+
+\item{file}{character. Path to the agd file}
 
 \item{expected}{character. The expected names of the triaxial variables}
 }
