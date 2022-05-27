@@ -200,3 +200,16 @@ reint_wrap <- function(ag, input_vars, fun) {
   .[ ,input_vars]
 
 }
+
+vm_reformat <- function(ag, verbose) {
+
+  if (all(.triaxial_vars %in% names(ag))) {
+    ag$Vector.Magnitude <-
+      ag[ ,.triaxial_vars] %>%
+      get_VM("Rcpp", verbose) %>%
+      round(2)
+  }
+
+  ag
+
+}

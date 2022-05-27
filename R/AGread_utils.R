@@ -68,7 +68,7 @@ get_epoch <- function(AG, time_var = "Timestamp") {
 
   stopifnot(
     inherits(AG, "data.frame"),
-    time_var %in% names(AG)
+    exists(time_var, AG)
   )
 
   nrow(AG) %>%

@@ -1,6 +1,6 @@
 if(getRversion() >= "2.15.1") utils::globalVariables(c(
-  ".", "Last_Sample_Time", "Sample_Rate", "Start_Date",
-  "values", "block", "Timestamp", "Date", "Time", "Vector.Magnitude"
+  ".", "block", "Date", "Last_Sample_Time", "Sample_Rate", "Start_Date",
+  "Time", "Timestamp", "values", "Vector.Magnitude", "where"
 ))
 
 .onAttach <- function(libname, pkgname) {

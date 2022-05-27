@@ -87,13 +87,6 @@ reintegrate <- function(ag, to, time_var = "Timestamp",
 
   ## Re-format VM and return
 
-    if (all(.triaxial_vars %in% names(ag))) {
-      ag$Vector.Magnitude <-
-        ag[ ,.triaxial_vars] %>%
-        get_VM("Rcpp", verbose) %>%
-        round(2)
-    }
-
-    ag
+    vm_reformat(ag, verbose = verbose)
 
 }
