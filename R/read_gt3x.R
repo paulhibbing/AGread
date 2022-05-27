@@ -5,15 +5,19 @@
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
 #' @param flag_idle_sleep should recorded idle sleep times be tagged?
-#' @param parser the parsing scheme to use, either \code{legacy} or \code{dev}.
-#'   The former runs slower but includes more extensive checks to ensure
-#'   alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
-#'   faster and has also been checked for alignment with \code{RAW.csv} and
-#'   \code{IMU.csv} files, but not as strictly. For example, rounding is not
-#'   performed by \code{parser="dev"}.
+#' @param parser the parsing scheme to use, either \code{legacy}, \code{dev}, or
+#'   \code{external}. The legacy parser runs slowly but includes more extensive
+#'   checks to ensure alignment with \code{RAW.csv} and \code{IMU.csv} files.
+#'   The development parser runs faster and has also been checked for alignment
+#'   with \code{RAW.csv} and \code{IMU.csv} files, but not as strictly. For
+#'   example, rounding is not performed by \code{parser="dev"}. The external
+#'   parser is a wrapper for \code{read.gt3x::read.gt3x}, and specific arguments
+#'   can be passed in via \code{...}
 #' @param cleanup logical. Delete unzipped files?
 #' @param data_checks Run extra checks on the data, including large values
 #' and duplicated time stamps.  Set to \code{FALSE} to speed up reading.
+#' @param ... arguments passed to \code{read.gt3x::read.gt3x} when \code{parser
+#'   == "external"}
 #'
 #' @return A list of processed data, with one element for each of the relevant
 #'   packet types.
@@ -44,23 +48,33 @@ read_gt3x <- function(
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
-  flag_idle_sleep = FALSE, parser = c("legacy", "dev"), cleanup = FALSE,
-  data_checks = TRUE
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev", "external"), cleanup = FALSE,
+  data_checks = TRUE, ...
 ) {
 
-  timer <- PAutilities::manage_procedure(
-    "Start", "\nProcessing", basename(file), "\n",
-    verbose = verbose
-  )
+  parser <- match.arg(parser)
 
-  file %<>% read_gt3x_setup(verbose, cleanup)
+  if (parser == "external") {
 
-  info <- read_gt3x_info(file, tz, verbose)
+    log <- external_parser(file, tz, verbose, ...)
 
-  log  <-
-    file$path %>%
-    utils::unzip("log.bin", exdir = tempdir()) %>%
-    parse_log_bin(info, tz, verbose, include, parser, file)
+  } else {
+
+    timer <- PAutilities::manage_procedure(
+      "Start", "\nProcessing", basename(file), "\n",
+      verbose = verbose
+    )
+
+    file %<>% read_gt3x_setup(verbose, cleanup)
+
+    info <- read_gt3x_info(file, tz, verbose)
+
+    log  <-
+      file$path %>%
+      utils::unzip("log.bin", exdir = tempdir()) %>%
+      parse_log_bin(info, tz, verbose, include, parser, file)
+
+  }
 
   if (flag_idle_sleep) {
 
@@ -73,6 +87,7 @@ read_gt3x <- function(
         "Cannot flag idle sleep unless both `RAW` and `EVENT` are elements",
         " of the output.\n  Make sure `include` contains \"ACTIVITY\",",
         "\"ACTIVITY2\", and \"EVENT\".",
+        "\n  NOTE: `flag_idle_sleep` is not applicable if `parser = 'external'",
         call. = FALSE
       )
 

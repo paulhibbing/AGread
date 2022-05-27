@@ -55,12 +55,14 @@ validate_parser(parser)
 
 \item{log_file}{character. Path to the log.bin file}
 
-\item{parser}{the parsing scheme to use, either \code{legacy} or \code{dev}.
-The former runs slower but includes more extensive checks to ensure
-alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
-faster and has also been checked for alignment with \code{RAW.csv} and
-\code{IMU.csv} files, but not as strictly. For example, rounding is not
-performed by \code{parser="dev"}.}
+\item{parser}{the parsing scheme to use, either \code{legacy}, \code{dev}, or
+\code{external}. The legacy parser runs slowly but includes more extensive
+checks to ensure alignment with \code{RAW.csv} and \code{IMU.csv} files.
+The development parser runs faster and has also been checked for alignment
+with \code{RAW.csv} and \code{IMU.csv} files, but not as strictly. For
+example, rounding is not performed by \code{parser="dev"}. The external
+parser is a wrapper for \code{read.gt3x::read.gt3x}, and specific arguments
+can be passed in via \code{...}}
 }
 \description{
 Parse the log component of a gt3x file

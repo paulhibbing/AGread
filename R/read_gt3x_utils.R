@@ -189,9 +189,6 @@ get_exponent <- function(value, n_bytes) {
 
   exponent <- as.integer(binx)
   if (is_negative) {
-    # magnitude <- binaryLogic::binAdd(
-    #   !binx, binaryLogic::as.binary(1)
-    # )
     exponent <- exponent * -1
   }
 
@@ -211,9 +208,6 @@ get_significand <- function(value, n_bits, n_bytes) {
 
   significand <- as.integer(binx)
   if (is_negative) {
-    # magnitude <- binaryLogic::binAdd(
-    #   !binx, binaryLogic::as.binary(1)
-    # )
     significand <- significand * -1
   }
 

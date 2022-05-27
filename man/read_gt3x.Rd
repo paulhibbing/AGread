@@ -12,9 +12,10 @@ read_gt3x(
     "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
     "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"),
   flag_idle_sleep = FALSE,
-  parser = c("legacy", "dev"),
+  parser = c("legacy", "dev", "external"),
   cleanup = FALSE,
-  data_checks = TRUE
+  data_checks = TRUE,
+  ...
 )
 }
 \arguments{
@@ -28,17 +29,22 @@ read_gt3x(
 
 \item{flag_idle_sleep}{should recorded idle sleep times be tagged?}
 
-\item{parser}{the parsing scheme to use, either \code{legacy} or \code{dev}.
-The former runs slower but includes more extensive checks to ensure
-alignment with \code{RAW.csv} and \code{IMU.csv} files. The latter runs
-faster and has also been checked for alignment with \code{RAW.csv} and
-\code{IMU.csv} files, but not as strictly. For example, rounding is not
-performed by \code{parser="dev"}.}
+\item{parser}{the parsing scheme to use, either \code{legacy}, \code{dev}, or
+\code{external}. The legacy parser runs slowly but includes more extensive
+checks to ensure alignment with \code{RAW.csv} and \code{IMU.csv} files.
+The development parser runs faster and has also been checked for alignment
+with \code{RAW.csv} and \code{IMU.csv} files, but not as strictly. For
+example, rounding is not performed by \code{parser="dev"}. The external
+parser is a wrapper for \code{read.gt3x::read.gt3x}, and specific arguments
+can be passed in via \code{...}}
 
 \item{cleanup}{logical. Delete unzipped files?}
 
 \item{data_checks}{Run extra checks on the data, including large values
 and duplicated time stamps.  Set to \code{FALSE} to speed up reading.}
+
+\item{...}{arguments passed to \code{read.gt3x::read.gt3x} when \code{parser
+== "external"}}
 }
 \value{
 A list of processed data, with one element for each of the relevant
