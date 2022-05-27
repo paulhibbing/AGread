@@ -52,6 +52,11 @@ read_gt3x <- function(
   data_checks = TRUE, ...
 ) {
 
+  timer <- PAutilities::manage_procedure(
+    "Start", "\nProcessing", basename(file), "\n",
+    verbose = verbose
+  )
+
   parser <- match.arg(parser)
 
   if (parser == "external") {
@@ -59,11 +64,6 @@ read_gt3x <- function(
     log <- external_parser(file, tz, verbose, ...)
 
   } else {
-
-    timer <- PAutilities::manage_procedure(
-      "Start", "\nProcessing", basename(file), "\n",
-      verbose = verbose
-    )
 
     file %<>% read_gt3x_setup(verbose, cleanup)
 
