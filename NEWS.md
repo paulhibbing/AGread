@@ -1,4 +1,8 @@
-# AGread 1.1.1
+# AGread 1.2.0
+
+  * Added reintegrate2
+  * Added a `parser = "dev"` option for `read_gt3x`, which serves
+    as a wrapper and formatter around `read.gt3x::read.gt3x`
 
 ## Changes
 
