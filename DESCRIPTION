@@ -22,7 +22,6 @@ Depends:
 License: MIT + file LICENSE
 Imports:
     anytime (>= 0.3.0),
-    binaryLogic (>= 0.3.9),
     data.table (>= 1.10.4),
     DescTools (>= 0.99.20),
     dplyr (>= 0.5.0),
