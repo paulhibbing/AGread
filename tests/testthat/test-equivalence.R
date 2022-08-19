@@ -1,52 +1,55 @@
-testthat::context("file reading method equivalence")
+# Setup -------------------------------------------------------------------
 
-testthat::test_that(
-  "file reading methods give equivalent results", {
+  ## Store the file names ####
 
-    ## Store the file names ####
+    file_3x <- system.file(
+      "extdata", "example.gt3x", package = "AGread"
+    )
+    file_RAW <- system.file(
+      "extdata","exampleRAW.csv", package = "AGread"
+    )
+    file_IMU <- system.file(
+      "extdata", "example-IMU.csv", package = "AGread"
+    )
 
-      file_3x <- system.file(
-        "extdata", "example.gt3x", package = "AGread"
-      )
-      file_RAW <- system.file(
-        "extdata","exampleRAW.csv", package = "AGread"
-      )
-      file_IMU <- system.file(
-        "extdata", "example-IMU.csv", package = "AGread"
-      )
+  ## Call the file reading methods ####
 
-    ## Call the file reading methods ####
+    reference_3x <- read_gt3x(file_3x, parser = "dev")
 
-      reference_3x <- read_gt3x(file_3x)
+    test1 <- read_AG_raw(
+      file_RAW, return_raw = TRUE
+    )[ ,-c(1:2)]
 
-      test1 <- read_AG_raw(
-        file_RAW, return_raw = TRUE
-      )[ ,-c(1:2)]
+    test2 <- suppressMessages(read_AG_raw(
+      file_RAW
+    )[ ,-c(1:2)])
 
-      test2 <- suppressMessages(read_AG_raw(
-        file_RAW
-      )[ ,-c(1:2)])
+    test3 <- suppressMessages(read_AG_raw(
+      file_RAW,output_window_secs = 5
+    )[ ,-c(1:2)])
 
-      test3 <- suppressMessages(read_AG_raw(
-        file_RAW,output_window_secs = 5
-      )[ ,-c(1:2)])
+    test4 <- suppressMessages(read_AG_IMU(
+      file_IMU, filter = FALSE,
+      return_raw = TRUE
+    )[ ,-c(1:2)])
 
-      test4 <- suppressMessages(read_AG_IMU(
-        file_IMU, filter = FALSE,
-        return_raw = TRUE
-      )[ ,-c(1:2)])
+    test5 <- suppressMessages(read_AG_IMU(
+      file_IMU
+    )[ ,-c(1:2)])
 
-      test5 <- suppressMessages(read_AG_IMU(
-        file_IMU
-      )[ ,-c(1:2)])
+    test6 <- suppressMessages(read_AG_IMU(
+      file_IMU,
+      output_window_secs = 5
+    )[ ,-c(1:2)])
 
-      test6 <- suppressMessages(read_AG_IMU(
-        file_IMU,
-        output_window_secs = 5
-      )[ ,-c(1:2)])
+
+# Test --------------------------------------------------------------------
+
+  testthat::test_that("file reading methods give equivalent results", {
+
 
     ## Test 1: gt3x_raw equivalent to read_raw? ####
-      # (Tolerance in milli-G's)
+    # (Tolerance in milli-G's)
 
       AG <- reference_3x$RAW[seq(nrow(test1)), ]
       class(AG) <- class(test1)
@@ -58,12 +61,11 @@ testthat::test_that(
         ))
       )
 
-      testthat::expect_equal(
-        AG, test1, scale = 1
-      )
+      testthat::expect_equal(AG, test1)
+
 
     ## Test 2: gt3x_raw equivalent to read_raw, 1-s epochs? ####
-       # (Tolerance in milli-G's)
+    # (Tolerance in milli-G's)
 
       AG <- reference_3x$RAW
       AG <- suppressMessages(
@@ -85,8 +87,9 @@ testthat::test_that(
         AG, test2, scale = 1
       )
 
+
     ## Test 3: gt3x_raw equivalent to read_raw, 5-s epochs? ####
-      # (Tolerance in milli-G's)
+    # (Tolerance in milli-G's)
 
       AG <- reference_3x$RAW
       AG <- suppressMessages(collapse_gt3x(
@@ -107,6 +110,7 @@ testthat::test_that(
       testthat::expect_equal(
         AG, test3, scale = 1
       )
+
 
     ## Test 4: gt3x_imu equivalent to read_imu? ####
 
@@ -129,6 +133,7 @@ testthat::test_that(
         scale = 1
       )
 
+
     ## Test 5: gt3x_imu equivalent to read_imu, 1-s epochs? ####
 
       AG <- reference_3x$IMU
@@ -139,8 +144,9 @@ testthat::test_that(
         scale = 1
       )
 
+
     ## Test 6: gt3x_imu equivalent to read_imu, 5-s epochs? ####
-      # (Same tolerance notes as previous section)
+    # (Same tolerance notes as previous section)
 
       AG <- reference_3x$IMU
       AG <- suppressMessages(collapse_gt3x(
@@ -152,5 +158,4 @@ testthat::test_that(
         scale = 1
       )
 
-  }
-)
+  })
