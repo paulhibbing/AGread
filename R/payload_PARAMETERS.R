@@ -1,16 +1,4 @@
-#' Second-level function for parsing PARAMETERS packets
-#'
-#' This is a helper function for \code{\link{parse_packet_set.PARAMETERS}}. It
-#' dispatches to third-level functions (e.g. \code{\link{par_battery_state}})
-#' that correspond to each packet address and identifier.
-#'
-#' @param payload_chunk raw. A subset of the PARAMETERS payload
-#' @inheritParams read_gt3x
-#'
-#' @keywords internal
-#'
 process_parameters <- function(payload_chunk, tz) {
-  # payload_chunk <- payload[[1]]
 
   address <- readBin(payload_chunk[1:2], "integer", 2, 2, FALSE)
   identifier <- readBin(payload_chunk[3:4], "integer", 2, 2, FALSE)

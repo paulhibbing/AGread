@@ -134,21 +134,6 @@ bin_int <- function(value_bin) {
   sum(2 ^ (length(value_bin) - which(value_bin)))
 }
 
-#' Convert a raw elements to a binary sequence
-#'
-#' Essentially a wrapper for \code{\link[binaryLogic]{as.binary}}
-#'
-#' @param value raw. The elements to convert
-#' @param n integer. Desired length of output for each element
-#'
-#' @keywords internal
-#'
-AG_binary <- function(value, n = 8) {
-  binaryLogic::as.binary(
-    unlist(binaryLogic::as.binary(rev(value), n = n)),
-    logic = TRUE
-  )
-}
 
 #' Evaluate the value portion of a PARAMETERS record
 #'
@@ -165,55 +150,6 @@ get_value <- function(type, value) {
   )
 }
 
-#' Retrieve the float value for appropriate PARAMETERS records
-#'
-#' @param value raw. The record to convert
-#'
-#' @keywords internal
-#'
-get_float_value <- function(value) {
-  n_bytes <- length(value)
-  n_bits <- n_bytes * 8
-  exponent <- get_exponent(value, n_bytes)
-  significand <- get_significand(value, n_bits, n_bytes)
-  significand * (2^exponent)
-}
-
-#' @rdname get_float_value
-#' @keywords internal
-get_exponent <- function(value, n_bytes) {
-
-  x <- value[n_bytes]
-  binx <- AG_binary(x, n = 8)
-  is_negative <- binx[1] == binaryLogic::as.binary(1)
-
-  exponent <- as.integer(binx)
-  if (is_negative) {
-    exponent <- exponent * -1
-  }
-
-  return(as.double(exponent))
-
-}
-
-#' @rdname get_float_value
-#' @keywords internal
-get_significand <- function(value, n_bits, n_bytes) {
-
-  FLOAT_MAXIMUM <- 2^((n_bits - 8) - 1)
-  x <- value[rev(seq(value))[-1]]
-
-  binx <- AG_binary(rev(x), n = 8)
-  is_negative <- binx[1] == binaryLogic::as.binary(1)
-
-  significand <- as.integer(binx)
-  if (is_negative) {
-    significand <- significand * -1
-  }
-
-  as.double(significand) / FLOAT_MAXIMUM
-
-}
 
 #' Final formatting for a PARAMETERS result
 #'

@@ -25,12 +25,12 @@ parse_packet_set.SENSOR_SCHEMA <- function(
     columnFlags <- payload[startingOffset]
 
     bigEndian <- bin_int(
-      AG_binary(columnFlags[1]) &
-        AG_binary(bitwShiftL(1, 0))
+      logical_bits(columnFlags[1]) &
+        logical_bits(as.raw(1))
     ) != 0
     signed <- bin_int(
-      AG_binary(columnFlags[1]) &
-        AG_binary(bitwShiftL(1, 1))
+      logical_bits(columnFlags[1]) &
+        logical_bits(as.raw(2))
     ) != 0
 
     columnOffset <- payload[startingOffset + 1]
