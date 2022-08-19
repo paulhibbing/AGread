@@ -117,14 +117,53 @@ get_float_value <- function(value) {
 
 get_exponent <- function(value, n_bytes) {
 
-  stop("`get_exponent` is defunct due to dependency on binaryLogic")
+  binx <-
+    dplyr::last(value) %>%
+    rawToBits(.)
+
+  is_negative <-
+    dplyr::last(binx) %>%
+    as.logical(.)
+
+  exponent <-
+    rep(0, 3) %>%
+    as.raw(.) %>%
+    rawToBits(.) %>%
+    c(binx, .) %>%
+    packBits("integer")
+
+  if (is_negative) {
+    exponent <- exponent * -1
+  }
+
+  return(as.double(exponent))
 
 }
 
 
 get_significand <- function(value, n_bits, n_bytes) {
 
-  stop("`get_significand` is defunct due to dependency on binaryLogic")
+  FLOAT_MAXIMUM <- 2^((n_bits - 8) - 1)
+
+  binx <-
+    head(value, n = -1) %>%
+    rawToBits(.)
+
+  is_negative <-
+    dplyr::last(binx) %>%
+    as.logical(.)
+
+  significand <-
+    as.raw(0) %>%
+    rawToBits(.) %>%
+    c(binx, .) %>%
+    packBits("integer")
+
+  if (is_negative) {
+    significand <- significand * -1
+  }
+
+  as.double(significand) / FLOAT_MAXIMUM
 
 }
 
