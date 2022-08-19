@@ -1,4 +1,3 @@
-
 #' Flag Idle Sleep Times
 #'
 #' @param RAW packet from \code{\link{parse_log_bin}}

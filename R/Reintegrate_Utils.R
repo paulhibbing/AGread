@@ -1,5 +1,3 @@
-.triaxial_vars <- c("Axis1", "Axis2", "Axis3")
-
 #' Remove trailing rows with missing values from data frame
 #'
 #' @param ag A data frame on which to perform the operation

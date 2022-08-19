@@ -46,19 +46,8 @@ read_agd <- function(
 
 }
 
-# Supporting code ---------------------------------------------------------
 
-.agd_names <- data.frame(
-  agd_name = c(
-    "dataTimestamp", "axis1", "axis2", "axis3", "steps", "lux", "inclineOff",
-    "inclineStanding", "inclineSitting", "inclineLying"
-  ),
-  csv_name = c(
-    "Timestamp", "Axis1", "Axis2", "Axis3", "Steps", "Lux", "Inclinometer.Off",
-    "Inclinometer.Standing", "Inclinometer.Sitting", "Inclinometer.Lying"
-  ),
-  stringsAsFactors = FALSE
-)
+# Supporting code ---------------------------------------------------------
 
 #' Format ActiGraph agd data after initial reading
 #'
@@ -148,4 +137,3 @@ agd_vector_magnitude <- function(AG, expected = paste0("Axis", 1:3)) {
     AG
   }
 }
-

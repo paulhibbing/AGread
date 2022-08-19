@@ -25,21 +25,6 @@ validate_include <- function(
 
 }
 
-#' @rdname parse_log_bin
-#' @keywords internal
-validate_parser <- function(parser) {
-
-  if (identical(
-    parser, c("legacy", "dev")
-  )) return("legacy")
-
-  parser %T>%
-  {stopifnot(
-    . %in% c("legacy", "dev"),
-    length(.) == 1
-  )}
-
-}
 
 # Record header retrieval & formatting ------------------------------------
 
@@ -138,6 +123,7 @@ select_records <- function(record_headers, include) {
   record_headers[names(record_headers) %in% include]
 
 }
+
 
 # Packet parsing ----------------------------------------------------------
 

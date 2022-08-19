@@ -3,10 +3,14 @@
   The legacy parser has been dismantled because of its dependency on the
   `binaryLogic` package, which was archived in April 2022. This is a breaking
   change and thus reflected in a major version increment.
+  
+  Additionally, reintegration has been restructured with both available methods
+  now available in a single `reintegrate` function
 
 ## Changes
 
   * Removed dependency on `binaryLogic` by dismantling legacy .gt3x parser
+  * Updated the interface for reintegration
 
 # AGread 1.2.0
 

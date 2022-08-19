@@ -37,7 +37,6 @@ parse_log_bin <- function(
   ## Validate inputs
 
     include %<>% validate_include(verbose)
-    parser  %<>% validate_parser(.)
 
   ## Read the bin file
 
@@ -53,9 +52,10 @@ parse_log_bin <- function(
 
       parser,
 
-      "legacy" = legacy_parse(
-        file, log = log, tz = tz, verbose = verbose,
-        include = include, info = info
+      "legacy" = stop(
+        "Legacy parser is not available as of AGread 2.0.0.",
+        " See ?AGread::read_gt3x",
+        call. = FALSE
       ),
 
       "dev" = dev_parse(

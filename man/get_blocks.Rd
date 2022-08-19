@@ -18,9 +18,6 @@ get_blocks(ag, time_var, to, start_epoch, direction)
 \arguments{
 \item{timestamp}{POSIX scalar}
 
-\item{to}{the desired epoch length of the output. Starting epoch length will
-be determined automatically (while also verifying the data are continuous).}
-
 \item{ag}{a data frame to reintegrate}
 
 \item{time_var}{The name of the column containing POSIX-formatted timestamp
