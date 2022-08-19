@@ -1,3 +1,13 @@
+# AGread 2.0.0
+
+  The legacy parser has been dismantled because of its dependency on the
+  `binaryLogic` package, which was archived in April 2022. This is a breaking
+  change and thus reflected in a major version increment.
+
+## Changes
+
+  * Removed dependency on `binaryLogic` by dismantling legacy .gt3x parser
+
 # AGread 1.2.0
 
   * Added reintegrate2
@@ -8,10 +18,9 @@
 
   * Fixed bugs related to overload and argument classes
   
+  
 # AGread 1.1.0
 
-## Summary
-  
 ## Changes
 
   * Revised interpolation schemes where necessary to ensure
@@ -24,15 +33,16 @@
   * Accounted for trailing zeroes in packets
   * Fixed column name detection in `read_AG_counts`
 
+
 # AGread 1.0.0
 
 ## Summary
 
   Version 1.0.0 features speedup via Rcpp in the `read_gt3x`
-    function. There is also increased reliance on S3 OOP
-    in the background code. The output is now successfully
-    tested for alignment with \*RAW.csv and \*-IMU.csv
-    output, having accounted for several issues noted below.
+  function. There is also increased reliance on S3 OOP
+  in the background code. The output is now successfully
+  tested for alignment with \*RAW.csv and \*-IMU.csv
+  output, having accounted for several issues noted below.
       
 ## Changes
 
@@ -48,11 +58,12 @@
     reading methods (csv output vs gt3x output etc.)
   * Updated example data
 
+
 # AGread 0.2.2
 
 ## Summary
 
-  This is a second resubmission of version 0.2.0
+  Resubmission of version 0.2.0
     
 ## Changes
 
@@ -60,11 +71,12 @@
     usage conditions of material derived from
     <https://github.com/actigraph/GT3X-File-Format>.
 
+
 # AGread 0.2.1
 
 ## Summary
 
-  This is a resubmission of version 0.2.0
+  Resubmission of version 0.2.0
     
 ## Changes
 
@@ -83,6 +95,7 @@
     r-patched-solaris-x86.
     
   * Documentation was updated.
+    
     
 # AGread 0.2.0
 
@@ -106,11 +119,12 @@
   * Updated time stamp calculations and time zone specifications where needed
   * Set up automated testing for continued development
 
+
 # AGread 0.1.2
 
 ## Summary
 
-  This is a resubmission of the original version
+  Resubmission of original version
   
 ## Changes
 
@@ -120,19 +134,21 @@
   * Improved the documentation of classify_magnetometer()
   * Exported AG_meta()
 
+
 # AGread 0.1.1
 
 ## Summary
 
-  This is a resubmission of the original version
+  Resubmission of original version
   
 ## Changes
 
   * Added Vincent van Hees as contributor
   * Added URL and BugReports fields to DESCRIPTION
 
+
 # AGread 0.1.0
 
 ## Summary
 
-  * This is the initial version of `AGread`.
+  * Initial package version
