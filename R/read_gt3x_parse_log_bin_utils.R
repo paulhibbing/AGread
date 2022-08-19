@@ -1,11 +1,5 @@
 # Input checking ----------------------------------------------------------
 
-#' Validate the values provided for the \code{input} argument in
-#' \code{\link{read_gt3x}}
-#'
-#' @inheritParams read_gt3x
-#'
-#' @keywords internal
 validate_include <- function(
   include,
   verbose = FALSE
@@ -26,15 +20,23 @@ validate_include <- function(
 }
 
 
+validate_parser <- function(parser) {
+
+  if (identical(
+    parser, c("legacy", "dev")
+  )) return("legacy")
+
+  parser %T>%
+  {stopifnot(
+    . %in% c("legacy", "dev"),
+    length(.) == 1
+  )}
+
+}
+
+
 # Record header retrieval & formatting ------------------------------------
 
-#' Retrieve record headers from .gt3x binary data
-#'
-#' @param log raw. The data from log.bin
-#' @inheritParams parse_log_bin
-#'
-#' @keywords internal
-#'
 get_headers <- function(log, tz = "UTC", verbose = FALSE) {
 
   if (verbose) cat("\n")
@@ -62,13 +64,7 @@ get_headers <- function(log, tz = "UTC", verbose = FALSE) {
 
 }
 
-#' Sort chronologically-ordered record headers by type, for parsing one type at
-#' a time
-#'
-#' @param record_headers the record headers to sort
-#'
-#' @keywords internal
-#'
+
 sort_records <- function(record_headers) {
 
   record_headers <- sapply(
@@ -104,15 +100,7 @@ sort_records <- function(record_headers) {
 
 }
 
-#' Exclude record headers of types that are not listed in the \code{include}
-#' argument of \code{\link{read_gt3x}}
-#'
-#' @param record_headers the record headers
-#' @param include the packet types to include in output of
-#'   \code{\link{read_gt3x}}
-#'
-#' @keywords internal
-#'
+
 select_records <- function(record_headers, include) {
 
   keep <- names(record_headers) %in% include
@@ -127,16 +115,6 @@ select_records <- function(record_headers, include) {
 
 # Packet parsing ----------------------------------------------------------
 
-#' Print packet-parsing information to console
-#'
-#' If \code{verbose} has been set to \code{TRUE} in the parent function, this
-#' function will be invoked to construct the message and print it.
-#'
-#' @param type character. The message type
-#' @param label character. The packet type
-#' @param i numeric. Proportion to print as percentage for progress updates
-#'
-#' @keywords internal
 packet_print <- function(
   type = c("startup", "progress", "cleanup"), label, i
 ) {
@@ -168,16 +146,7 @@ packet_print <- function(
 
 }
 
-#' Retrieve payload data for a single packet
-#'
-#' This function includes a call to \code{\link{checksumC}} and will break if
-#' the result is not as expected
-#'
-#' @param record_header data frame containing information about the packet
-#'   indices etc.
-#' @param log raw. The data from log.bin
-#'
-#' @keywords internal
+
 setup_payload <- function(record_header, log) {
 
   log_indices <- seq(
@@ -197,6 +166,7 @@ setup_payload <- function(record_header, log) {
   payload
 
 }
+
 
 get_temp_offset <- function(parameters) {
 

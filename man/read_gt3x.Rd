@@ -12,7 +12,7 @@ read_gt3x(
     "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE", "LUX", "CAPSENSE",
     "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2", "SENSOR_DATA"),
   flag_idle_sleep = FALSE,
-  parser = c("dev", "external"),
+  parser = c("legacy", "dev", "external"),
   cleanup = FALSE,
   data_checks = TRUE,
   ...
@@ -29,10 +29,14 @@ read_gt3x(
 
 \item{flag_idle_sleep}{should recorded idle sleep times be tagged?}
 
-\item{parser}{the parsing scheme to use, either \code{dev} or
-\code{external}. The external parser is a wrapper for
-\code{read.gt3x::read.gt3x}, and specific arguments can be passed in via
-\code{...}. The 'Details' section has more information about parsers.}
+\item{parser}{the parsing scheme to use, either \code{legacy}, \code{dev}, or
+\code{external}. The legacy parser runs slowly but includes more extensive
+checks to ensure alignment with \code{RAW.csv} and \code{IMU.csv} files.
+The development parser runs faster and has also been checked for alignment
+with \code{RAW.csv} and \code{IMU.csv} files, but not as strictly. For
+example, rounding is not performed by \code{parser="dev"}. The external
+parser is a wrapper for \code{read.gt3x::read.gt3x}, and specific arguments
+can be passed in via \code{...}}
 
 \item{cleanup}{logical. Delete unzipped files?}
 
@@ -51,14 +55,6 @@ A list of processed data, with one element for each of the relevant
 Read data from a gt3x file
 }
 \details{
-Prior to \code{AGread 2.0.0}, a legacy parser was also available. It ran
-slowly but included extensive checks to ensure alignment with \code{RAW.csv}
-and \code{IMU.csv} files. The development parser runs faster and has also
-been checked for alignment with \code{RAW.csv} and \code{IMU.csv} files, but
-not as strictly. For example, rounding is not performed by
-\code{parser="dev"}. The legacy parser was removed because of dependency on
-the \code{binaryLogic} package, which was archived in April 2022.
-
 The default value for \code{include} gives all possible packet types, of
 which there are 18. Processing time can be reduced by passing a subset of the
 18 possibilities. Exclusion is not recommended for the PARAMETERS and

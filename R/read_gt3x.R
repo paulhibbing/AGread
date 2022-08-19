@@ -5,10 +5,14 @@
 #' @param verbose logical. Print updates to console?
 #' @param include character. The PACKET types to parse
 #' @param flag_idle_sleep should recorded idle sleep times be tagged?
-#' @param parser the parsing scheme to use, either \code{dev} or
-#'   \code{external}. The external parser is a wrapper for
-#'   \code{read.gt3x::read.gt3x}, and specific arguments can be passed in via
-#'   \code{...}. The 'Details' section has more information about parsers.
+#' @param parser the parsing scheme to use, either \code{legacy}, \code{dev}, or
+#'   \code{external}. The legacy parser runs slowly but includes more extensive
+#'   checks to ensure alignment with \code{RAW.csv} and \code{IMU.csv} files.
+#'   The development parser runs faster and has also been checked for alignment
+#'   with \code{RAW.csv} and \code{IMU.csv} files, but not as strictly. For
+#'   example, rounding is not performed by \code{parser="dev"}. The external
+#'   parser is a wrapper for \code{read.gt3x::read.gt3x}, and specific arguments
+#'   can be passed in via \code{...}
 #' @param cleanup logical. Delete unzipped files?
 #' @param data_checks logical. Run extra checks on the data (e.g. for large
 #'   values and duplicated timestamps)?  Set to \code{FALSE} to speed up
@@ -20,15 +24,6 @@
 #'   packet types.
 #'
 #' @details
-#'
-#' Prior to \code{AGread 2.0.0}, a legacy parser was also available. It ran
-#' slowly but included extensive checks to ensure alignment with \code{RAW.csv}
-#' and \code{IMU.csv} files. The development parser runs faster and has also
-#' been checked for alignment with \code{RAW.csv} and \code{IMU.csv} files, but
-#' not as strictly. For example, rounding is not performed by
-#' \code{parser="dev"}. The legacy parser was removed because of dependency on
-#' the \code{binaryLogic} package, which was archived in April 2022.
-#'
 #' The default value for \code{include} gives all possible packet types, of
 #' which there are 18. Processing time can be reduced by passing a subset of the
 #' 18 possibilities. Exclusion is not recommended for the PARAMETERS and
@@ -54,7 +49,7 @@ read_gt3x <- function(
                 "TAG", "ACTIVITY", "HEART_RATE_BPM", "HEART_RATE_ANT", "HEART_RATE_BLE",
                 "LUX", "CAPSENSE", "EPOCH", "EPOCH2", "EPOCH3", "EPOCH4", "ACTIVITY2",
                 "SENSOR_DATA"),
-  flag_idle_sleep = FALSE, parser = c("dev", "external"), cleanup = FALSE,
+  flag_idle_sleep = FALSE, parser = c("legacy", "dev", "external"), cleanup = FALSE,
   data_checks = TRUE, ...
 ) {
 
@@ -65,15 +60,7 @@ read_gt3x <- function(
 
   parser <- match.arg(parser)
 
-  if (parser == "legacy") {
-
-    stop(
-      "Legacy parser is not available as of AGread 2.0.0.",
-      " See ?AGread::read_gt3x",
-      call. = FALSE
-    )
-
-  } else if (parser == "external") {
+  if (parser == "external") {
 
     log <- external_parser(file, tz, verbose, ...)
 
