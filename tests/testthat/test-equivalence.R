@@ -14,7 +14,7 @@
 
   ## Call the file reading methods ####
 
-    reference_3x <- read_gt3x(file_3x, parser = "dev")
+    reference_3x <- read_gt3x(file_3x)
 
     test1 <- read_AG_raw(
       file_RAW, return_raw = TRUE
@@ -83,9 +83,7 @@
         )
       )
 
-      testthat::expect_equal(
-        AG, test2, scale = 1
-      )
+      testthat::expect_equal(AG, test2)
 
 
     ## Test 3: gt3x_raw equivalent to read_raw, 5-s epochs? ####
@@ -107,9 +105,7 @@
         )
       )
 
-      testthat::expect_equal(
-        AG, test3, scale = 1
-      )
+      testthat::expect_equal(AG, test3)
 
 
     ## Test 4: gt3x_imu equivalent to read_imu? ####
@@ -128,10 +124,7 @@
         )
       )
 
-      testthat::expect_equal(
-        AG, test4, tolerance = 0.000001,
-        scale = 1
-      )
+      testthat::expect_equal(AG, test4, tolerance = 0.0001)
 
 
     ## Test 5: gt3x_imu equivalent to read_imu, 1-s epochs? ####
@@ -139,10 +132,7 @@
       AG <- reference_3x$IMU
       AG <- collapse_gt3x(AG)[seq(nrow(test5)),-c(1:2)]
 
-      testthat::expect_equal(
-        AG, test5, tolerance = 0.00005,
-        scale = 1
-      )
+      testthat::expect_equal(AG, test5, tolerance = 0.00005)
 
 
     ## Test 6: gt3x_imu equivalent to read_imu, 5-s epochs? ####
@@ -153,9 +143,6 @@
         AG, output_window_secs = 5
       )[seq(nrow(test6)),-c(1:2)])
 
-      testthat::expect_equal(
-        AG, test6, tolerance = 0.00005,
-        scale = 1
-      )
+      testthat::expect_equal(AG, test6, tolerance = 0.00005)
 
   })
