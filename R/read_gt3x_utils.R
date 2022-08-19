@@ -92,79 +92,12 @@ bin_int <- function(value_bin) {
 }
 
 
-AG_binary <- function(value, n = 8) {
-  stop("`AG_binary` is defunct because of dependency on binaryLogic")
-}
-
-
 get_value <- function(type, value) {
   switch(
     type,
     "float" = get_float_value(value),
     "int" = readBin(value, "integer", 4, 4)
   )
-}
-
-
-get_float_value <- function(value) {
-  n_bytes <- length(value)
-  n_bits <- n_bytes * 8
-  exponent <- get_exponent(value, n_bytes)
-  significand <- get_significand(value, n_bits, n_bytes)
-  significand * (2^exponent)
-}
-
-
-get_exponent <- function(value, n_bytes) {
-
-  binx <-
-    dplyr::last(value) %>%
-    rawToBits(.)
-
-  is_negative <-
-    dplyr::last(binx) %>%
-    as.logical(.)
-
-  exponent <-
-    rep(0, 3) %>%
-    as.raw(.) %>%
-    rawToBits(.) %>%
-    c(binx, .) %>%
-    packBits("integer")
-
-  if (is_negative) {
-    exponent <- exponent * -1
-  }
-
-  return(as.double(exponent))
-
-}
-
-
-get_significand <- function(value, n_bits, n_bytes) {
-
-  FLOAT_MAXIMUM <- 2^((n_bits - 8) - 1)
-
-  binx <-
-    head(value, n = -1) %>%
-    rawToBits(.)
-
-  is_negative <-
-    dplyr::last(binx) %>%
-    as.logical(.)
-
-  significand <-
-    as.raw(0) %>%
-    rawToBits(.) %>%
-    c(binx, .) %>%
-    packBits("integer")
-
-  if (is_negative) {
-    significand <- significand * -1
-  }
-
-  as.double(significand) / FLOAT_MAXIMUM
-
 }
 
 
