@@ -1,7 +1,7 @@
 ## Resubmission:
 This update is in response to the archiving of 'binaryLogic', a previous 
-dependency. The dependency has been removed and the package adapted to 
-allow continued usage of portions that do not rely on binaryLogic.
+dependency. The dependency has been circumvented, and additional minor
+enhancements have been made throughout the package.
 
 ## Test environments
 * local Windows 10 install, R 4.0.5

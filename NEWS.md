@@ -1,16 +1,17 @@
-# AGread 2.0.0
+# AGread 1.3.0
 
-  The legacy parser has been dismantled because of its dependency on the
-  `binaryLogic` package, which was archived in April 2022. This is a breaking
-  change and thus reflected in a major version increment.
+  Dependency on the `binaryLogic` package has been circumvented, as the latter
+  package was archived in April 2022.
   
   Additionally, reintegration has been restructured with both available methods
   now available in a single `reintegrate` function
 
 ## Changes
 
-  * Removed dependency on `binaryLogic` by dismantling legacy .gt3x parser
+  * Removed dependency on `binaryLogic`
   * Updated the interface for reintegration
+
+
 
 # AGread 1.2.0
 
@@ -21,6 +22,7 @@
 ## Changes
 
   * Fixed bugs related to overload and argument classes
+  
   
   
 # AGread 1.1.0
@@ -36,6 +38,7 @@
   * Utilized pre-allocation to speed up code (#15, @muschellij2)
   * Accounted for trailing zeroes in packets
   * Fixed column name detection in `read_AG_counts`
+
 
 
 # AGread 1.0.0
@@ -63,6 +66,7 @@
   * Updated example data
 
 
+
 # AGread 0.2.2
 
 ## Summary
@@ -74,6 +78,7 @@
   * The license has been changed from GPL-3 to MIT, to accommodate the
     usage conditions of material derived from
     <https://github.com/actigraph/GT3X-File-Format>.
+
 
 
 # AGread 0.2.1
@@ -100,6 +105,7 @@
     
   * Documentation was updated.
     
+  
     
 # AGread 0.2.0
 
@@ -124,6 +130,7 @@
   * Set up automated testing for continued development
 
 
+
 # AGread 0.1.2
 
 ## Summary
@@ -139,6 +146,7 @@
   * Exported AG_meta()
 
 
+
 # AGread 0.1.1
 
 ## Summary
@@ -149,6 +157,7 @@
 
   * Added Vincent van Hees as contributor
   * Added URL and BugReports fields to DESCRIPTION
+
 
 
 # AGread 0.1.0
