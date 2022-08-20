@@ -98,8 +98,7 @@
     DESCRIPTION has been changed to `file LICENSE` to prevent misrepresentation
     of the package copyright.
     
-  * Dependency `reshape2` was removed to resolve a NOTE on
-    <https://cran.r-project.org/web/checks/check_results_AGread.html> for
+  * Dependency `reshape2` was removed to resolve a NOTE in CRAN checks for
     r-devel-linux-x86_64-fedora-clang, r-devel-linux-x86_64-fedora-gcc, and
     r-patched-solaris-x86.
     
