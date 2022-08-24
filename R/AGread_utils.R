@@ -76,10 +76,7 @@ get_epoch <- function(AG, time_var = "Timestamp") {
   ceiling(.) %>%
   pmax(2) %>%
   seq(.) %>%
-  AG[.,time_var] %>%
-  diff(.) %>%
-  as.numeric(units = "secs") %>%
-  unique(.) %T>%
-  {stopifnot(length(.) == 1)}
+  AG[., time_var] %>%
+  PAutilities::epoch_length_sec(.)
 
 }
