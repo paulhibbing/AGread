@@ -8,6 +8,13 @@
 #'
 calibrate_raw <- function(AG, file) {
 
+  if (!isTRUE(requireNamespace("GGIR", quietly = TRUE))) {
+    stop(
+      "You must install the GGIR package to perform autocalibration",
+      call. = FALSE
+    )
+  }
+
   message_update(29)
   cal_coeffs <- GGIR::g.calibrate(
     datafile = file,

@@ -14,6 +14,13 @@ imu_filter_gyroscope <- function(
   AG, samp_rate, filter_hz = 35, verbose = FALSE
 ) {
 
+  if (!isTRUE(requireNamespace("seewave", quietly = TRUE))) {
+    stop(
+      "You must install the seewave package to filter IMU data",
+      call. = FALSE
+    )
+  }
+
   if (verbose) message_update(19, filter_hz = filter_hz)
 
   gyro_names <- grepl("gyroscope", names(AG), ignore.case = TRUE)
@@ -26,7 +33,7 @@ imu_filter_gyroscope <- function(
         n = 2,
         to = filter_hz
       )
-      }
+    }
   )
 
   if (verbose) message_update(20)

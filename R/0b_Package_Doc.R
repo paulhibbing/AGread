@@ -6,7 +6,7 @@
 #' \code{.csv} formats), and raw data from primary accelerometer and inertial
 #' measurement unit files (\code{RAW.csv} and \code{IMU.csv} formats,
 #' respectively). More information about \code{.gt3x} file formats can be found
-#' \href{here}{https://github.com/actigraph/GT3X-File-Format}.
+#' \href{https://github.com/actigraph/GT3X-File-Format}{here}.
 #'
 #' @section Core functions:
 #' \code{\link{read_AG_counts}}

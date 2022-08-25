@@ -24,6 +24,8 @@ calling `read_gt3x`. (Beware of setting `verbose = TRUE` when using
 the legacy parser, as progress updates are implemented with sickening
 inefficiency.)
 
+AGread also offers minimal pre-processing, for tasks such as reintegration.
+
 ## Installation
 
 You can install the development version of AGread from github with:
@@ -37,7 +39,7 @@ Windows users, make sure you have
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed
 before running the above.
 
-Alternatively, AGread v1.1.1 is available on CRAN. Install it with:
+Alternatively, AGread v1.3.0 is available on CRAN. Install it with:
 
 ``` r
 install.packages("AGread")

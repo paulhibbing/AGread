@@ -24,7 +24,7 @@ validate_direction <- function(direction) {
     silent = TRUE
   )
 
-  if (class(direction) == "try-error" | direction == "err") {
+  if (inherits(direction, "try-error") | direction == "err") {
     warning(paste("Argument `direction` must be exactly one of",
       "\"forwards\" or \"backwards\". Defaulting to forwards."))
     direction <- "forwards"

@@ -3,8 +3,9 @@
   Dependency on the `binaryLogic` package has been circumvented, as the latter
   package was archived in April 2022.
   
-  Additionally, reintegration has been restructured with both available methods
-  now available in a single `reintegrate` function
+  Additionally, reintegration has been restructured with both of the
+  previously-implemented methods now available in a single `reintegrate`
+  function
 
 ## Changes
 
