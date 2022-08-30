@@ -25,7 +25,7 @@
 #'   "example1sec.csv",
 #'   package = "AGread"
 #'   ),
-#'   skip = 11
+#'   header = TRUE
 #' )
 #' AG_RAW <- read_AG_raw(
 #'   system.file(

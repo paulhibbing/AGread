@@ -3,7 +3,6 @@
 #' @param file A character scalar giving path to an automatically-generated csv
 #'   file with count values
 #' @param verbose A logical scalar: Print processing updates?
-#' @param skip Header length: Number of rows to skip when reading the file
 #' @param header A logical scalar: Are variable names contained in first row of
 #'   file?
 #' @param header_timestamp_format character. Space delimited format of the date
@@ -20,12 +19,12 @@
 #'     "example1sec.csv",
 #'     package = "AGread"
 #'   ),
-#'   skip = 11
+#'   header = TRUE
 #' )
 #' head(AG_counts)
 #'
 read_AG_counts <- function(
-  file, verbose = FALSE, skip = 11, header = FALSE,
+  file, verbose = FALSE, header = FALSE,
   header_timestamp_format = "%m/%d/%Y %H:%M:%S", ...
 ) {
 
@@ -66,8 +65,8 @@ read_AG_counts <- function(
       data.table::fread(
         file,
         stringsAsFactors = FALSE,
-        skip = skip,
         header = header,
+        skip = find_skip(file),
         ...
       ) %>%
       data.frame(stringsAsFactors = FALSE, row.names = NULL)

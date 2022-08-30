@@ -9,7 +9,7 @@ check_columns(file, skip, ...)
 \arguments{
 \item{file}{A character scalar giving path to primary accelerometer file}
 
-\item{skip}{Header length: Number of rows to skip when reading the file}
+\item{skip}{number of lines to skip when reading \code{file}}
 
 \item{...}{Arguments passed to \code{\link{read.csv}}}
 }

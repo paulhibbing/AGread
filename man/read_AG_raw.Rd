@@ -9,7 +9,6 @@ read_AG_raw(
   output_window_secs = 1,
   calibrate = FALSE,
   verbose = FALSE,
-  skip = 10,
   block = FALSE,
   return_raw = FALSE,
   ...
@@ -23,8 +22,6 @@ read_AG_raw(
 \item{calibrate}{logical. Perform autocalibration using \link[GGIR]{g.calibrate}}
 
 \item{verbose}{A logical scalar: Print processing updates?}
-
-\item{skip}{Header length: Number of rows to skip when reading the file}
 
 \item{block}{logical. Should file be read in blocks? Will be automatically
 invoked if file is larger than 2 GB.}

@@ -19,7 +19,8 @@ Retrieve the epoch length of an ActiGraph data frame
 }
 \examples{
 AG <- read_AG_counts(
-  system.file("extdata/example1sec.csv", package = "AGread")
+  system.file("extdata/example1sec.csv", package = "AGread"),
+  header = TRUE
 )
 get_epoch(AG)
 }

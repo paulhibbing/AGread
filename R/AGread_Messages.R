@@ -50,8 +50,7 @@ message_update <- function(
     ),
     paste(
       "\nAll columns read as character.\nReturning prematurely",
-      "as a result.\nAdjusting value of skip parameter will",
-      "likely fix the issue."
+      "as a result.\nTry setting header = TRUE"
     ),
     "\n......Checks on inclinometer variables showed no issues",
     #^^15

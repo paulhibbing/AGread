@@ -4,7 +4,7 @@
     "extdata", "example1sec.csv", package = "AGread"
   )
 
-  ag <- read_AG_counts(test_file, skip = 11)
+  ag <- read_AG_counts(test_file, header = TRUE)
 
   forward5 <- reintegrate(ag, 5, "Timestamp", "legacy", "forwards")
   forward60 <- reintegrate(forward5, 60, "Timestamp", "legacy", "forwards")

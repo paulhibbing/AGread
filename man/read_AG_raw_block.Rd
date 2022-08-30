@@ -24,8 +24,6 @@ read_AG_raw_block(
 
 \item{verbose}{A logical scalar: Print processing updates?}
 
-\item{skip}{Header length: Number of rows to skip when reading the file}
-
 \item{meta}{information from \code{\link{get_raw_file_meta}}}
 
 \item{timer}{initial time passed from initial call to \code{\link{read_AG_raw}}}

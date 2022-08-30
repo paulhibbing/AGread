@@ -7,7 +7,6 @@
 read_AG_counts(
   file,
   verbose = FALSE,
-  skip = 11,
   header = FALSE,
   header_timestamp_format = "\%m/\%d/\%Y \%H:\%M:\%S",
   ...
@@ -18,8 +17,6 @@ read_AG_counts(
 file with count values}
 
 \item{verbose}{A logical scalar: Print processing updates?}
-
-\item{skip}{Header length: Number of rows to skip when reading the file}
 
 \item{header}{A logical scalar: Are variable names contained in first row of
 file?}
@@ -42,7 +39,7 @@ AG_counts <- read_AG_counts(
     "example1sec.csv",
     package = "AGread"
   ),
-  skip = 11
+  header = TRUE
 )
 head(AG_counts)
 

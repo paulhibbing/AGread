@@ -61,7 +61,8 @@ get_VM <- function(
 #'
 #' @examples
 #' AG <- read_AG_counts(
-#'   system.file("extdata/example1sec.csv", package = "AGread")
+#'   system.file("extdata/example1sec.csv", package = "AGread"),
+#'   header = TRUE
 #' )
 #' get_epoch(AG)
 get_epoch <- function(AG, time_var = "Timestamp") {
@@ -79,4 +80,11 @@ get_epoch <- function(AG, time_var = "Timestamp") {
   AG[., time_var] %>%
   PAutilities::epoch_length_sec(.)
 
+}
+
+find_skip <- function(filename) {
+  readLines(filename, 25) %>%
+  grepl("^-----", .) %>%
+  which(.) %>%
+  max(.)
 }

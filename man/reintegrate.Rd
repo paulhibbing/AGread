@@ -60,7 +60,7 @@ test_file <- system.file(
   "extdata", "example1sec.csv", package = "AGread"
 )
 
-ag <- read_AG_counts(test_file, skip = 11)
+ag <- read_AG_counts(test_file, header = TRUE)
 
 # Old Method:
 

@@ -6,6 +6,7 @@
 #'
 #' @inheritParams read_AG_raw
 #' @inheritParams read_AG_counts
+#' @param skip number of lines to skip when reading \code{file}
 #' @param ... Arguments passed to \code{\link{read.csv}}
 #' @examples
 #' raw_file <-

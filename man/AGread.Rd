@@ -31,7 +31,7 @@ AG_counts <- read_AG_counts(
   "example1sec.csv",
   package = "AGread"
   ),
-  skip = 11
+  header = TRUE
 )
 AG_RAW <- read_AG_raw(
   system.file(

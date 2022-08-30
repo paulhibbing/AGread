@@ -11,7 +11,7 @@
 
   * Removed dependency on `binaryLogic`
   * Updated the interface for reintegration
-
+  * Added header skip recognition in csv-reading-related functions
 
 
 # AGread 1.2.0

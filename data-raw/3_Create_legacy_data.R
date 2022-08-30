@@ -16,7 +16,7 @@ if (do_start) {
   )
 
   counts <- AGread::read_AG_counts(
-    "inst/extdata/example1sec.csv", verbose = TRUE, skip = 11
+    "inst/extdata/example1sec.csv", header = TRUE, verbose = TRUE
   )
   saveRDS(counts, file = "data-raw/counts_legacy.rds")
 

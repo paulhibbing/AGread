@@ -10,7 +10,7 @@ testthat::test_that("csv file reading produces expected output", {
 
   testthat::expect_snapshot_file(
     save_counts(
-      read_AG_counts(f)
+      read_AG_counts(f, header = TRUE)
     ),
     "read_counts.rds"
   )

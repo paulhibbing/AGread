@@ -29,7 +29,7 @@
 #'
 #' @export
 read_AG_raw <- function(file, output_window_secs = 1,
-  calibrate = FALSE, verbose = FALSE, skip = 10, block = FALSE,
+  calibrate = FALSE, verbose = FALSE, block = FALSE,
   return_raw = FALSE, ...) {
 
   timer <- proc.time()
@@ -37,6 +37,8 @@ read_AG_raw <- function(file, output_window_secs = 1,
   if (verbose) message_update(1, file = file)
 
   meta <- get_raw_file_meta(file)
+
+  skip <- find_skip(file)
 
   if (any(block, get_file_size__gb(file) > 2)) {
 

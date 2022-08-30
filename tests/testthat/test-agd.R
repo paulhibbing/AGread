@@ -26,7 +26,7 @@
       "read_agd.rds"
     )
 
-    ref <- read_AG_counts(csv)
+    ref <- read_AG_counts(csv, header = TRUE)
     test <- read_agd(agd)
     test2 <- read_agd(agd, "settings")
     test3 <- read_agd(agd, "data")

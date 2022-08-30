@@ -23,7 +23,7 @@
 #' @export
 read_AG_IMU <- function(
   file, output_window_secs = 1, verbose = FALSE,
-  skip = 10, filter = TRUE, filter_hz = 35,
+  filter = TRUE, filter_hz = 35,
   output_vars = c(
     "accelerometer", "temperature", "gyroscope", "magnetometer"
   ), return_raw = FALSE
@@ -47,7 +47,7 @@ read_AG_IMU <- function(
     try(data.table::fread(
       file,
       stringsAsFactors = FALSE,
-      skip = skip,
+      skip = find_skip(file),
       #nrows = 25,
       showProgress = FALSE
     ))
