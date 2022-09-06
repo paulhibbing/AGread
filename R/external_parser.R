@@ -38,18 +38,8 @@ external_parser <- function(log, file, tz, verbose, ...) {
   }
 
 
-  if (!isTRUE(requireNamespace("zoo", quietly = TRUE))) stop(
-    "Please install the `zoo` package to",
-    " enable latching of missing gt3x values."
-  )
-
-
-  AG$Accelerometer_X <- zoo::na.locf0(AG$Accelerometer_X)
-  AG$Accelerometer_Y <- zoo::na.locf0(AG$Accelerometer_Y)
-  AG$Accelerometer_Z <- zoo::na.locf0(AG$Accelerometer_Z)
-
-
-  external_restructure(AG) %>%
+  impute_primary(AG, verbose) %>%
+  external_restructure(.) %>%
   c(list(EVENT = events))
 
 
