@@ -1,6 +1,10 @@
-external_parser <- function(file, tz, verbose, ...) {
+external_parser <- function(file, tz, verbose, flag_idle_sleep = FALSE, ...) {
 
-  read.gt3x::read.gt3x(file, verbose, asDataFrame = TRUE, ...) %>%
+  read.gt3x::read.gt3x(
+    file, verbose, asDataFrame = TRUE,
+    imputeZeroes = TRUE, ...
+  ) %>%
+  latch_gt3x(verbose = verbose, flag_idle_sleep = flag_idle_sleep) %>%
   dplyr::rename(
     "Timestamp" = "time", "Accelerometer_X" = "X",
     "Accelerometer_Y" = "Y", "Accelerometer_Z" = "Z"
