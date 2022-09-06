@@ -1,7 +1,4 @@
-external_parser <- function(
-  log, file, tz, verbose,
-  flag_idle_sleep = FALSE, ...
-) {
+external_parser <- function(log, file, tz, verbose, ...) {
 
 
   events <-
@@ -9,22 +6,50 @@ external_parser <- function(
     get_events(tz, info, verbose)
 
 
-  read.gt3x::read.gt3x(
-    file$path, verbose = FALSE, asDataFrame = TRUE,
-    imputeZeroes = TRUE, ...
-  ) %>%
-  dplyr::rename(
-    "Timestamp" = "time", "Accelerometer_X" = "X",
-    "Accelerometer_Y" = "Y", "Accelerometer_Z" = "Z"
-  ) %T>%
-  {stopifnot(exists("Timestamp", .))} %>%
-  flag_idle(events) %>%
-  {latch_gt3x(
-    ., flag_idle_sleep = flag_idle_sleep,
-    is_sleep = .$idle
-  )} %>%
-  within({Timestamp = lubridate::force_tz(Timestamp, tz)}) %>%
-  external_restructure(.) %>%
+  AG <-
+    read.gt3x::read.gt3x(
+      file$path, verbose = FALSE, asDataFrame = TRUE,
+      imputeZeroes = FALSE, ...
+    ) %>%
+    dplyr::rename(
+      "Timestamp" = "time", "Accelerometer_X" = "X",
+      "Accelerometer_Y" = "Y", "Accelerometer_Z" = "Z"
+    ) %T>%
+    {stopifnot(exists("Timestamp", .))}
+
+
+  AG <-
+    get_expected(
+      start = attr(AG, "start_time"),
+      end = min(attr(AG, "stop_time"), attr(AG, "last_sample_time")),
+      samp_rate = attr(AG, "sample_rate")
+    ) %>%
+    {data.frame(Timestamp = .$expected_full)} %>%
+    dplyr::full_join(AG, ., "Timestamp") %>%
+    {.[order(.$Timestamp), ]} %>%
+    within({Timestamp = lubridate::force_tz(Timestamp, tz)})
+
+
+  if (nrow(events$other_events) > 0) {
+    zeroes <-
+      lubridate::floor_date(AG$Timestamp, "1 sec") %in%
+      events$other_events$timestamp
+    AG[zeroes, .accel_names] <- 0
+  }
+
+
+  if (!isTRUE(requireNamespace("zoo", quietly = TRUE))) stop(
+    "Please install the `zoo` package to",
+    " enable latching of missing gt3x values."
+  )
+
+
+  AG$Accelerometer_X <- zoo::na.locf0(AG$Accelerometer_X)
+  AG$Accelerometer_Y <- zoo::na.locf0(AG$Accelerometer_Y)
+  AG$Accelerometer_Z <- zoo::na.locf0(AG$Accelerometer_Z)
+
+
+  external_restructure(AG) %>%
   c(list(EVENT = events))
 
 

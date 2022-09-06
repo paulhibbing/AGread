@@ -86,7 +86,7 @@ read_gt3x <- function(
 
     if (parser == "external") {
 
-      log %<>% external_parser(file, tz, verbose, flag_idle_sleep, ...)
+      log %<>% external_parser(file, tz, verbose, ...)
 
     } else {
 
@@ -95,9 +95,9 @@ read_gt3x <- function(
     }
 
 
-  ## Flag idle sleep if requested (handled separately in the external parser)
+  ## Flag idle sleep if requested
 
-    if (flag_idle_sleep & parser != "external") {
+    if (flag_idle_sleep) {
 
       if (!all(
         "RAW" %in% names(log),

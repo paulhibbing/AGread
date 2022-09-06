@@ -47,7 +47,7 @@ List type3(RawVector log, bool verbose = false) {
         break;
       }
 
-      if (type == event_value) {
+      if ((type == event_value) | (size == 1)) {
 
         timestamp = (unsigned int)(
           (unsigned int)(log[current_index + 5]) << 24 |

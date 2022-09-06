@@ -35,7 +35,7 @@ flag_idle <- function(RAW, EVENT, verbose = FALSE) {
         data.frame(
           TIME = seq(from = x,
                      to = y,
-                     by = lubridate::as.period(1, "secs")),
+                     by = lubridate::period("1 sec")),
           idle = TRUE, stringsAsFactors = FALSE)
       },
       sleep_events$sleep_ON,

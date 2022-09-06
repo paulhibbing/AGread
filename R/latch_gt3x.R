@@ -97,7 +97,7 @@ check_missing.default <- function(
 #' @export
 check_missing.activity_df <- function(
   AG, x_var = "Accelerometer_X", y_var = "Accelerometer_Y",
-  z_var = "Accelerometer_Z", time_var = "time", ...
+  z_var = "Accelerometer_Z", time_var = "Timestamp", ...
 ) {
 
 
