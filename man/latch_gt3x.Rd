@@ -2,20 +2,27 @@
 % Please edit documentation in R/latch_gt3x.R
 \name{latch_gt3x}
 \alias{latch_gt3x}
-\alias{get_sleep}
+\alias{check_missing}
 \title{Replace imputed zeroes by carrying forward last non-zero value}
 \usage{
 latch_gt3x(
   AG,
-  x_var = "X",
-  y_var = "Y",
-  z_var = "Z",
+  x_var = "Accelerometer_X",
+  y_var = "Accelerometer_Y",
+  z_var = "Accelerometer_Z",
   verbose = FALSE,
   flag_idle_sleep = FALSE,
-  ...
+  ...,
+  is_sleep = NULL
 )
 
-get_sleep(AG, x_var = "X", y_var = "Y", z_var = "Z", ...)
+check_missing(
+  AG,
+  x_var = "Accelerometer_X",
+  y_var = "Accelerometer_Y",
+  z_var = "Accelerometer_Z",
+  ...
+)
 }
 \arguments{
 \item{AG}{data frame of ActiGraph data (could be an \code{activity_df} object
@@ -28,7 +35,11 @@ acceleration data in \code{AG}}
 
 \item{flag_idle_sleep}{should recorded idle sleep times be tagged?}
 
-\item{...}{arguments passed to \code{get_sleep}}
+\item{...}{arguments passed to \code{check_missing}}
+
+\item{is_sleep}{an optional logical vector whose length must equal
+\code{nrow(AG)}. Can be passed as an override to internal calculation of
+idle sleep via \code{check_missing}}
 
 \item{time_var}{character scalar naming the column of \code{AG} containing
 POSIX-formatted timestamps}
@@ -40,13 +51,19 @@ An updated data frame with latched values rather than zeroes for
 \description{
 Replace imputed zeroes by carrying forward last non-zero value
 }
+\note{
+\code{check_missing} may pick up on more than idle sleep mode (e.g.,
+  USB connect events or trailing zeroes at the end of a file). To exclusively
+  isolate idle sleep mode, you will need to go through some of the other
+  \code{AGread::read_gt3x} avenues that include event parsing.
+}
 \examples{
 \donttest{
 file_3x <- system.file(
   "extdata", "example.gt3x", package = "AGread"
 )
 AG <- read_gt3x(file_3x)$RAW
-head(latch_gt3x(AG, "Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z"))
+head(latch_gt3x(AG))
 }
 
 }

@@ -25,7 +25,7 @@ legacy_parse(file, ...)
 dev_parse(file, ...)
 
 parse_log_bin(
-  log_file,
+  log,
   info,
   tz = "UTC",
   verbose = FALSE,
@@ -49,8 +49,6 @@ parse_log_bin(
 
 \item{...}{for internal use. Arguments passed to the specific parser from the
 \code{parse_log_bin} shell}
-
-\item{log_file}{character. Path to the log.bin file}
 
 \item{parser}{the parsing scheme to use, either \code{legacy}, \code{dev}, or
 \code{external}. The legacy parser runs slowly but includes more extensive

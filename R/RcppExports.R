@@ -49,6 +49,11 @@ get_VM_C <- function(x, y, z) {
     .Call('_AGread_get_VM_C', PACKAGE = 'AGread', x, y, z)
 }
 
+#' @keywords internal
+type3 <- function(log, verbose = FALSE) {
+    .Call('_AGread_type3', PACKAGE = 'AGread', log, verbose)
+}
+
 #' Collect information about the packets stored in log.bin
 #'
 #' @param x RawVector. The contents of log.bin

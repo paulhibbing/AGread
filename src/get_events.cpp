@@ -2,16 +2,13 @@
 #include "helpers.h"
 using namespace Rcpp;
 
-//' @rdname parse_log_bin
 //' @keywords internal
 // [[Rcpp::export]]
-List dev1_bin_initialize(
-  RawVector log, bool verbose, IntegerVector include
-) {
+List type3(RawVector log, bool verbose = false) {
 
   // Console update
     if (verbose) {
-      Rcout << "\r  Pre-parsing log.bin ";
+      Rcout << "\r  searching for EVENT records ";
     }
 
   // Set up preallocated list (10 bytes should be minimum packet size)
@@ -19,6 +16,7 @@ List dev1_bin_initialize(
     List packets(ceil(max_packets));
 
   // Declare loop variables
+    unsigned char event_value = 0x03;
     int type;
     int timestamp;
     int size;
@@ -49,9 +47,7 @@ List dev1_bin_initialize(
         break;
       }
 
-      if (
-          setdiff(IntegerVector(1,type), include).size() == 0
-      ) {
+      if (type == event_value) {
 
         timestamp = (unsigned int)(
           (unsigned int)(log[current_index + 5]) << 24 |
@@ -59,8 +55,6 @@ List dev1_bin_initialize(
           (unsigned int)(log[current_index + 3]) << 8 |
           (unsigned int)(log[current_index + 2])
         );
-
-        //Rcout << "\rCurrent index: " << current_index;
 
         payload_start = current_index + 8;
         record_end = payload_start + size;
@@ -98,7 +92,7 @@ List dev1_bin_initialize(
 
   // Console update
     if (verbose) {
-      Rcout << "\r  Pre-parsing log.bin " <<
+      Rcout << "\r  searching for EVENT records " <<
       " ............. COMPLETE";
     }
 

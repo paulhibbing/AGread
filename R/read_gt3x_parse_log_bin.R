@@ -22,7 +22,7 @@ dev_parse <- function(file, ...) {
 
 #' Parse the log component of a gt3x file
 #'
-#' @param log_file character. Path to the log.bin file
+#' @param log binary data from \code{log.bin} contents of the \code{gt3x} file
 #' @param info result of \code{\link{read_gt3x_info}}
 #' @inheritParams read_gt3x
 #' @param file internal list object containing information about the zip archive
@@ -30,7 +30,7 @@ dev_parse <- function(file, ...) {
 #'
 #' @keywords internal
 parse_log_bin <- function(
-  log_file, info, tz = "UTC", verbose = FALSE,
+  log, info, tz = "UTC", verbose = FALSE,
   include = .packets, parser, file
 ) {
 
@@ -38,14 +38,6 @@ parse_log_bin <- function(
 
     include %<>% validate_include(verbose)
     parser  %<>% validate_parser(.)
-
-  ## Read the bin file
-
-    if (verbose) cat("\n  Reading log.bin")
-    log <- readBin(
-      log_file, "raw", file$result["log.bin", "Length"]
-    )
-    if (verbose) cat("  ............. COMPLETE")
 
   ## Run the desired parser
 

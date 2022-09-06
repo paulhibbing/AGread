@@ -5,9 +5,17 @@
 #' @param x_var,y_var,z_var character scalars naming the three columns of raw
 #'   acceleration data in \code{AG}
 #' @inheritParams read_gt3x
-#' @param ... arguments passed to \code{get_sleep}
+#' @param ... arguments passed to \code{check_missing}
+#' @param is_sleep an optional logical vector whose length must equal
+#'   \code{nrow(AG)}. Can be passed as an override to internal calculation of
+#'   idle sleep via \code{check_missing}
 #' @param time_var character scalar naming the column of \code{AG} containing
 #'   POSIX-formatted timestamps
+#'
+#' @note \code{check_missing} may pick up on more than idle sleep mode (e.g.,
+#'   USB connect events or trailing zeroes at the end of a file). To exclusively
+#'   isolate idle sleep mode, you will need to go through some of the other
+#'   \code{AGread::read_gt3x} avenues that include event parsing.
 #'
 #' @return An updated data frame with latched values rather than zeroes for
 #'   missing data
@@ -19,18 +27,25 @@
 #'   "extdata", "example.gt3x", package = "AGread"
 #' )
 #' AG <- read_gt3x(file_3x)$RAW
-#' head(latch_gt3x(AG, "Accelerometer_X", "Accelerometer_Y", "Accelerometer_Z"))
+#' head(latch_gt3x(AG))
 #' }
 #'
 latch_gt3x <- function(
-  AG, x_var = "X", y_var = "Y",
-  z_var = "Z", verbose = FALSE,
-  flag_idle_sleep = FALSE, ...
+  AG, x_var = "Accelerometer_X", y_var = "Accelerometer_Y",
+  z_var = "Accelerometer_Z", verbose = FALSE,
+  flag_idle_sleep = FALSE, ...,
+  is_sleep = NULL
 ){
-browser()
-  is_sleep <- get_sleep(AG, x_var, y_var, z_var, ...)
 
-  if (flag_idle_sleep) AG$idle <- is_sleep
+  stopifnot(inherits(AG, "data.frame"))
+
+  if (is.null(is_sleep)) {
+    is_sleep <- check_missing(AG, x_var, y_var, z_var, ...)
+  } else {
+    stopifnot(length(is_sleep) == nrow(AG))
+  }
+
+  if (flag_idle_sleep) AG$idle <- is_sleep else AG$idle <- NULL
 
   if (!any(is_sleep)) return(AG)
 
@@ -63,26 +78,26 @@ browser()
 #' @export
 #' @keywords internal
 #' @rdname latch_gt3x
-get_sleep <- function(
-  AG, x_var = "X", y_var = "Y",
-  z_var = "Z", ...
+check_missing <- function(
+  AG, x_var = "Accelerometer_X", y_var = "Accelerometer_Y",
+  z_var = "Accelerometer_Z", ...
 ) {
-  UseMethod("get_sleep", AG)
+  UseMethod("check_missing", AG)
 }
 
 
 #' @export
-get_sleep.default <- function(
-  AG, x_var = "X", y_var = "Y", z_var = "Z", ...
+check_missing.default <- function(
+  AG, x_var = "Accelerometer_X", y_var = "Accelerometer_Y", z_var = "Accelerometer_Z", ...
 ) {
   AG[[x_var]]==0 & AG[[y_var]]==0 & AG[[z_var]]==0
 }
 
 
 #' @export
-get_sleep.activity_df <- function(
-  AG, x_var = "X", y_var = "Y",
-  z_var = "Z", time_var = "time", ...
+check_missing.activity_df <- function(
+  AG, x_var = "Accelerometer_X", y_var = "Accelerometer_Y",
+  z_var = "Accelerometer_Z", time_var = "time", ...
 ) {
 
 

@@ -79,6 +79,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// type3
+List type3(RawVector log, bool verbose);
+RcppExport SEXP _AGread_type3(SEXP logSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< RawVector >::type log(logSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(type3(log, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_headersC
 DataFrame get_headersC(RawVector x, bool verbose);
 RcppExport SEXP _AGread_get_headersC(SEXP xSEXP, SEXP verboseSEXP) {
@@ -477,6 +489,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_AGread_dev_parse_activity", (DL_FUNC) &_AGread_dev_parse_activity, 5},
     {"_AGread_dev1_bin_initialize", (DL_FUNC) &_AGread_dev1_bin_initialize, 3},
     {"_AGread_get_VM_C", (DL_FUNC) &_AGread_get_VM_C, 3},
+    {"_AGread_type3", (DL_FUNC) &_AGread_type3, 2},
     {"_AGread_get_headersC", (DL_FUNC) &_AGread_get_headersC, 2},
     {"_AGread_latch_accel", (DL_FUNC) &_AGread_latch_accel, 3},
     {"_AGread_get_latch_index", (DL_FUNC) &_AGread_get_latch_index, 2},

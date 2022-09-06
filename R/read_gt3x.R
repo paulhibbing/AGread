@@ -53,106 +53,132 @@ read_gt3x <- function(
   data_checks = TRUE, ...
 ) {
 
-  timer <- PAutilities::manage_procedure(
-    "Start", "\nProcessing", basename(file), "\n",
-    verbose = verbose
-  )
 
-  parser <- match.arg(parser)
+  ## Setup
 
-  if (parser == "external") {
+    timer <- PAutilities::manage_procedure(
+      "Start", "\nProcessing", basename(file), "\n",
+      verbose = verbose
+    )
 
-    log <- external_parser(file, tz, verbose, flag_idle_sleep, ...)
-
-  } else {
+    parser <- match.arg(parser)
 
     file %<>% read_gt3x_setup(verbose, cleanup)
 
     info <- read_gt3x_info(file, tz, verbose)
 
-    log  <-
-      file$path %>%
-      utils::unzip("log.bin", exdir = tempdir()) %>%
-      parse_log_bin(info, tz, verbose, include, parser, file)
 
-  }
+  ## Read the bin file
 
-  if (flag_idle_sleep & parser != "external") {
+    if (verbose) cat("\n  Reading log.bin")
 
-    if (!all(
-      "RAW" %in% names(log),
-      "EVENT" %in% names(log)
-    )) {
-
-      warning(
-        "Cannot flag idle sleep unless both `RAW` and `EVENT` are elements",
-        " of the output.\n  Make sure `include` contains \"ACTIVITY\",",
-        "\"ACTIVITY2\", and \"EVENT\".",
-        "\n  NOTE: `flag_idle_sleep` is not applicable if `parser = 'external'",
-        call. = FALSE
-      )
-
-    } else {
-
-      log$RAW %<>% flag_idle(log$EVENT, verbose)
-
-    }
-
-  }
-
-  if (!is.null(log$RAW$Timestamp) & data_checks) {
-
-    if (verbose) cat("\n  Running some extra data checks")
-
-    if (anyDuplicated(log$RAW$Timestamp)) warning(
-      "Duplicated timestamps in the data. This usually indicates an error",
-      call. = FALSE
-    )
-
-    if (any(.accel_names %in% names(log$RAW))) {
-
-      intersect(.accel_names, names(log$RAW)) %>%
-      log$RAW[ ,.] %>%
-      abs(.) %>%
-      {. > .odd_value_threshold} %>%
-      any(.) %>%
-      {if (.) warning(
-        "Data values outside of ", .odd_value_threshold,
-        " threshold, this usually indicates an error",
-        call. = FALSE
-      )}
-
-    }
-
-    if (verbose) cat("Checking............. COMPLETE")
-
-  }
-
-  if (cleanup) {
-
-    if (verbose) cat("\n\n  Cleaning up")
-
-    remove_file <- attr(file$path, "remove")
-
-    if (remove_file) {
-      file.remove(file$path)
-    }
-
-    tempdir() %>%
-      file.path("log.bin") %>%
-      file.remove(.)
+      log  <-
+        file$path %>%
+        utils::unzip("log.bin", exdir = tempdir()) %>%
+        readBin(
+          "raw", file$result["log.bin", "Length"]
+        )
 
     if (verbose) cat("  ............. COMPLETE")
 
-  }
 
-  PAutilities::manage_procedure(
-    "End", "\n\nProcessing complete. Elapsed time",
-    PAutilities::get_duration(timer),
-    "minutes.\n", verbose = verbose
-  )
+  ## Parse the log file
+
+    if (parser == "external") {
+
+      log %<>% external_parser(file, tz, verbose, flag_idle_sleep, ...)
+
+    } else {
+
+      log %<>% parse_log_bin(info, tz, verbose, include, parser, file)
+
+    }
 
 
-  return(log)
+  ## Flag idle sleep if requested (handled separately in the external parser)
+
+    if (flag_idle_sleep & parser != "external") {
+
+      if (!all(
+        "RAW" %in% names(log),
+        "EVENT" %in% names(log)
+      )) {
+
+        warning(
+          "Cannot flag idle sleep unless both `RAW` and `EVENT` are elements",
+          " of the output.\n  Make sure `include` contains \"ACTIVITY\",",
+          "\"ACTIVITY2\", and \"EVENT\".", call. = FALSE
+        )
+
+      } else {
+
+        log$RAW %<>% flag_idle(log$EVENT, verbose)
+
+      }
+
+    }
+
+
+  ## Run extra checks if requested and applicable
+
+    if (!is.null(log$RAW$Timestamp) & data_checks) {
+
+      if (verbose) cat("\n  Running some extra data checks")
+
+      if (anyDuplicated(log$RAW$Timestamp)) warning(
+        "Duplicated timestamps in the data. This usually indicates an error",
+        call. = FALSE
+      )
+
+      if (any(.accel_names %in% names(log$RAW))) {
+
+        intersect(.accel_names, names(log$RAW)) %>%
+        log$RAW[ ,.] %>%
+        abs(.) %>%
+        {. > .odd_value_threshold} %>%
+        any(.) %>%
+        {if (.) warning(
+          "Data values outside of ", .odd_value_threshold,
+          " threshold, this usually indicates an error",
+          call. = FALSE
+        )}
+
+      }
+
+      if (verbose) cat("Checking............. COMPLETE")
+
+    }
+
+
+  ## Run cleanup procedures if requested
+
+    if (cleanup) {
+
+      if (verbose) cat("\n\n  Cleaning up")
+
+      remove_file <- attr(file$path, "remove")
+
+      if (remove_file) {
+        file.remove(file$path)
+      }
+
+      tempdir() %>%
+        file.path("log.bin") %>%
+        file.remove(.)
+
+      if (verbose) cat("  ............. COMPLETE")
+
+    }
+
+  ## Return
+
+    PAutilities::manage_procedure(
+      "End", "\n\nProcessing complete. Elapsed time",
+      PAutilities::get_duration(timer),
+      "minutes.\n", verbose = verbose
+    )
+
+
+    return(log)
 
 }

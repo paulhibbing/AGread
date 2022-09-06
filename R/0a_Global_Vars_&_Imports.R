@@ -58,9 +58,8 @@
 
 # Imports -----------------------------------------------------------------
 
-  #' @importFrom magrittr %>% %T>% %<>% %$%
   #' @importFrom rlang := .data
-  #' @import Rcpp
+  #' @import magrittr Rcpp
   #' @docType package
   #' @useDynLib AGread
   NULL
