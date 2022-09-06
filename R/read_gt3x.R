@@ -86,7 +86,7 @@ read_gt3x <- function(
 
     if (parser == "external") {
 
-      log %<>% external_parser(file, tz, verbose, ...)
+      log %<>% external_parser(info, file, tz, verbose, ...)
 
     } else {
 

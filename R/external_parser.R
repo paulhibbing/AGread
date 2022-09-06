@@ -1,4 +1,4 @@
-external_parser <- function(log, file, tz, verbose, ...) {
+external_parser <- function(log, info, file, tz, verbose, ...) {
 
 
   events <-
@@ -19,14 +19,21 @@ external_parser <- function(log, file, tz, verbose, ...) {
 
 
   AG <-
+    c(attr(AG, "stop_time"), attr(AG, "last_sample_time")) %>%
+    .[.>0] %>%
+    min(.) %>%
+    lubridate::force_tz(tz) %>%
     get_expected(
-      start = attr(AG, "start_time"),
-      end = min(attr(AG, "stop_time"), attr(AG, "last_sample_time")),
+      start = lubridate::force_tz(
+        attr(AG, "start_time"),
+        tz
+      ),
+      end = .,
       samp_rate = attr(AG, "sample_rate")
     ) %>%
     {data.frame(Timestamp = .$expected_full)} %>%
     dplyr::full_join(AG, ., "Timestamp") %>%
-    {.[order(.$Timestamp), ]} %>%
+    dplyr::slice(., order(.$Timestamp)) %>%
     within({Timestamp = lubridate::force_tz(Timestamp, tz)})
 
 

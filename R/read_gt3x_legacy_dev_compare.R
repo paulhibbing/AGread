@@ -19,7 +19,7 @@
 #' }
 legacy_dev_compare <- function(file, time = FALSE, verbose = FALSE) {
 
-  if (verbose) cat("\nComparing parsers for", basename(file))
+  if (verbose) cat("\nComparing LEGACY and DEV for", basename(file))
 
   ## Run and time the parsers
 
