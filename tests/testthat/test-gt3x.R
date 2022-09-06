@@ -6,8 +6,12 @@
 
   test <- read_gt3x(file)
 
-  test$RAW$Timestamp <- as.character(test$RAW$Timestamp)
-  test$IMU$Timestamp <- as.character(test$IMU$Timestamp)
+  test$RAW$Timestamp <- gsub(
+    "\\..+$", "", as.character(test$RAW$Timestamp)
+  )
+  test$IMU$Timestamp <- gsub(
+    "\\..+$", "", as.character(test$IMU$Timestamp)
+  )
 
 
 # Testing -----------------------------------------------------------------
