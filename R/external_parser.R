@@ -2,7 +2,7 @@ external_parser <- function(log, file, tz, verbose, ...) {
 
 
   events <-
-    list(EVENT = type3(log, verbose)) %>%
+    list(EVENT = type3(log, verbose)) %!>%
     get_events(tz, info, verbose)
 
 
@@ -38,8 +38,8 @@ external_parser <- function(log, file, tz, verbose, ...) {
   }
 
 
-  impute_primary(AG, verbose) %>%
-  external_restructure(.) %>%
+  impute_primary(AG, verbose) %!>%
+  external_restructure(.) %!>%
   c(list(EVENT = events))
 
 
