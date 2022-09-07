@@ -39,8 +39,9 @@ external_parser <- function(log, info, file, tz, verbose, ...) {
 
   if (nrow(events$other_events) > 0) {
     zeroes <-
-      lubridate::floor_date(AG$Timestamp, "1 sec") %in%
-      events$other_events$timestamp
+      {events$other_events$payload_size == 1} %>%
+      events$other_events$timestamp[.] %>%
+      {AG$Timestamp %in% .}
     AG[zeroes, .accel_names] <- 0
   }
 
